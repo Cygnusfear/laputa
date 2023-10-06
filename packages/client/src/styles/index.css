@@ -4,5 +4,5 @@
 
 html,
 body {
-  @apply bg-[#76ADAB];
+  @apply bg-[#76ADAB] text-black;
 }

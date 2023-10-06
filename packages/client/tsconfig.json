@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "types": ["vite/client"],
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "esModuleInterop": true,
+    "jsxImportSource": "react",
+    "skipLibCheck": true,
+    
+    /* Bundler mode */
+    "moduleResolution": "Node",
+    // "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* path aliases */
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src", "tailwind.config.ts", "postcss.config.cjs"],
+  "ignore": ["./postcss*"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
