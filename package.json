@@ -11,10 +11,8 @@
     "prepare": "(forge --version || pnpm foundry:up) && husky install",
     "test": "pnpm recursive run test",
     "preview": "tsc && vite build && vite preview",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "fmt:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
-    "fmt:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache"
+    "lint": "pnpm recursive run lint",
+    "type-check": "pnpm recursive run type-check"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.2",

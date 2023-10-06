@@ -147,6 +147,9 @@ importers:
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
         version: 0.5.1
+      '@types/debug':
+        specifier: ^4.1.9
+        version: 4.1.9
       '@types/node':
         specifier: ^20.8.0
         version: 20.8.2
@@ -2334,6 +2337,12 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
+  /@types/debug@4.1.9:
+    resolution: {integrity: sha512-8Hz50m2eoS56ldRlepxSBa6PWEVCtzUo/92HgLc2qTMnotJNIm7xP+UZhyWoYsyOdd5dxZ+NZLb24rsKyFs2ow==}
+    dependencies:
+      '@types/ms': 0.7.32
+    dev: true
+
   /@types/draco3d@1.4.6:
     resolution: {integrity: sha512-tAyEGmnz6qcPqSWoHtO3tTobQCDW0tW36gVdDKyN0jkT2S2w6LABe0+DdVkfVDwNzTwR7cE7LQGiGJiAsdSNKg==}
     dev: false
@@ -2344,6 +2353,10 @@ packages:
 
   /@types/minimist@1.2.3:
     resolution: {integrity: sha512-ZYFzrvyWUNhaPomn80dsMNgMeXxNWZBdkuG/hWlUvXvbdUH8ZERNBGXnU87McuGcWDsyzX2aChCv/SVN348k3A==}
+    dev: true
+
+  /@types/ms@0.7.32:
+    resolution: {integrity: sha512-xPSg0jm4mqgEkNhowKgZFBNtwoEwF6gJ4Dhww+GFpm3IgtNseHQZ5IqdNwnquZEoANxyDAKDRAdVo4Z72VvD/g==}
     dev: true
 
   /@types/node@18.18.3:

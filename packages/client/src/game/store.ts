@@ -35,12 +35,22 @@ const useStore = create<IState>((set, get) => ({
     array: [],
     octree,
     addEntity: (entity) => {
-      get().world.array.push(entity);
       get().world.octree.set(entity.position, entity);
+      set((state) => ({
+        world: {
+          ...state.world,
+          entities: [...state.world.array, entity],
+        },
+      }));
     },
     removeEntity: (entity) => {
-      get().world.array = get().world.array.filter((e) => e !== entity);
       get().world.octree.remove(entity.position);
+      set((state) => ({
+        world: {
+          ...state.world,
+          entities: state.world.array.filter((e) => e !== entity),
+        },
+      }));
     },
     getEntityByRef: (ref) => {
       return get().world.array.find((e) => e.ref === ref);

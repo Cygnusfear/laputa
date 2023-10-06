@@ -1,14 +1,12 @@
 {
   "compilerOptions": {
-    "types": ["vite/client"],
-    "target": "ESNext",
+    "target": "ES2020",
     "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "esModuleInterop": true,
-    "jsxImportSource": "react",
     "skipLibCheck": true,
-    
+    "allowSyntheticDefaultImports": true,
+
     /* Bundler mode */
     "moduleResolution": "Node",
     // "moduleResolution": "bundler",
@@ -31,6 +29,6 @@
     }
   },
   "include": ["src", "tailwind.config.ts", "postcss.config.cjs"],
-  "ignore": ["./postcss*"],
+  "ignore": ["./postcss*", "./node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
