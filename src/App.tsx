@@ -1,4 +1,5 @@
-import GameRoot from "@/components/game/gameRoot";
+import GameRoot from "@/game/gameRoot";
+
 import RootLayout from "@/components/layout/layout";
 
 const App = () => {

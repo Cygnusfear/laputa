@@ -1,7 +1,7 @@
+import GameScene from "@/game/gameScene";
 import { Canvas } from "@react-three/fiber";
 import { ACESFilmicToneMapping, Color } from "three";
 
-import GameScene from "@/components/game/gameScene";
 import GameUI from "@/components/ui/gameUI";
 
 function GameRoot() {

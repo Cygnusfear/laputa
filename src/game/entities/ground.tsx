@@ -26,7 +26,6 @@ function Ground() {
   return (
     <>
       <GridRenderer />
-
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         receiveShadow
