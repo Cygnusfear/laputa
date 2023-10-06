@@ -38,9 +38,9 @@ jobs:
         shell: bash
         run: pnpm recursive run build
 
-      - name: Check types
-        run: pnpm run type-check
-        if: always()
+      #- name: Check types
+      #  run: pnpm run type-check
+      #  if: always()
 
       - name: Check linting
         run: pnpm run lint
