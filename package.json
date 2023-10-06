@@ -14,12 +14,21 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@react-spring/three": "^9.7.3",
+    "@react-three/drei": "^9.86.3",
+    "@react-three/fiber": "^8.14.5",
+    "@react-three/postprocessing": "^2.15.1",
+    "@types/three": "^0.156.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.279.0",
+    "postprocessing": "^6.33.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
-    "tailwind-merge": "^1.14.0"
+    "sparse-octree": "^7.1.8",
+    "tailwind-merge": "^1.14.0",
+    "three": "^0.157.0",
+    "zustand": "^4.4.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.7.2",
@@ -33,6 +42,7 @@
     "@typescript-eslint/parser": "^6.7.3",
     "@vitejs/plugin-react-swc": "^3.4.0",
     "autoprefixer": "^10.4.16",
+    "bun-types": "^1.0.5-canary.20231006T140143",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
@@ -46,5 +56,7 @@
     "tailwindcss": "^3.3.3",
     "typescript": "^5.2.2",
     "vite": "^4.4.9"
-  }
+  },
+  "module": "index.ts",
+  "type": "module"
 }

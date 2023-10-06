@@ -23,9 +23,12 @@ jobs:
 
       - name: Check types
         run: bun run type-check
+        if: always()
 
       - name: Check linting
         run: bun run lint
+        if: always()
 
       - name: Check commits messages
         uses: wagoid/commitlint-github-action@v5
+        if: always()

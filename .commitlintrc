@@ -1,4 +1,18 @@
 {
+  "type-enum": [
+    "build",
+    "chore",
+    "ci",
+    "docs",
+    "feat",
+    "fix",
+    "perf",
+    "refactor",
+    "revert",
+    "style",
+    "test",
+    "audio"
+  ],
   "extends": [
     "@commitlint/config-conventional"
   ]
