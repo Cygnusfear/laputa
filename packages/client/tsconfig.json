@@ -15,6 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "types": [],
 
     /* Linting */
     "strict": true,
@@ -29,6 +30,6 @@
     }
   },
   "include": ["src", "tailwind.config.ts", "postcss.config.cjs"],
-  "ignore": ["./postcss*", "./node_modules"],
+  "exclude": ["postcss*", "node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

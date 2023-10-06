@@ -18,8 +18,15 @@ jobs:
         with:
           version: 8
 
+      - name: Setup foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+          
       - name: Install dependencies
         run: pnpm i
+        env:
+          SKIP_FOUNDRY: true
 
       - name: Check types
         run: pnpm run type-check

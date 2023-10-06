@@ -8,7 +8,7 @@
     "dev:contracts": "pnpm --filter 'contracts' dev",
     "foundry:up": "curl -L https://foundry.paradigm.xyz | bash && bash $HOME/.foundry/bin/foundryup",
     "mud:up": "pnpm mud set-version --tag main && pnpm install",
-    "prepare": "(forge --version || pnpm foundry:up) && husky install",
+    "prepare": "if [ \"$SKIP_FOUNDRY\" != \"true\" ]; then (forge --version || pnpm foundry:up); fi && husky install",
     "test": "pnpm recursive run test",
     "preview": "tsc && vite build && vite preview",
     "lint": "pnpm recursive run lint",

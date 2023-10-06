@@ -3,7 +3,7 @@ import { singletonEntity } from "@latticexyz/store-sync/recs";
 
 import RootLayout from "./components/layout/layout";
 import GameRoot from "./game/gameRoot";
-import { useMUD } from "./MUDContext";
+import { useMUD } from "./useMUD";
 
 export const App = () => {
   const {
