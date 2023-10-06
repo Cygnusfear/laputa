@@ -30,6 +30,6 @@
     }
   },
   "include": ["src", "tailwind.config.ts", "postcss.config.cjs"],
-  "exclude": ["postcss*", "node_modules"],
+  "exclude": ["postcss*", "node_modules", "../../node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
