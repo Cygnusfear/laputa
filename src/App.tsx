@@ -1,10 +1,10 @@
-import RootLayout from "./components/layout";
-import Home from "./pages/home";
+import GameRoot from "@/components/game/gameRoot";
+import RootLayout from "@/components/layout/layout";
 
 const App = () => {
   return (
     <RootLayout>
-      <Home />
+      <GameRoot />
     </RootLayout>
   );
 };
