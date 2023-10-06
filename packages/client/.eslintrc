@@ -1,7 +1,8 @@
 {
   "env": { "browser": true, "es2020": true, "node": true },
   "extends": [
-    "../../.eslintrc", "plugin:react/recommended", "plugin:react-hooks/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
@@ -17,8 +18,7 @@
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/classnames-order": "warn",
     "@typescript-eslint/ban-ts-comment": "off",
-    "react-hooks/exhaustive-deps": "error",
-    "react/no-unknown-property": ["off", { "ignore": ["args"] }]
+    "react-hooks/exhaustive-deps": "error"
   },
   "settings": {
     "tailwindcss": {
