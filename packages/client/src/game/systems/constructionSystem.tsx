@@ -1,8 +1,9 @@
 import { Vector3 } from "three";
-import { Facility, getState } from "../store";
+import { getState } from "../store";
 import { createRef } from "react";
 import { getRandom } from "@/lib/utils";
 import { palette } from "../utils/palette";
+import { IFacility } from "../entities/entities";
 
 const canBuildAtPosition = (position: Vector3) => {
   if (position.y < 0) return false;
@@ -40,7 +41,7 @@ const buildFacility = (position: Vector3) => {
     ),
     // model: getRandom(assets),
     // createdTime: Date.now(),
-  } as Facility;
+  } as IFacility;
 
   addEntity(newFacility);
   cursor.setCursor({ cursorState: "hidden" });

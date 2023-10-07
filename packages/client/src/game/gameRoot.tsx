@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { ACESFilmicToneMapping, Color } from "three";
 
 import GameUI from "@/components/ui/gameUI";
+import Importer from "./utils/importer";
 
 function GameRoot() {
   return (
@@ -14,6 +15,7 @@ function GameRoot() {
           gl.setClearColor(new Color("#76ADAB"));
         }}
       >
+        <Importer />
         <GameScene />
       </Canvas>
       <GameUI />

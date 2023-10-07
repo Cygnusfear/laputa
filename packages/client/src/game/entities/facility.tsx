@@ -1,5 +1,5 @@
 import { RefObject, useState } from "react";
-import { Facility, useStore } from "../store";
+import { useStore } from "../store";
 import { AdditiveBlending, DoubleSide, Mesh, Vector3 } from "three";
 import { animated } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
@@ -9,8 +9,9 @@ import {
 } from "../systems/constructionSystem";
 import { palette } from "../utils/palette";
 import { faceDirections } from "@/lib/utils";
+import { IFacility } from "./entities";
 
-const Facility = (props: Facility) => {
+const Facility = (props: IFacility) => {
   const { position, scale, colorPrimary, entityRef } = props;
   const [faceIndex, setFaceIndex] = useState<number | undefined>(undefined);
   const {

@@ -37,6 +37,7 @@
     "sparse-octree": "^7.1.8",
     "tailwind-merge": "^1.14.0",
     "three": "^0.157.0",
+    "three-stdlib": "^2.27.0",
     "viem": "1.14.0",
     "zustand": "^4.4.3"
   },
@@ -60,11 +61,11 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "eslint-plugin-tailwindcss": "^3.13.0",
     "postcss": "^8.4.31",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.4",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
-    "wait-port": "^1.0.4",
-    "prettier": "^3.0.3",
-    "prettier-plugin-tailwindcss": "^0.5.4"
+    "wait-port": "^1.0.4"
   }
 }

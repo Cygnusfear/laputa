@@ -5,6 +5,7 @@ import Ground from "./entities/ground";
 import Cursor from "./input/cursor";
 import { useStore } from "./store";
 import Facility from "./entities/facility";
+import { IFacility } from "./entities/entities";
 
 let loaded = false;
 
@@ -27,9 +28,10 @@ function GameScene() {
       <Camera />
       <ambientLight intensity={1.2} />
       <Ground />
-      {entities.map((entity, idx) => (
-        <Facility key={idx} {...entity} />
-      ))}
+      {entities.map((entity, idx) => {
+        const factility = entity as IFacility;
+        return <Facility key={idx} {...factility} />;
+      })}
       <Cursor />
     </scene>
   );

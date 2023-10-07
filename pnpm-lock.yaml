@@ -137,6 +137,9 @@ importers:
       three:
         specifier: ^0.157.0
         version: 0.157.0
+      three-stdlib:
+        specifier: ^2.27.0
+        version: 2.27.0(three@0.157.0)
       viem:
         specifier: 1.14.0
         version: 1.14.0(typescript@5.2.2)(zod@3.22.4)
@@ -2102,7 +2105,7 @@ packages:
       suspend-react: 0.1.3(react@18.2.0)
       three: 0.157.0
       three-mesh-bvh: 0.6.7(three@0.157.0)
-      three-stdlib: 2.26.13(three@0.157.0)
+      three-stdlib: 2.27.0(three@0.157.0)
       troika-three-text: 0.47.2(three@0.157.0)
       utility-types: 3.10.0
       uuid: 9.0.1
@@ -2163,7 +2166,7 @@ packages:
       postprocessing: 6.33.2(three@0.157.0)
       react: 18.2.0
       three: 0.157.0
-      three-stdlib: 2.26.13(three@0.157.0)
+      three-stdlib: 2.27.0(three@0.157.0)
     transitivePeerDependencies:
       - '@types/three'
     dev: false
@@ -6012,8 +6015,8 @@ packages:
       three: 0.157.0
     dev: false
 
-  /three-stdlib@2.26.13(three@0.157.0):
-    resolution: {integrity: sha512-CF0OdNa//PPt9B80fgBQ/JQj7viQTrARV7iR5MYDIMiIJyfAK80wQSHCEQxxBzI0MsEiqz4GertneLRrVu9u2Q==}
+  /three-stdlib@2.27.0(three@0.157.0):
+    resolution: {integrity: sha512-YnsE3oGMdR2u65L98Ze70tNx87FASU63Uq0cWprHaf+t7AxXA9iHu9GLKXRRmLJ/srtZOg+7NYehzoZqXOYkpA==}
     peerDependencies:
       three: '>=0.128.0'
     dependencies:
