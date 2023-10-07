@@ -11,6 +11,10 @@ export default mudConfig({
         x: "int32",
         y: "int32",
         z: "int32",
+      },
+    },
+    Orientation: {
+      valueSchema: {
         yaw: "int32",
       },
     },
@@ -29,12 +33,12 @@ export default mudConfig({
     {
       name: "KeysInTableModule",
       root: true,
-      args: [resolveTableId("Position"), resolveTableId("EntityType")],
+      args: [resolveTableId("Position")],
     },
     {
       name: "KeysWithValueModule",
       root: true,
-      args: [resolveTableId("Position"), resolveTableId("EntityType")],
+      args: [resolveTableId("Position")],
     },
   ],  
 });

@@ -5,5 +5,6 @@ pragma solidity >=0.8.21;
 
 import { Counter, CounterTableId } from "./tables/Counter.sol";
 import { Position, PositionData, PositionTableId } from "./tables/Position.sol";
+import { Orientation, OrientationTableId } from "./tables/Orientation.sol";
 import { EntityType, EntityTypeTableId } from "./tables/EntityType.sol";
 import { OwnedBy, OwnedByTableId } from "./tables/OwnedBy.sol";
