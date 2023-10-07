@@ -3,7 +3,7 @@ import { RefObject } from "react";
 import { PointOctree } from "sparse-octree";
 import { Mesh, Object3D, Vector3 } from "three";
 import { create } from "zustand";
-import { IEntity } from "./entities/entities";
+import { IEntity } from "./types/entities";
 import { Assets } from "./utils/importer";
 
 export interface World {

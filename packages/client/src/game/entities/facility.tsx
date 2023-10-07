@@ -9,7 +9,7 @@ import {
 } from "../systems/constructionSystem";
 import { palette } from "../utils/palette";
 import { faceDirections } from "@/lib/utils";
-import { IFacility } from "./entities";
+import { IFacility } from "../types/entities";
 
 const Facility = (props: IFacility) => {
   const { position, scale, colorPrimary, entityRef } = props;
@@ -86,7 +86,7 @@ const Facility = (props: IFacility) => {
             side={DoubleSide}
           />
         ))}
-        <mesh>
+        <mesh receiveShadow castShadow>
           <boxGeometry args={[1, 1, 1]} />
           <meshStandardMaterial color={colorPrimary} />
         </mesh>

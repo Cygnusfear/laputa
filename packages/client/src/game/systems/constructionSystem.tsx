@@ -3,7 +3,7 @@ import { getState } from "../store";
 import { createRef } from "react";
 import { getRandom } from "@/lib/utils";
 import { palette } from "../utils/palette";
-import { IFacility } from "../entities/entities";
+import { IFacility } from "../types/entities";
 
 const canBuildAtPosition = (position: Vector3) => {
   if (position.y < 0) return false;
