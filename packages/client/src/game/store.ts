@@ -1,28 +1,42 @@
 import { RefObject } from "react";
 import { PointOctree } from "sparse-octree";
-import { Mesh, Vector3 } from "three";
+import { Mesh, Object3D, Vector3 } from "three";
 import { create } from "zustand";
 
 export interface Entity {
   position: Vector3;
   scale: Vector3;
   rotation: Vector3;
-  ref: RefObject<Mesh>;
+  ref: RefObject<Object3D | Mesh>;
 }
 
 export interface Facility extends Entity {}
 
 export interface World {
-  array: Entity[];
+  entities: Entity[];
   octree: PointOctree<Entity>;
   addEntity: (entity: Entity) => void;
   removeEntity: (entity: Entity) => void;
-  getEntityByRef: (ref: RefObject<Mesh>) => Entity | undefined;
+  getEntityByRef: (ref: RefObject<Object3D | Mesh>) => Entity | undefined;
   getEntityByPosition: (position: Vector3) => Entity | undefined;
+}
+
+export type CursorState = "valid" | "invalid" | "hidden";
+
+export interface CursorProps {
+  position: Vector3;
+  cursorState: CursorState;
+  object: Object3D | Mesh | undefined;
+  setCursor: (props: Partial<CursorProps>) => void;
+}
+
+export interface Input {
+  cursor: CursorProps;
 }
 
 export interface IState {
   world: World;
+  input: Input;
 }
 
 const octreeScale = 1000;
@@ -31,15 +45,33 @@ const max = new Vector3(octreeScale, octreeScale, octreeScale);
 const octree = new PointOctree<Entity>(min, max);
 
 const useStore = create<IState>((set, get) => ({
+  input: {
+    cursor: {
+      position: new Vector3(),
+      cursorState: "valid",
+      object: undefined,
+      setCursor: (props: Partial<CursorProps>) => {
+        set((state) => ({
+          input: {
+            ...state.input,
+            cursor: {
+              ...state.input.cursor,
+              ...props,
+            },
+          },
+        }));
+      },
+    },
+  },
   world: {
-    array: [],
+    entities: [],
     octree,
     addEntity: (entity) => {
       get().world.octree.set(entity.position, entity);
       set((state) => ({
         world: {
           ...state.world,
-          entities: [...state.world.array, entity],
+          entities: [...state.world.entities, entity],
         },
       }));
     },
@@ -48,12 +80,12 @@ const useStore = create<IState>((set, get) => ({
       set((state) => ({
         world: {
           ...state.world,
-          entities: state.world.array.filter((e) => e !== entity),
+          entities: state.world.entities.filter((e) => e !== entity),
         },
       }));
     },
     getEntityByRef: (ref) => {
-      return get().world.array.find((e) => e.ref === ref);
+      return get().world.entities.find((e) => e.ref === ref);
     },
     getEntityByPosition: (position) => {
       return get().world.octree.get(position) || undefined;

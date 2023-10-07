@@ -2,6 +2,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 
 import Camera from "./entities/camera";
 import Ground from "./entities/ground";
+import Cursor from "./input/cursor";
 
 let loaded = false;
 
@@ -21,6 +22,7 @@ function GameScene() {
       <Camera />
       <ambientLight intensity={1.2} />
       <Ground />
+      <Cursor />
     </scene>
   );
 }
