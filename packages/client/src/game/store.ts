@@ -5,6 +5,7 @@ import { Mesh, Object3D, Vector3 } from "three";
 import { create } from "zustand";
 import { IEntity } from "./types/entities";
 import { Assets } from "./utils/importer";
+import { EntityDataType } from "./data/entities";
 
 export interface World {
   entities: IEntity[];
@@ -23,8 +24,14 @@ export interface CursorProps {
   direction: Vector3;
   setCursor: (props: Partial<CursorProps>) => void;
 }
+
+export type InputMode = "select" | "build" | "delete";
 export interface Input {
   cursor: CursorProps;
+  selection: IEntity | null;
+  building: EntityDataType | null;
+  mode: InputMode;
+  setInput: (props: Partial<Omit<Input, "cursor">>) => void;
 }
 
 export interface IState {
@@ -68,6 +75,17 @@ const useStore = create<IState>((set, get) => ({
     },
   },
   input: {
+    mode: "select",
+    selection: null,
+    building: null,
+    setInput: (props) => {
+      set((state) => ({
+        input: {
+          ...state.input,
+          ...props,
+        },
+      }));
+    },
     cursor: {
       position: new Vector3(),
       cursorState: "valid",

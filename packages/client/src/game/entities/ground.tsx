@@ -2,7 +2,7 @@ import { createRef } from "react";
 import { Grid, GridProps } from "@react-three/drei";
 
 import { useInput } from "../input/useInput";
-import { getState } from "../store";
+import { getState, useStore } from "../store";
 import {
   buildFacility,
   canBuildAtPosition,
@@ -29,6 +29,9 @@ function GridRenderer() {
 }
 
 function Ground() {
+  const {
+    input: { building },
+  } = useStore();
   const gridRef = createRef<THREE.Mesh>();
 
   const { onMouseMove } = useInput((event) => {
@@ -49,7 +52,7 @@ function Ground() {
 
   return (
     <>
-      <GridRenderer />
+      {building && <GridRenderer />}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         receiveShadow

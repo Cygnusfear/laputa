@@ -28,9 +28,8 @@ function GameScene() {
     <scene>
       <Camera />
       <ambientLight intensity={1.2} />
-      <directionalLight castShadow position={[5, 0, 5]} intensity={4.5}>
-        x
-      </directionalLight>
+      <directionalLight castShadow position={[5, 8, 5]} intensity={2.5} />
+      <directionalLight castShadow position={[-5, 8, 5]} intensity={2.5} />
       <Background />
       <Ground />
       {entities.map((entity, idx) => {

@@ -11,8 +11,56 @@ import { palette } from "../utils/palette";
 import { faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
 
+const Renderer = (props: IFacility) => {
+  const { colorPrimary, colorSecondary, scale, variant } = props;
+  const {
+    assets: { meshes },
+  } = useStore();
+
+  const [prototypes] = useState(
+    Object.values(meshes).filter((node) => variant?.nodes.includes(node.name))
+  );
+
+  if (!variant || !prototypes || prototypes.length < 1) {
+    console.error("No prototypes found for variant", variant, prototypes);
+    return null;
+  }
+
+  return (
+    <group
+      dispose={null}
+      scale={scale.multiplyScalar(0.7)}
+      position={[0, 0, 0]}
+    >
+      {prototypes!.map((proto, index) => {
+        let color = variant.colors[index];
+        switch (variant.colors[index]) {
+          case "primary":
+            color = colorPrimary!;
+            break;
+          case "secondary":
+            color = colorSecondary!;
+            break;
+        }
+        return (
+          <mesh
+            dispose={null}
+            position={[0, 0, 0]}
+            key={index}
+            geometry={proto.geometry.clone()}
+            receiveShadow
+            castShadow
+          >
+            <meshLambertMaterial attach={`material`} color={color} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+};
+
 const Facility = (props: IFacility) => {
-  const { position, scale, colorPrimary, entityRef } = props;
+  const { position, scale, entityRef } = props;
   const [faceIndex, setFaceIndex] = useState<number | undefined>(undefined);
   const {
     input: { cursor },
@@ -20,9 +68,11 @@ const Facility = (props: IFacility) => {
 
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
     if (faceIndex === undefined) return;
+    console.log(event.object);
     const direction = event.position.clone().add(faceDirections[faceIndex!]);
     const canBuild = canBuildAtPosition(direction);
     if (canBuild) {
+      console.log("cabuild");
       cursor.setCursor({
         position: direction,
         cursorState: "valid",
@@ -51,17 +101,20 @@ const Facility = (props: IFacility) => {
         position={position}
         scale={scale}
         ref={entityRef as RefObject<Mesh>}
-        userData={{ type: "facility" }}
+        userData={{ type: "facility", name: props.type.name }}
         onPointerDown={onMouseDown}
         onPointerUp={onMouseClick}
         onPointerMove={(e) => {
-          setFaceIndex(
-            e?.face?.materialIndex !== undefined
-              ? e.face.materialIndex
-              : undefined
-          );
-          onMouseMove(e);
-          e.stopPropagation();
+          // make sure we match the correct object
+          if (e.object === e.eventObject) {
+            setFaceIndex(
+              e?.face?.materialIndex !== undefined
+                ? e.face.materialIndex
+                : undefined
+            );
+            onMouseMove(e);
+            e.stopPropagation();
+          }
         }}
         onPointerLeave={() => setFaceIndex(undefined)}
       >
@@ -86,10 +139,12 @@ const Facility = (props: IFacility) => {
             side={DoubleSide}
           />
         ))}
-        <mesh receiveShadow castShadow>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color={colorPrimary} />
-        </mesh>
+        <Renderer {...props} />
+
+        {/* <mesh>
+          <boxGeometry args={[1, 1]} />
+          <meshLambertMaterial color={palette.cursor} />
+        </mesh> */}
       </animated.mesh>
     </group>
   );

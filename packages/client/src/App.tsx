@@ -1,5 +1,6 @@
 import { useComponentValue } from "@latticexyz/react";
 import { singletonEntity } from "@latticexyz/store-sync/recs";
+import LoadingScreen from "@/components/loadingScreen/loadingScreen";
 
 import RootLayout from "./components/layout/layout";
 import GameRoot from "./game/gameRoot";
@@ -16,7 +17,6 @@ export const App = () => {
   return (
     <RootLayout>
       <GameRoot />
-
       <div>
         Counter: <span>{counter?.value ?? "??"}</span>
       </div>
@@ -30,6 +30,7 @@ export const App = () => {
       >
         Increment
       </button>
+      <LoadingScreen />
     </RootLayout>
   );
 };

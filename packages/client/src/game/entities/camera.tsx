@@ -21,9 +21,9 @@ function Camera() {
   }, [orbitRef]);
 
   useEffect(() => {
-    window.addEventListener("gameLoaded", setCameraAngle);
+    document.addEventListener("gameLoaded", setCameraAngle);
     return () => {
-      window.removeEventListener("gameLoaded", setCameraAngle);
+      document.removeEventListener("gameLoaded", setCameraAngle);
     };
   }, []);
 

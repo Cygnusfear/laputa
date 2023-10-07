@@ -35,15 +35,15 @@ function Cursor() {
             color={palette.cursor}
             visible={faceIndex !== undefined && faceIndex === index}
             transparent={true}
-            opacity={0.6}
+            opacity={0.3}
             blending={AdditiveBlending}
             side={DoubleSide}
           />
         ))}
         <Sparkles
-          count={10}
-          scale={1.5}
-          size={3.6}
+          count={7}
+          scale={1.15}
+          size={2.6}
           visible={cursorState !== "hidden"}
         />
       </mesh>
