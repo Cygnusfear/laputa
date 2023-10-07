@@ -20,7 +20,7 @@ const EntityData = {
       image: "gravity.webp",
       costs: [["lapu", 500]],
       produces: [["gravity", 25, 1]],
-      variants: [ModelData.doubleside00],
+      variants: [ModelData.well00],
     },
     dynamo: {
       name: "Whirly Dynamo",

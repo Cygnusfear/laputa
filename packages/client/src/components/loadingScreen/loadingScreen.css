@@ -32,7 +32,11 @@
   25% {
     opacity: (1);
   }
+  99.99% {
+    opacity: (0);
+  }
   100% {
     opacity: (0);
+    display: none;
   }
 }

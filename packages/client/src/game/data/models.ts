@@ -36,6 +36,12 @@ const ModelData: { [key: string]: ModelDataType } = {
     materials: ["Engine.Mat.Back", "Engine.Mat.Front"],
     colors: ["secondary", "primary"],
   },
+  well00: {
+    name: "Well00",
+    nodes: ["Well00", "Well00001"],
+    materials: ["Engine.Mat.Back", "Engine.Mat.Front"],
+    colors: ["secondary", "primary"],
+  },
 } as const;
 
 export type TModelData = typeof ModelData;

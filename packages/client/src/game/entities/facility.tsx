@@ -69,11 +69,9 @@ const Facility = (props: IFacility) => {
 
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
     if (faceIndex === undefined) return;
-    console.log(event.object);
     const direction = event.position.clone().add(faceDirections[faceIndex!]);
     const canBuild = canBuildAtPosition(direction);
     if (canBuild) {
-      console.log("cabuild");
       cursor.setCursor({
         position: direction,
         cursorState: "valid",
@@ -141,11 +139,6 @@ const Facility = (props: IFacility) => {
           />
         ))}
         <Renderer {...props} />
-
-        {/* <mesh>
-          <boxGeometry args={[1, 1]} />
-          <meshLambertMaterial color={palette.cursor} />
-        </mesh> */}
       </animated.mesh>
     </group>
   );
