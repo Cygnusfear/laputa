@@ -11,7 +11,7 @@ function Camera() {
   const setCameraAngle = () => {
     if (orbitRef && orbitRef.current !== null) {
       // @ts-ignore
-      orbitRef.current.setPolarAngle(Math.PI / 3.5);
+      orbitRef.current.setPolarAngle(Math.PI / 3);
       orbitRef.current.maxPolarAngle = Infinity;
     }
   };
