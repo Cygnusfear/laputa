@@ -1,4 +1,11 @@
-const ModelData = {
+export type ModelDataType = {
+  name: string;
+  nodes: string[];
+  materials: string[];
+  colors: string[];
+};
+
+const ModelData: { [key: string]: ModelDataType } = {
   block00: {
     name: "GenericBlock00",
     nodes: ["BlockBase", "Block02"],
@@ -29,5 +36,8 @@ const ModelData = {
     materials: ["Engine.Mat.Back", "Engine.Mat.Front"],
     colors: ["secondary", "primary"],
   },
-};
+} as const;
+
+export type ModelData = typeof ModelData;
+
 export default ModelData;
