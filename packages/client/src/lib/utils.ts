@@ -9,3 +9,7 @@ import { twMerge } from "tailwind-merge";
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
+
+export function getRandom<T>(array: T[]) {
+  return array[Math.floor(Math.random() * array.length)];
+}

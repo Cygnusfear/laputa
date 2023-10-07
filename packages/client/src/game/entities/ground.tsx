@@ -1,8 +1,12 @@
 import { createRef } from "react";
 import { Grid, GridProps } from "@react-three/drei";
 
-import { useInput } from "../input/input";
+import { useInput } from "../input/useInput";
 import { getState } from "../store";
+import {
+  buildFacility,
+  canBuildAtPosition,
+} from "../systems/constructionSystem";
 
 const gridSize = 1000;
 
@@ -30,7 +34,15 @@ function Ground() {
     const {
       input: { cursor },
     } = getState();
-    cursor.setCursor({ position: event.position });
+    const canBuild = canBuildAtPosition(event.position);
+    cursor.setCursor({
+      position: event.position,
+      cursorState: canBuild ? "valid" : "hidden",
+    });
+  }, gridRef);
+
+  const { onMouseDown, onMouseClick } = useInput((event) => {
+    buildFacility(event.position);
   }, gridRef);
 
   return (
@@ -41,10 +53,10 @@ function Ground() {
         receiveShadow
         userData={{ type: "grid" }}
         ref={gridRef}
-        // onPointerDown={onMouseDown}
-        // onClick={onMouseClick}
+        onPointerDown={onMouseDown}
+        onClick={onMouseClick}
         onPointerMove={onMouseMove}
-        // onPointerEnter={onMouseMove}
+        onPointerEnter={onMouseMove}
       >
         <planeGeometry args={[gridSize, gridSize]} />
         <meshToonMaterial attach="material" visible={false} />

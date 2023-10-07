@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { Sparkles } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
 import { useStore } from "../store";
@@ -12,11 +11,6 @@ function Cursor() {
       cursor: { position, cursorState },
     },
   } = useStore();
-
-  useFrame(() => {
-    //   if (cursorRef.current) {
-    //   }
-  });
 
   return (
     <mesh

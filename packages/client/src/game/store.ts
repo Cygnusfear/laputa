@@ -7,7 +7,9 @@ export interface Entity {
   position: Vector3;
   scale: Vector3;
   rotation: Vector3;
-  ref: RefObject<Object3D | Mesh>;
+  entityRef: RefObject<Object3D | Mesh>;
+  colorPrimary: string;
+  colorSecondary: string;
 }
 
 export interface Facility extends Entity {}
@@ -85,7 +87,7 @@ const useStore = create<IState>((set, get) => ({
       }));
     },
     getEntityByRef: (ref) => {
-      return get().world.entities.find((e) => e.ref === ref);
+      return get().world.entities.find((e) => e.entityRef === ref);
     },
     getEntityByPosition: (position) => {
       return get().world.octree.get(position) || undefined;
