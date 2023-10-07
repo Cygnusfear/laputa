@@ -20,7 +20,6 @@ function Cursor() {
     if (direction) {
       const idx = faceDirections.findIndex((dir) => dir.equals(direction));
       setFaceIndex(idx);
-      console.log(idx);
     }
   }, [direction]);
 

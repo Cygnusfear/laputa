@@ -33,6 +33,7 @@
     "postprocessing": "^6.33.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.11.0",
     "rxjs": "7.5.5",
     "sparse-octree": "^7.1.8",
     "tailwind-merge": "^1.14.0",

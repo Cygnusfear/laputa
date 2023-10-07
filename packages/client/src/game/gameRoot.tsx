@@ -9,6 +9,7 @@ function GameRoot() {
   return (
     <>
       <Canvas
+        shadows
         gl={{ antialias: true, alpha: true }}
         onCreated={({ gl }) => {
           gl.toneMapping = ACESFilmicToneMapping;

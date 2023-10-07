@@ -38,6 +38,6 @@ const ModelData: { [key: string]: ModelDataType } = {
   },
 } as const;
 
-export type ModelData = typeof ModelData;
+export type TModelData = typeof ModelData;
 
 export default ModelData;
