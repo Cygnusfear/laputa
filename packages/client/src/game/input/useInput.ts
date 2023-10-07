@@ -6,6 +6,7 @@ export type MouseInputEvent = {
   type: "click" | "hover";
   position: Vector3;
   object: THREE.Object3D;
+  event: ThreeEvent<MouseEvent>;
 };
 
 export function useInput(
@@ -35,7 +36,7 @@ export function useInput(
       const pos = getClosestPosition(event, closest);
       if (!ref || ref.current === closest) {
         callback &&
-          callback({ type: eventType, position: pos, object: closest });
+          callback({ type: eventType, position: pos, object: closest, event });
       }
     },
     [callback, ref]

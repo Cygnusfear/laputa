@@ -1,3 +1,4 @@
+import { Directions } from "@/lib/utils";
 import { RefObject } from "react";
 import { PointOctree } from "sparse-octree";
 import { Mesh, Object3D, Vector3 } from "three";
@@ -29,6 +30,7 @@ export interface CursorProps {
   position: Vector3;
   cursorState: CursorState;
   object: Object3D | Mesh | undefined;
+  direction: Vector3;
   setCursor: (props: Partial<CursorProps>) => void;
 }
 
@@ -52,6 +54,7 @@ const useStore = create<IState>((set, get) => ({
       position: new Vector3(),
       cursorState: "valid",
       object: undefined,
+      direction: Directions.UP(),
       setCursor: (props: Partial<CursorProps>) => {
         set((state) => ({
           input: {

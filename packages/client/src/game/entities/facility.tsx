@@ -3,47 +3,44 @@ import { Facility, useStore } from "../store";
 import { AdditiveBlending, DoubleSide, Mesh, Vector3 } from "three";
 import { animated } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
-import { buildFacility } from "../systems/constructionSystem";
+import {
+  buildFacility,
+  canBuildAtPosition,
+} from "../systems/constructionSystem";
 import { palette } from "../utils/palette";
-
-const faceDirections = [
-  new Vector3(1, 0, 0),
-  new Vector3(-1, 0, 0),
-  new Vector3(0, 1, 0),
-  new Vector3(0, -1, 0),
-  new Vector3(0, 0, 1),
-  new Vector3(0, 0, -1),
-];
+import { faceDirections } from "@/lib/utils";
 
 const Facility = (props: Facility) => {
   const { position, scale, colorPrimary, entityRef } = props;
-  const [hovered, setHover] = useState<number | undefined>(undefined);
+  const [faceIndex, setFaceIndex] = useState<number | undefined>(undefined);
   const {
-    world: { getEntityByPosition },
     input: { cursor },
   } = useStore();
 
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
-    if (hovered === undefined) return;
-    const direction = event.position.clone().add(faceDirections[hovered!]);
-    const existingFacility = getEntityByPosition(direction);
-    // console.log(hovered, event, direction, existingFacility);
-    if (!existingFacility) {
-      cursor.setCursor({ position: direction, cursorState: "valid" });
+    if (faceIndex === undefined) return;
+    const direction = event.position.clone().add(faceDirections[faceIndex!]);
+    const canBuild = canBuildAtPosition(direction);
+    if (canBuild) {
+      cursor.setCursor({
+        position: direction,
+        cursorState: "valid",
+        direction: faceDirections[faceIndex!].clone().negate(),
+      });
     } else {
       cursor.setCursor({ cursorState: "hidden" });
     }
   }, entityRef);
 
   const { onMouseDown, onMouseClick } = useInput((event: MouseInputEvent) => {
-    if (hovered === undefined) return;
-    const direction = event.position.clone().add(faceDirections[hovered!]);
-    const existingFacility = getEntityByPosition(direction);
-    if (!existingFacility) {
+    if (faceIndex === undefined) return;
+    const direction = event.position.clone().add(faceDirections[faceIndex!]);
+    const canBuild = canBuildAtPosition(direction);
+    if (canBuild) {
       buildFacility(direction);
-      setHover(undefined);
+      setFaceIndex(undefined);
     }
-  });
+  }, entityRef);
 
   return (
     <group dispose={null}>
@@ -57,7 +54,7 @@ const Facility = (props: Facility) => {
         onPointerDown={onMouseDown}
         onPointerUp={onMouseClick}
         onPointerMove={(e) => {
-          setHover(
+          setFaceIndex(
             e?.face?.materialIndex !== undefined
               ? e.face.materialIndex
               : undefined
@@ -65,7 +62,7 @@ const Facility = (props: Facility) => {
           onMouseMove(e);
           e.stopPropagation();
         }}
-        onPointerLeave={() => setHover(undefined)}
+        onPointerLeave={() => setFaceIndex(undefined)}
       >
         <boxGeometry
           attach="geometry"
@@ -76,20 +73,20 @@ const Facility = (props: Facility) => {
             attach={`material-${index}`}
             key={index}
             color={
-              hovered !== undefined && hovered === index
+              faceIndex !== undefined && faceIndex === index
                 ? palette.cursor
                 : "black"
             }
-            visible={hovered !== undefined && hovered === index}
+            visible={faceIndex !== undefined && faceIndex === index}
             transparent={true}
-            opacity={0.2}
+            // TODO: Remove the face highlighting completely, or use alternative face highlighting like in Townscraper
+            opacity={0}
             blending={AdditiveBlending}
             side={DoubleSide}
           />
         ))}
         <mesh>
           <boxGeometry args={[1, 1, 1]} />
-
           <meshStandardMaterial color={colorPrimary} />
         </mesh>
       </animated.mesh>

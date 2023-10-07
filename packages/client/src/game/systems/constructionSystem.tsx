@@ -29,7 +29,7 @@ const buildFacility = (position: Vector3) => {
 
   const newFacility = {
     position: position,
-    scale: new Vector3(Math.random() * 0.4 + 0.7, 1, Math.random() * 0.4 + 0.7),
+    scale: new Vector3(Math.random() * 0.3 + 0.7, 1, Math.random() * 0.3 + 0.7),
     colorPrimary: getRandom(palette.buildingPrimary),
     colorSecondary: getRandom(palette.buildingSecondary),
     entityRef: createRef<THREE.Mesh>(),
