@@ -144,6 +144,12 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
     devDependencies:
+      '@commitlint/config-conventional':
+        specifier: ^17.7.0
+        version: 17.7.0
+      '@ianvs/prettier-plugin-sort-imports':
+        specifier: ^4.1.0
+        version: 4.1.0(prettier@3.0.3)
       '@total-typescript/ts-reset':
         specifier: ^0.5.1
         version: 0.5.1
@@ -195,6 +201,12 @@ importers:
       postcss:
         specifier: ^8.4.31
         version: 8.4.31
+      prettier:
+        specifier: ^3.0.3
+        version: 3.0.3
+      prettier-plugin-tailwindcss:
+        specifier: ^0.5.4
+        version: 0.5.5(@ianvs/prettier-plugin-sort-imports@4.1.0)(prettier@3.0.3)
       tailwindcss:
         specifier: ^3.3.3
         version: 3.3.3(ts-node@10.9.1)
