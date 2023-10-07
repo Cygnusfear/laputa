@@ -18,7 +18,6 @@ function Cursor() {
   useEffect(() => {
     if (direction) {
       const idx = faceDirections.findIndex((dir) => dir.equals(direction));
-      console.log(direction, idx, faceDirections[idx]);
       setFaceIndex(idx);
     }
   }, [direction]);
