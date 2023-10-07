@@ -25,12 +25,8 @@ function Cursor() {
   }, [direction]);
 
   return (
-    <group position={position.toArray()}>
-      <mesh
-        userData={{ type: "cursor" }}
-        visible={cursorState !== "hidden"}
-        ref={cursorRef}
-      >
+    <group position={position.toArray()} visible={cursorState !== "hidden"}>
+      <mesh userData={{ type: "cursor" }} ref={cursorRef}>
         <boxGeometry args={[0.96, 0.96]} />
         {/* Face mapping for direction */}
         {[...Array(6)].map((_, index) => (
