@@ -11,20 +11,7 @@ export default mudConfig({
         x: "int32",
         y: "int32",
         z: "int32",
-      },
-    },
-    Size: {
-      valueSchema: {
-        width: "uint32",
-        length: "uint32",
-        height: "uint32",
-      },
-    },
-    Orientation: {
-      valueSchema: {
-        yaw: "uint32",
-        pitch: "uint32",
-        roll: "uint32",
+        yaw: "int32",
       },
     },
     EntityType: {
@@ -32,17 +19,22 @@ export default mudConfig({
         typeId: "uint32",
       },
     },
+    OwnedBy: {
+      valueSchema: {
+        owner: "address",
+      },
+    },
   },
   modules: [
     {
       name: "KeysInTableModule",
       root: true,
-      args: [resolveTableId("Position")],
+      args: [resolveTableId("Position"), resolveTableId("EntityType")],
     },
     {
       name: "KeysWithValueModule",
       root: true,
-      args: [resolveTableId("Position")],
+      args: [resolveTableId("Position"), resolveTableId("EntityType")],
     },
   ],  
 });
