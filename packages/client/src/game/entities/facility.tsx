@@ -12,7 +12,7 @@ import { faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
 
 const Renderer = (props: IFacility) => {
-  const { colorPrimary, colorSecondary, scale, variant } = props;
+  const { colorPrimary, colorSecondary, scale, variant, rotation } = props;
   const {
     assets: { meshes },
   } = useStore();
@@ -31,6 +31,7 @@ const Renderer = (props: IFacility) => {
       dispose={null}
       scale={scale.multiplyScalar(0.7)}
       position={[0, 0, 0]}
+      rotation={[0, rotation.y, 0]}
     >
       {prototypes!.map((proto, index) => {
         let color = variant.colors[index];
