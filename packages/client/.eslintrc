@@ -18,7 +18,6 @@
     "tailwindcss/classnames-order": "warn",
     "@typescript-eslint/ban-ts-comment": "off",
     "react-hooks/exhaustive-deps": "error"
-    // "react/no-unknown-property": ["off", { "ignore": ["args"] }]
   },
   "settings": {
     "tailwindcss": {

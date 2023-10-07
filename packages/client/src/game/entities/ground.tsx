@@ -30,7 +30,7 @@ function Ground() {
     const {
       input: { cursor },
     } = getState();
-    cursor.position.copy(event.position);
+    cursor.setCursor({ position: event.position });
   }, gridRef);
 
   return (
