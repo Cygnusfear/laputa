@@ -5,6 +5,9 @@ export type ModelDataType = {
   colors: string[];
 };
 
+export const importModels = ["/models/plants.glb", "/models/facilities.glb"];
+export const importTextures = ["/textures/box01.webp"];
+
 const ModelData: { [key: string]: ModelDataType } = {
   block00: {
     name: "GenericBlock00",
