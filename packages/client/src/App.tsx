@@ -9,7 +9,7 @@ import { useMUD } from "./useMUD";
 export const App = () => {
   const {
     components: { Counter },
-    systemCalls: { increment },
+    systemCalls: { mudBuildFacility },
   } = useMUD();
 
   const counter = useComponentValue(Counter, singletonEntity);
@@ -22,13 +22,13 @@ export const App = () => {
       </div>
       <button
         type="button"
-        className="rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+        className="px-100 py-100 rounded-md border border-gray-300 bg-white text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50"
         onClick={async (event) => {
           event.preventDefault();
-          console.log("new counter value:", await increment());
+          console.log("new counter value:", await mudBuildFacility());
         }}
       >
-        Increment
+        mudBuildFacility
       </button>
       <LoadingScreen />
     </RootLayout>

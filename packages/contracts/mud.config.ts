@@ -1,4 +1,4 @@
-import { mudConfig } from "@latticexyz/world/register";
+import { mudConfig, resolveTableId } from "@latticexyz/world/register";
 
 export default mudConfig({
   tables: {
@@ -6,5 +6,39 @@ export default mudConfig({
       keySchema: {},
       valueSchema: "uint32",
     },
+    Position: {
+      valueSchema: {
+        x: "int32",
+        y: "int32",
+        z: "int32",
+      },
+    },
+    Orientation: {
+      valueSchema: {
+        yaw: "int32",
+      },
+    },
+    EntityType: {
+      valueSchema: {
+        typeId: "uint32",
+      },
+    },
+    OwnedBy: {
+      valueSchema: {
+        owner: "address",
+      },
+    },
   },
+  modules: [
+    {
+      name: "KeysInTableModule",
+      root: true,
+      args: [resolveTableId("Position")],
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("Position")],
+    },
+  ],
 });

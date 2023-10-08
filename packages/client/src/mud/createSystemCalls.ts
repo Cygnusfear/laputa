@@ -44,7 +44,25 @@ export function createSystemCalls(
     return getComponentValue(Counter, singletonEntity);
   };
 
+  const mudBuildFacility = async (
+    entityTypeId: number = 10,
+    x: number = 1,
+    y: number = 1,
+    z: number = 1,
+    yaw: number = 0
+  ) => {
+    const tx = await worldContract.write.buildFacility([
+      entityTypeId,
+      x,
+      y,
+      z,
+      yaw,
+    ]);
+    await waitForTransaction(tx);
+  };
+
   return {
     increment,
+    mudBuildFacility,
   };
 }
