@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Sparkles } from "@react-three/drei";
-import { AdditiveBlending, DoubleSide } from "three";
+import { AdditiveBlending, DoubleSide, Vector3 } from "three";
 
 import { useStore } from "../store";
 import { palette } from "../utils/palette";
@@ -38,9 +38,13 @@ function Cursor() {
   }, [cursorState, building, position, setCursor]);
 
   return (
-    <group position={position.toArray()} visible={cursorState !== "hidden"}>
+    <group
+      position={position.toArray()}
+      visible={cursorState !== "hidden"}
+      scale={new Vector3(0.95, 0.95, 0.95)}
+    >
       <mesh userData={{ type: "cursor" }} ref={cursorRef}>
-        <boxGeometry args={[0.96, 0.96]} />
+        <boxGeometry args={[1, 1]} />
         {/* Face mapping for direction */}
         {[...Array(6)].map((_, index) => (
           <meshLambertMaterial
@@ -65,7 +69,7 @@ function Cursor() {
       </mesh>
       {/* 🐁 main cursor block */}
       <mesh visible={cursorState === "valid"}>
-        <boxGeometry args={[0.99, 0.99, 0.99]} />
+        <boxGeometry args={[0.95, 0.95, 0.95]} />
         <meshStandardMaterial
           map={textures["box01"]}
           color={

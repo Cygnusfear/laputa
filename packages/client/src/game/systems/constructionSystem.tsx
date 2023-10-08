@@ -6,6 +6,7 @@ import { palette } from "../utils/palette";
 import { IFacility } from "../types/entities";
 import prand from "pure-rand";
 
+// TODO: Extract build conditions, can't build 1 tile below gravity well, only gravity well can build at y==1, etc
 const canBuildAtPosition = (position: Vector3) => {
   const {
     input: { building },

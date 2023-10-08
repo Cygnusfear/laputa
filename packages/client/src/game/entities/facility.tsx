@@ -128,7 +128,7 @@ const Facility = (props: IFacility) => {
                 ? palette.cursor
                 : "black"
             }
-            visible={faceIndex !== undefined && faceIndex === index}
+            visible={false}
             transparent={true}
             // TODO: Remove the face highlighting completely, or use alternative face highlighting like in Townscraper
             opacity={0}
