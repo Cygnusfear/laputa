@@ -7,10 +7,17 @@ import { IFacility } from "../types/entities";
 import prand from "pure-rand";
 
 const canBuildAtPosition = (position: Vector3) => {
+  const {
+    input: { building },
+  } = getState();
   if (position.y < 0) return false;
   const { getEntityByPosition } = getState().world;
   const entity = getEntityByPosition(position);
-  return entity ? false : true;
+  if (entity) return false;
+  if (building && !building.tags.includes("groundLevel") && position.y < 1) {
+    return false;
+  }
+  return true;
 };
 
 const getEntityInDirection = (position: Vector3, direction: Vector3) => {
@@ -34,6 +41,7 @@ const buildFacility = (position: Vector3) => {
 
   if (!canBuildAtPosition(position)) {
     console.error("Cannot build here", position);
+    cursor.setCursor({ cursorState: "invalid" });
     return;
   }
 
@@ -62,7 +70,6 @@ const buildFacility = (position: Vector3) => {
 
   addEntity(newFacility);
   // Move Input logic away from here
-  cursor.setCursor({ cursorState: "hidden" });
   setInput({ building: undefined });
   console.log(newFacility);
 };

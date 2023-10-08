@@ -3,10 +3,7 @@ import { Grid, GridProps } from "@react-three/drei";
 
 import { useInput } from "../input/useInput";
 import { getState, useStore } from "../store";
-import {
-  buildFacility,
-  canBuildAtPosition,
-} from "../systems/constructionSystem";
+import { buildFacility } from "../systems/constructionSystem";
 import { Directions } from "@/lib/utils";
 
 const gridSize = 1000;
@@ -38,10 +35,8 @@ function Ground() {
     const {
       input: { cursor },
     } = getState();
-    const canBuild = canBuildAtPosition(event.position);
     cursor.setCursor({
       position: event.position,
-      cursorState: canBuild ? "valid" : "hidden",
       direction: Directions.DOWN(),
     });
   }, gridRef);

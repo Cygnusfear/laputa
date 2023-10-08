@@ -3,10 +3,7 @@ import { useStore } from "../store";
 import { AdditiveBlending, DoubleSide, Mesh, Vector3 } from "three";
 import { animated } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
-import {
-  buildFacility,
-  canBuildAtPosition,
-} from "../systems/constructionSystem";
+import { buildFacility } from "../systems/constructionSystem";
 import { palette } from "../utils/palette";
 import { faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
@@ -81,26 +78,16 @@ const Facility = (props: IFacility) => {
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
     if (faceIndex === undefined) return;
     const direction = event.position.clone().add(faceDirections[faceIndex!]);
-    const canBuild = canBuildAtPosition(direction);
-    if (canBuild) {
-      cursor.setCursor({
-        position: direction,
-        cursorState: "valid",
-        direction: faceDirections[faceIndex!].clone().negate(),
-      });
-    } else {
-      cursor.setCursor({ cursorState: "hidden" });
-    }
+    cursor.setCursor({
+      position: direction,
+      direction: faceDirections[faceIndex!].clone().negate(),
+    });
   }, entityRef);
 
-  const { onMouseDown, onMouseClick } = useInput((event: MouseInputEvent) => {
+  const { onMouseDown, onMouseClick } = useInput(() => {
     if (faceIndex === undefined) return;
-    const direction = event.position.clone().add(faceDirections[faceIndex!]);
-    const canBuild = canBuildAtPosition(direction);
-    if (canBuild) {
-      buildFacility(direction);
-      setFaceIndex(undefined);
-    }
+    buildFacility(cursor.position);
+    setFaceIndex(undefined);
   }, entityRef);
 
   return (
