@@ -2,13 +2,23 @@
 pragma solidity >=0.8.21;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
+//import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
 
 import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy } from "../codegen/index.sol";
+import { positionToEntityKey } from "../positionToEntityKey.sol";
 
 contract FacilitySystem is System {
+  /**
+   * @dev Build a facility of entityTypeId at the given position with the given yaw.
+   * @param entityTypeId The entityTypeId of the facility to build.
+   * @param x The x coordinate of the position to build the facility at.
+   * @param y The y coordinate of the position to build the facility at.
+   * @param z The z coordinate of the position to build the facility at.
+   * @param yaw The yaw of the facility to build.
+   * @return The key of the entity that was created.
+   */
   function buildFacility(uint32 entityTypeId, int32 x, int32 y, int32 z, int32 yaw) public returns (bytes32) {
     require(_msgSender() != address(0), "Invalid sender address");
 
@@ -23,12 +33,12 @@ contract FacilitySystem is System {
     require(keysAtPosition.length == 0, "Position is occupied");
 
     //create entity and assign component values
-    bytes32 entityId = getUniqueEntity();
-    Position.set(entityId, x, y, z);
-    Orientation.set(entityId, yaw);
-    EntityType.set(entityId, entityTypeId);
-    OwnedBy.set(entityId, _msgSender());
+    bytes32 entityKey = positionToEntityKey(x, y, z);
+    Position.set(entityKey, x, y, z);
+    Orientation.set(entityKey, yaw);
+    EntityType.set(entityKey, entityTypeId);
+    OwnedBy.set(entityKey, _msgSender());
 
-    return entityId;
+    return entityKey;
   }
 }
