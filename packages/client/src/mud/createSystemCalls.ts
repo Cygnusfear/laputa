@@ -5,6 +5,7 @@
 
 import { getComponentValue } from "@latticexyz/recs";
 import { singletonEntity } from "@latticexyz/store-sync/recs";
+import { Vector3 } from "three";
 
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
@@ -44,6 +45,17 @@ export function createSystemCalls(
     return getComponentValue(Counter, singletonEntity);
   };
 
+  const mudIsPositionEmpty = async (
+    position: Vector3 = new Vector3(1, 1, 1)
+  ) => {
+    const res = await worldContract.read.isPositionEmpty([
+      position.x,
+      position.y,
+      position.z,
+    ]);
+    return res;
+  };
+
   const mudBuildFacility = async (
     entityTypeId: number = 10,
     x: number = 1,
@@ -59,10 +71,12 @@ export function createSystemCalls(
       yaw,
     ]);
     await waitForTransaction(tx);
+    return tx;
   };
 
   return {
     increment,
+    mudIsPositionEmpty,
     mudBuildFacility,
   };
 }
