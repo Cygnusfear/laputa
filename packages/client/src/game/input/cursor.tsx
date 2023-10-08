@@ -5,7 +5,6 @@ import { AdditiveBlending, DoubleSide } from "three";
 import { useStore } from "../store";
 import { palette } from "../utils/palette";
 import { faceDirections } from "@/lib/utils";
-import { useFrame } from "@react-three/fiber";
 import { canBuildAtPosition } from "../systems/constructionSystem";
 
 function Cursor() {
@@ -26,7 +25,7 @@ function Cursor() {
     }
   }, [direction]);
 
-  useFrame(() => {
+  useEffect(() => {
     if (building) {
       if (!canBuildAtPosition(position)) {
         setCursor({ cursorState: "invalid" });
@@ -36,7 +35,7 @@ function Cursor() {
     } else {
       setCursor({ cursorState: "hidden" });
     }
-  });
+  }, [cursorState, building, position, setCursor]);
 
   return (
     <group position={position.toArray()} visible={cursorState !== "hidden"}>
