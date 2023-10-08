@@ -52,7 +52,18 @@ const Renderer = (props: IFacility) => {
             receiveShadow
             castShadow
           >
-            <meshLambertMaterial attach={`material`} color={color} />
+            {
+              // @ts-ignore
+              proto.material?.map ? (
+                <meshLambertMaterial
+                  attach="material"
+                  // @ts-ignore
+                  map={proto.material?.map}
+                />
+              ) : (
+                <meshLambertMaterial attach={`material`} color={color} />
+              )
+            }
           </mesh>
         );
       })}

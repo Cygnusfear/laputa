@@ -26,20 +26,20 @@ const ModelData: { [key: string]: ModelDataType } = {
   },
   engine00: {
     name: "Engine00",
-    nodes: ["Engine00", "Engine00001"],
-    materials: ["Engine.Mat.Back", "Engine.Mat.Front"],
+    nodes: ["dynamo00", "dynamo00001"],
+    materials: [],
     colors: ["secondary", "primary"],
   },
   doubleside00: {
     name: "DoubleSide00",
     nodes: ["Double00", "Double00001"],
-    materials: ["Engine.Mat.Back", "Engine.Mat.Front"],
+    materials: [],
     colors: ["secondary", "primary"],
   },
   well00: {
     name: "Well00",
     nodes: ["Well00", "Well00001"],
-    materials: ["Engine.Mat.Back", "Engine.Mat.Front"],
+    materials: ["Well"],
     colors: ["secondary", "primary"],
   },
 } as const;
