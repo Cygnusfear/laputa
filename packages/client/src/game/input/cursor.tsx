@@ -12,6 +12,7 @@ function Cursor() {
     input: {
       cursor: { position, cursorState, direction },
     },
+    assets: { textures },
   } = useStore();
   const [faceIndex, setFaceIndex] = useState(0);
 
@@ -23,48 +24,43 @@ function Cursor() {
   }, [direction]);
 
   return (
-    <mesh
-      position={position.toArray()}
-      userData={{ type: "cursor" }}
-      visible={cursorState !== "hidden"}
-      ref={cursorRef}
-    >
-      <boxGeometry args={[0.99, 0.99]} />
-      {/* Face mapping for direction */}
-      {[...Array(6)].map((_, index) => (
-        <meshLambertMaterial
-          attach={`material-${index}`}
-          key={index}
-          color={
-            faceIndex !== undefined && faceIndex === index
-              ? palette.cursor
-              : "black"
-          }
-          visible={faceIndex !== undefined && faceIndex === index}
-          transparent={true}
-          opacity={0.6}
-          blending={AdditiveBlending}
-          side={DoubleSide}
+    <group position={position.toArray()} visible={cursorState !== "hidden"}>
+      <mesh userData={{ type: "cursor" }} ref={cursorRef}>
+        <boxGeometry args={[0.96, 0.96]} />
+        {/* Face mapping for direction */}
+        {[...Array(6)].map((_, index) => (
+          <meshLambertMaterial
+            attach={`material-${index}`}
+            key={index}
+            color={palette.cursor}
+            visible={faceIndex !== undefined && faceIndex === index}
+            transparent={true}
+            opacity={0.3}
+            blending={AdditiveBlending}
+            side={DoubleSide}
+          />
+        ))}
+        <Sparkles
+          count={7}
+          scale={1.15}
+          size={2.6}
+          visible={cursorState !== "hidden"}
         />
-      ))}
-      <Sparkles
-        count={10}
-        scale={1.5}
-        size={3.6}
-        visible={cursorState !== "hidden"}
-      />
+      </mesh>
       {/* 🐁 main cursor block */}
       <mesh>
-        <boxGeometry args={[1, 1, 1]} />
+        <boxGeometry args={[0.99, 0.99, 0.99]} />
         <meshStandardMaterial
+          map={textures["box01"]}
           color={"#76EAE4"}
-          blending={AdditiveBlending}
           transparent
           attach="material"
           opacity={0.1}
+          blending={AdditiveBlending}
+          side={DoubleSide}
         />
       </mesh>
-    </mesh>
+    </group>
   );
 }
 

@@ -1,0 +1,64 @@
+.inventory-bar {
+  @apply absolute bottom-3 flex-row flex items-center justify-center w-full h-40;
+}
+
+.card {
+  @apply relative flex flex-col items-center justify-end w-24 h-full m-2 text-white overflow-clip cursor-pointer;
+  transition: opacity 1s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.1) translateY(-10px);
+  transition: transform cubic-bezier(1, 0, 0, 1) 0.15s;
+}
+
+.card-content {
+  @apply flex-grow flex-col flex mb-1 justify-end leading-tight;
+  opacity: 0;
+}
+
+.card:hover .card-content {
+  opacity: 1;
+}
+
+.card-portrait {
+  @apply relative flex bg-cover h-24 w-24 self-end rounded-lg shadow-md cursor-pointer border border-transparent bg-[#76eae441];
+}
+
+.card-image {
+  @apply absolute top-[5%] left-[5%] bg-cover h-[90%] w-[90%];
+}
+
+.selected-item .card-portrait {
+  @apply border-[#76EAE4] bg-[#76eae466];
+  transition: all 0.3s;
+}
+
+.card-title {
+  @apply relative text-sm font-bold text-center leading-3;
+  text-shadow:
+    0px 0px 8px rgba(0, 0, 0, 0.02),
+    0px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.card-blurb {
+  @apply text-xxs mt-1 text-center;
+}
+
+.card-produces {
+  @apply absolute top-1 left-1.5 text-xs font-bold text-center;
+}
+
+.card-costs {
+  @apply absolute bottom-1 right-1.5 text-xs font-bold text-center;
+}
+
+.card-produces-item {
+  @apply text-xxs font-bold;
+}
+
+.card-costs span {
+  text-shadow:
+    0px 0px 8px rgba(0, 0, 0, 0.1),
+    0px 1px 2px rgba(0, 0, 0, 0.4);
+}

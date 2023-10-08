@@ -3,29 +3,20 @@ import { RefObject } from "react";
 import { PointOctree } from "sparse-octree";
 import { Mesh, Object3D, Vector3 } from "three";
 import { create } from "zustand";
-
-export interface Entity {
-  position: Vector3;
-  scale: Vector3;
-  rotation: Vector3;
-  entityRef: RefObject<Object3D | Mesh>;
-  colorPrimary: string;
-  colorSecondary: string;
-}
-
-export interface Facility extends Entity {}
+import { IEntity } from "./types/entities";
+import { Assets } from "./utils/importer";
+import { EntityDataType } from "./data/entities";
 
 export interface World {
-  entities: Entity[];
-  octree: PointOctree<Entity>;
-  addEntity: (entity: Entity) => void;
-  removeEntity: (entity: Entity) => void;
-  getEntityByRef: (ref: RefObject<Object3D | Mesh>) => Entity | undefined;
-  getEntityByPosition: (position: Vector3) => Entity | undefined;
+  entities: IEntity[];
+  octree: PointOctree<IEntity>;
+  addEntity: (entity: IEntity) => void;
+  removeEntity: (entity: IEntity) => void;
+  getEntityByRef: (ref: RefObject<Object3D | Mesh>) => IEntity | undefined;
+  getEntityByPosition: (position: Vector3) => IEntity | undefined;
 }
 
 export type CursorState = "valid" | "invalid" | "hidden";
-
 export interface CursorProps {
   position: Vector3;
   cursorState: CursorState;
@@ -34,40 +25,27 @@ export interface CursorProps {
   setCursor: (props: Partial<CursorProps>) => void;
 }
 
+export type InputMode = "select" | "build" | "delete";
 export interface Input {
   cursor: CursorProps;
+  selection: IEntity | null;
+  building: EntityDataType | null;
+  mode: InputMode;
+  setInput: (props: Partial<Omit<Input, "cursor">>) => void;
 }
 
 export interface IState {
   world: World;
   input: Input;
+  assets: Assets;
 }
 
 const octreeScale = 1000;
 const min = new Vector3(-octreeScale, -octreeScale, -octreeScale);
 const max = new Vector3(octreeScale, octreeScale, octreeScale);
-const octree = new PointOctree<Entity>(min, max);
+const octree = new PointOctree<IEntity>(min, max);
 
 const useStore = create<IState>((set, get) => ({
-  input: {
-    cursor: {
-      position: new Vector3(),
-      cursorState: "valid",
-      object: undefined,
-      direction: Directions.UP(),
-      setCursor: (props: Partial<CursorProps>) => {
-        set((state) => ({
-          input: {
-            ...state.input,
-            cursor: {
-              ...state.input.cursor,
-              ...props,
-            },
-          },
-        }));
-      },
-    },
-  },
   world: {
     entities: [],
     octree,
@@ -94,6 +72,74 @@ const useStore = create<IState>((set, get) => ({
     },
     getEntityByPosition: (position) => {
       return get().world.octree.get(position) || undefined;
+    },
+  },
+  input: {
+    mode: "select",
+    selection: null,
+    building: null,
+    setInput: (props) => {
+      set((state) => ({
+        input: {
+          ...state.input,
+          ...props,
+        },
+      }));
+    },
+    cursor: {
+      position: new Vector3(),
+      cursorState: "valid",
+      object: undefined,
+      direction: Directions.UP(),
+      setCursor: (props: Partial<CursorProps>) => {
+        set((state) => ({
+          input: {
+            ...state.input,
+            cursor: {
+              ...state.input.cursor,
+              ...props,
+            },
+          },
+        }));
+      },
+    },
+  },
+  assets: {
+    meshes: {},
+    addMesh: (name, mesh) => {
+      set((state) => ({
+        assets: {
+          ...state.assets,
+          meshes: {
+            ...state.assets.meshes,
+            [name]: mesh,
+          },
+        },
+      }));
+    },
+    textures: {},
+    addTexture: (name, texture) => {
+      set((state) => ({
+        assets: {
+          ...state.assets,
+          textures: {
+            ...state.assets.textures,
+            [name]: texture,
+          },
+        },
+      }));
+    },
+    materials: {},
+    addMaterial: (name, material) => {
+      set((state) => ({
+        assets: {
+          ...state.assets,
+          material: {
+            ...state.assets.textures,
+            [name]: material,
+          },
+        },
+      }));
     },
   },
 }));

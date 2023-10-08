@@ -1,0 +1,42 @@
+.loading-wrapper {
+  @apply fixed left-0 top-0 flex h-screen w-screen items-center justify-center overflow-hidden text-clip bg-clip-border flex-col z-[1000];
+}
+
+.loading-background {
+  @apply fixed left-0 top-0 flex h-screen w-screen items-center justify-center overflow-hidden text-clip bg-[#76ADAB] bg-clip-border flex-col;
+  transition: opacity 1s ease-in-out;
+}
+
+.game-title {
+  @apply relative mx-auto text-6xl pt-4;
+  font-family: "Anton", sans;
+  animation: pulseShadow 5s infinite alternate;
+  transition: opacity 1s ease-in-out;
+}
+
+.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wrapper-animate {
+  transition: opacity 4s ease-in-out;
+  animation: 2s wrapperFade linear;
+  pointer-events: none;
+}
+
+@keyframes wrapperFade {
+  0% {
+    opacity: (1);
+  }
+  25% {
+    opacity: (1);
+  }
+  99.99% {
+    opacity: (0);
+  }
+  100% {
+    opacity: (0);
+    display: none;
+  }
+}
