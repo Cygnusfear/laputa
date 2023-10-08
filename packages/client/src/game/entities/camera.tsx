@@ -32,7 +32,7 @@ function Camera() {
       <PerspectiveCamera position={[0, 50, 50]} fov={35} />
       <OrbitControls
         target={[0, 0, 0]}
-        minDistance={12}
+        minDistance={7}
         maxDistance={100}
         maxPolarAngle={Math.PI / 3.5}
         // @ts-ignore

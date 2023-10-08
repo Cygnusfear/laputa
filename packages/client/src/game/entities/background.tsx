@@ -13,7 +13,7 @@ function Background() {
           seed={12}
           position={[0, -2, 0]}
           fade={120}
-          opacity={0.03}
+          opacity={0.09}
         />
         <Cloud
           bounds={[100, 2, 100]}
@@ -23,7 +23,7 @@ function Background() {
           color="#C59885"
           fade={120}
           position={[0, -5, 0]}
-          opacity={0.13}
+          opacity={0.23}
           speed={0.02}
           concentrate={"inside"}
         />
