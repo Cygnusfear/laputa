@@ -40,5 +40,5 @@ export default mudConfig({
       root: true,
       args: [resolveTableId("Position")],
     },
-  ],  
+  ],
 });
