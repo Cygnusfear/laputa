@@ -3,16 +3,13 @@ import { useStore } from "../store";
 import { AdditiveBlending, DoubleSide, Mesh, Vector3 } from "three";
 import { animated } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
-import {
-  buildFacility,
-  canBuildAtPosition,
-} from "../systems/constructionSystem";
+import { buildFacility } from "../systems/constructionSystem";
 import { palette } from "../utils/palette";
 import { faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
 
 const Renderer = (props: IFacility) => {
-  const { colorPrimary, colorSecondary, scale, variant, rotation } = props;
+  const { colorPrimary, colorSecondary, variant, rotation } = props;
   const {
     assets: { meshes },
   } = useStore();
@@ -29,7 +26,7 @@ const Renderer = (props: IFacility) => {
   return (
     <group
       dispose={null}
-      scale={scale.multiplyScalar(0.7)}
+      scale={new Vector3(1, 1, 1)}
       position={[0, 0, 0]}
       rotation={[0, rotation.y, 0]}
     >
@@ -81,26 +78,16 @@ const Facility = (props: IFacility) => {
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
     if (faceIndex === undefined) return;
     const direction = event.position.clone().add(faceDirections[faceIndex!]);
-    const canBuild = canBuildAtPosition(direction);
-    if (canBuild) {
-      cursor.setCursor({
-        position: direction,
-        cursorState: "valid",
-        direction: faceDirections[faceIndex!].clone().negate(),
-      });
-    } else {
-      cursor.setCursor({ cursorState: "hidden" });
-    }
+    cursor.setCursor({
+      position: direction,
+      direction: faceDirections[faceIndex!].clone().negate(),
+    });
   }, entityRef);
 
-  const { onMouseDown, onMouseClick } = useInput((event: MouseInputEvent) => {
+  const { onMouseDown, onMouseClick } = useInput(() => {
     if (faceIndex === undefined) return;
-    const direction = event.position.clone().add(faceDirections[faceIndex!]);
-    const canBuild = canBuildAtPosition(direction);
-    if (canBuild) {
-      buildFacility(direction);
-      setFaceIndex(undefined);
-    }
+    buildFacility(cursor.position);
+    setFaceIndex(undefined);
   }, entityRef);
 
   return (
@@ -141,7 +128,7 @@ const Facility = (props: IFacility) => {
                 ? palette.cursor
                 : "black"
             }
-            visible={faceIndex !== undefined && faceIndex === index}
+            visible={false}
             transparent={true}
             // TODO: Remove the face highlighting completely, or use alternative face highlighting like in Townscraper
             opacity={0}

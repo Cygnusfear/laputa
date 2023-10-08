@@ -4,6 +4,7 @@ const grassColors = ["#9BD48A", "#8FCD5F", "#69CD1E"];
 
 const palette = {
   cursor: "#76EAE4",
+  cursorInvalid: "#ff0000",
   buildingPrimary: buildingPrimary,
   buildingSecondary: buildingSecondary,
   grassColors: grassColors,

@@ -9,7 +9,16 @@ export type EntityDataType = {
   costs: [ResourceType, number][];
   produces: [ResourceType, number, number][];
   variants: ModelDataType[];
+  tags: EntityTag[];
 };
+
+export const entityTags = [
+  "groundLevel",
+  "producesPower",
+  "producesGravity",
+  "producesPopulation",
+] as const;
+export type EntityTag = (typeof entityTags)[number];
 
 const EntityData = {
   facilities: {
@@ -21,6 +30,7 @@ const EntityData = {
       costs: [["lapu", 500]],
       produces: [["gravity", 25, 1]],
       variants: [ModelData.well00],
+      tags: ["groundLevel"],
     },
     dynamo: {
       name: "Whirly Dynamo",
@@ -31,6 +41,7 @@ const EntityData = {
       costs: [["lapu", 200]],
       produces: [["power", 25, 1]],
       variants: [ModelData.engine00],
+      tags: [],
     },
     residence: {
       name: "Residence",
@@ -41,6 +52,7 @@ const EntityData = {
       costs: [["lapu", 100]],
       produces: [["population", 5, 1]],
       variants: [ModelData.block00, ModelData.block01, ModelData.block02],
+      tags: [],
     },
   } as { [key: string]: EntityDataType },
 } as const;

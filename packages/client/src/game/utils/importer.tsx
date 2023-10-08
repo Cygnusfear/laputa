@@ -3,9 +3,7 @@ import { useGLTF, useTexture } from "@react-three/drei";
 import { Material, Mesh, Texture } from "three";
 import type { GLTF } from "three-stdlib";
 import { useStore } from "../store";
-
-const models = ["/models/plants.glb", "/models/block01.glb"];
-const textures = ["/textures/box01.webp"];
+import { importModels, importTextures } from "../data/models";
 
 export interface Assets {
   meshes: Record<string, Mesh>;
@@ -51,12 +49,12 @@ function TextureLoader({ path }: { path: string }) {
     useTexture.preload(path);
   }, [path]);
 
-  // Loading and storing the model
+  // Loading and storing the texture
   const texture = useTexture(path) as Texture;
 
   useEffect(() => {
     if (texture) {
-      textures.forEach((node) => {
+      importTextures.forEach((node) => {
         try {
           addTexture(node.replace("/textures/", "").split(".")[0], texture);
         } catch (error) {
@@ -72,10 +70,10 @@ function TextureLoader({ path }: { path: string }) {
 function Importer() {
   return (
     <>
-      {models.map((model) => (
+      {importModels.map((model) => (
         <ModelLoader key={model} path={model} />
       ))}
-      {textures.map((texture) => (
+      {importTextures.map((texture) => (
         <TextureLoader key={texture} path={texture} />
       ))}
     </>

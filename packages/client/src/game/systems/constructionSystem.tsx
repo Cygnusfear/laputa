@@ -6,11 +6,19 @@ import { palette } from "../utils/palette";
 import { IFacility } from "../types/entities";
 import prand from "pure-rand";
 
+// TODO: Extract build conditions, can't build 1 tile below gravity well, only gravity well can build at y==1, etc
 const canBuildAtPosition = (position: Vector3) => {
+  const {
+    input: { building },
+  } = getState();
   if (position.y < 0) return false;
   const { getEntityByPosition } = getState().world;
   const entity = getEntityByPosition(position);
-  return entity ? false : true;
+  if (entity) return false;
+  if (building && !building.tags.includes("groundLevel") && position.y < 1) {
+    return false;
+  }
+  return true;
 };
 
 const getEntityInDirection = (position: Vector3, direction: Vector3) => {
@@ -34,6 +42,7 @@ const buildFacility = (position: Vector3) => {
 
   if (!canBuildAtPosition(position)) {
     console.error("Cannot build here", position);
+    cursor.setCursor({ cursorState: "invalid" });
     return;
   }
 
@@ -43,7 +52,7 @@ const buildFacility = (position: Vector3) => {
 
   const newFacility = {
     position: position,
-    scale: new Vector3(Math.random() * 0.1 + 0.9, 1, Math.random() * 0.1 + 0.9),
+    scale: new Vector3(1, 1, 1),
     colorPrimary: getRandom(palette.buildingPrimary),
     colorSecondary: getRandom(palette.buildingSecondary),
     entityRef: createRef<THREE.Mesh>(),
@@ -62,7 +71,6 @@ const buildFacility = (position: Vector3) => {
 
   addEntity(newFacility);
   // Move Input logic away from here
-  cursor.setCursor({ cursorState: "hidden" });
   setInput({ building: undefined });
   console.log(newFacility);
 };
