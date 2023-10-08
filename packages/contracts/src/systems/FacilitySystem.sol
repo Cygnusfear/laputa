@@ -41,4 +41,14 @@ contract FacilitySystem is System {
 
     return entityKey;
   }
+
+  function destoryFacility(bytes32 entityKey) public {
+    require(_msgSender() != address(0), "Invalid sender address");
+    require(OwnedBy.get(entityKey) == _msgSender(), "Sender does not own this entity");
+
+    OwnedBy.deleteRecord(entityKey);
+    EntityType.deleteRecord(entityKey);
+    Orientation.deleteRecord(entityKey);
+    Position.deleteRecord(entityKey);
+  }
 }
