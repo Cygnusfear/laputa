@@ -65,7 +65,7 @@ function Cursor() {
           count={7}
           scale={1.15}
           size={2.6}
-          visible={cursorState !== "hidden"}
+          visible={cursorState === "valid"}
         />
       </mesh>
       {/* 🐁 main cursor block */}

@@ -11,14 +11,26 @@ import prand from "pure-rand";
 import Wire from "./wire";
 
 const Renderer = (props: IFacility) => {
-  const { colorPrimary, colorSecondary, variant, rotation } = props;
+  const { colorPrimary, colorSecondary, variant, rotation, position } = props;
   const {
     assets: { meshes },
+    world: { getEntityByPosition },
   } = useStore();
 
   const [prototypes] = useState(
-    Object.values(meshes).filter((node) => variant?.nodes.includes(node.name))
+    Object.values(meshes).filter((mesh) => variant?.nodes.includes(mesh.name))
   );
+
+  const rand = useMemo(() => {
+    const seed = Date.now() ^ (Math.random() * 0x100000000);
+    return prand.xoroshiro128plus(seed);
+  }, []);
+
+  const numWires = useMemo(() => {
+    const entityBelow = getEntityByPosition(Directions.DOWN().add(position));
+    if (entityBelow) return 0;
+    return prand.unsafeUniformIntDistribution(0, 5, rand);
+  }, [rand, position, getEntityByPosition]);
 
   if (!variant || !prototypes || prototypes.length < 1) {
     console.error("No prototypes found for variant", variant, prototypes);
@@ -67,6 +79,7 @@ const Renderer = (props: IFacility) => {
           </mesh>
         );
       })}
+      <Wire numWires={numWires} />
     </group>
   );
 };
@@ -76,17 +89,7 @@ const Facility = (props: IFacility) => {
   const [faceIndex, setFaceIndex] = useState<number | undefined>(undefined);
   const {
     input: { cursor },
-    world: { getEntityByPosition },
   } = useStore();
-  const rand = useMemo(() => {
-    const seed = Date.now() ^ (Math.random() * 0x100000000);
-    return prand.xoroshiro128plus(seed);
-  }, []);
-  const numWires = useMemo(() => {
-    const entityBelow = getEntityByPosition(Directions.DOWN().add(position));
-    if (entityBelow) return 0;
-    return prand.unsafeUniformIntDistribution(0, 5, rand);
-  }, [rand, position, getEntityByPosition]);
 
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
     if (faceIndex === undefined) return;
@@ -150,9 +153,6 @@ const Facility = (props: IFacility) => {
           />
         ))}
         <Renderer {...props} />
-        <group layers={30}>
-          <Wire numWires={numWires} />
-        </group>
       </animated.mesh>
     </group>
   );
