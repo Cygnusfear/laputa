@@ -21,6 +21,7 @@ const Wire: React.FC<WireProps> = ({ numWires = 5 }) => {
     const rand = prand.unsafeUniformIntDistribution;
     const rng = prand.xoroshiro128plus(seed);
     const wiresArray: Vector3[][] = [];
+
     for (let i = 0; i < numWires; i++) {
       // Random start and end X and Z coordinates within the tile
       const startX = 0.75 * (rand(0, 100, rng) / 100 - 0.5);
