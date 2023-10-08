@@ -42,6 +42,7 @@ function Cursor() {
       position={position.toArray()}
       visible={cursorState !== "hidden"}
       scale={new Vector3(0.95, 0.95, 0.95)}
+      layers={30}
     >
       <mesh userData={{ type: "cursor" }} ref={cursorRef}>
         <boxGeometry args={[1, 1]} />

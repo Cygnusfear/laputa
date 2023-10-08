@@ -1,12 +1,14 @@
-import { RefObject, useState } from "react";
+import { RefObject, useMemo, useState } from "react";
 import { useStore } from "../store";
 import { AdditiveBlending, DoubleSide, Mesh, Vector3 } from "three";
 import { animated } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
 import { buildFacility } from "../systems/constructionSystem";
 import { palette } from "../utils/palette";
-import { faceDirections } from "@/lib/utils";
+import { Directions, faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
+import prand from "pure-rand";
+import Wire from "./wire";
 
 const Renderer = (props: IFacility) => {
   const { colorPrimary, colorSecondary, variant, rotation } = props;
@@ -25,6 +27,7 @@ const Renderer = (props: IFacility) => {
 
   return (
     <group
+      layers={30}
       dispose={null}
       scale={new Vector3(1, 1, 1)}
       position={[0, 0, 0]}
@@ -73,7 +76,17 @@ const Facility = (props: IFacility) => {
   const [faceIndex, setFaceIndex] = useState<number | undefined>(undefined);
   const {
     input: { cursor },
+    world: { getEntityByPosition },
   } = useStore();
+  const rand = useMemo(() => {
+    const seed = Date.now() ^ (Math.random() * 0x100000000);
+    return prand.xoroshiro128plus(seed);
+  }, []);
+  const numWires = useMemo(() => {
+    const entityBelow = getEntityByPosition(Directions.DOWN().add(position));
+    if (entityBelow) return 0;
+    return prand.unsafeUniformIntDistribution(0, 5, rand);
+  }, [rand, position, getEntityByPosition]);
 
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
     if (faceIndex === undefined) return;
@@ -137,6 +150,9 @@ const Facility = (props: IFacility) => {
           />
         ))}
         <Renderer {...props} />
+        <group layers={30}>
+          <Wire numWires={numWires} />
+        </group>
       </animated.mesh>
     </group>
   );
