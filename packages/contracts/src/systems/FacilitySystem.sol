@@ -11,6 +11,15 @@ import { positionToEntityKey } from "../positionToEntityKey.sol";
 
 contract FacilitySystem is System {
   /**
+   * @dev Check if an entityTypeId is a ground level facility.
+   * @param entityTypeId The entityTypeId of the facility to check.
+   * @return True if the facility is a ground level facility, false otherwise.
+   */
+  function isEntityTypeIdGroundLevelFacility(uint32 entityTypeId) public pure returns (bool) {
+    return entityTypeId <= 100;
+  }
+
+  /**
    * @dev Check if a facility can be built at the given position.
    * @param x The x coordinate of the position to check.
    * @param y The y coordinate of the position to check.
@@ -38,13 +47,53 @@ contract FacilitySystem is System {
   }
 
   /**
-   * @dev Check if a player owns a facility.
-   * @param player The address of the player to check.
-   * @param entityKey The key of the facility to check.
-   * @return True if the player owns the facility, false otherwise.
+   * @dev Check if a position is next to an existing entity.
+   * @param x The x coordinate of the position to check.
+   * @param y The y coordinate of the position to check.
+   * @param z The z coordinate of the position to check.
+   * @return True if the position is next to an existing entity, false otherwise.
    */
-  function isPlayerOwnerOfFacility(address player, bytes32 entityKey) public view returns (bool) {
-    return OwnedBy.get(entityKey) == player;
+  function isPositionNextToAnExistingEntity(int32 x, int32 y, int32 z) public view returns (bool) {
+    if (!isPositionEmpty(x, y - 1, z)) return true;
+    if (!isPositionEmpty(x, y + 1, z)) return true;
+    if (!isPositionEmpty(x - 1, y, z)) return true;
+    if (!isPositionEmpty(x + 1, y, z)) return true;
+    if (!isPositionEmpty(x, y, z - 1)) return true;
+    if (!isPositionEmpty(x, y, z + 1)) return true;
+    return false;
+  }
+
+  /**
+   * @dev Check if a facility of entityTypeId can be built at the given position.
+   * @param entityTypeId The entityTypeId of the facility to check.
+   * @param x The x coordinate of the position to check.
+   * @param y The y coordinate of the position to check.
+   * @param z The z coordinate of the position to check.
+   * @return True if a facility of entityTypeId can be built at the given position, false otherwise.
+   */
+  function canBuildFacilityTypeAtPosition(uint32 entityTypeId, int32 x, int32 y, int32 z) public view returns (bool) {
+    if (y < 0) return false;
+    if (!isPositionEmpty(x, y, z)) return false;
+    if (y == 0) return isEntityTypeIdGroundLevelFacility(entityTypeId);
+    return isPositionNextToAnExistingEntity(x, y, z);
+  }
+
+  /**
+   * @dev Get the ownedBy of the target entity.
+   * @param entityKey The key of the entity.
+   * @return owner address.
+   */
+  function getOwnedBy(bytes32 entityKey) public view returns (address) {
+    return OwnedBy.get(entityKey);
+  }
+
+  /**
+   * @dev Get the entityTypeId of the target entity.
+   * @param entityKey The key of the entity.
+   * @return entityTypeId.
+   */
+  function getEntityTypeId(bytes32 entityKey) public view returns (uint32) {
+    return EntityType.get(entityKey);
   }
 
   /**
@@ -59,7 +108,7 @@ contract FacilitySystem is System {
   function buildFacility(uint32 entityTypeId, int32 x, int32 y, int32 z, int32 yaw) public returns (bytes32) {
     require(_msgSender() != address(0), "Invalid sender address");
     require(canPlayerBuildFacilityType(_msgSender(), entityTypeId), "Cannot build this facility type");
-    require(isPositionEmpty(x, y, z), "Position is occupied");
+    require(canBuildFacilityTypeAtPosition(entityTypeId, x, y, z), "This facility cannot be built at this position");
 
     //TODO: consume resources from sender to build facility
 
@@ -79,7 +128,7 @@ contract FacilitySystem is System {
    */
   function destoryFacility(bytes32 entityKey) public {
     require(_msgSender() != address(0), "Invalid sender address");
-    require(isPlayerOwnerOfFacility(_msgSender(), entityKey), "Sender does not own this entity");
+    require(getOwnedBy(entityKey) == _msgSender(), "Sender does not own this entity");
 
     OwnedBy.deleteRecord(entityKey);
     EntityType.deleteRecord(entityKey);
