@@ -34,6 +34,7 @@ function Inventory() {
   }, []);
 
   useEffect(() => {
+    // TODO: Remove hack to only show gravityhill at startup
     if (entities.length > 0 && facilities.length < 2) {
       const f = Object.entries(EntityData.facilities)
         .map(([, entityData]) => entityData)
