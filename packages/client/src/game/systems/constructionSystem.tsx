@@ -30,7 +30,7 @@ const getEntityInDirection = (position: Vector3, direction: Vector3) => {
 // Should accept a building type as arg
 const buildFacility = (position: Vector3) => {
   const {
-    input: { cursor, building, setInput },
+    input: { cursor, building },
     world: { addEntity },
   } = getState();
 
@@ -72,7 +72,7 @@ const buildFacility = (position: Vector3) => {
 
   addEntity(newFacility);
   // Move Input logic away from here
-  setInput({ building: undefined });
+  // setInput({ building: undefined });
 };
 
 export { buildFacility, canBuildAtPosition, getEntityInDirection };
