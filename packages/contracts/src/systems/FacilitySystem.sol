@@ -79,24 +79,6 @@ contract FacilitySystem is System {
   }
 
   /**
-   * @dev Get the ownedBy of the target entity.
-   * @param entityKey The key of the entity.
-   * @return owner address.
-   */
-  function getOwnedBy(bytes32 entityKey) public view returns (address) {
-    return OwnedBy.get(entityKey);
-  }
-
-  /**
-   * @dev Get the entityTypeId of the target entity.
-   * @param entityKey The key of the entity.
-   * @return entityTypeId.
-   */
-  function getEntityTypeId(bytes32 entityKey) public view returns (uint32) {
-    return EntityType.get(entityKey);
-  }
-
-  /**
    * @dev Build a facility of entityTypeId at the given position with the given yaw.
    * @param entityTypeId The entityTypeId of the facility to build.
    * @param x The x coordinate of the position to build the facility at.
@@ -128,7 +110,7 @@ contract FacilitySystem is System {
    */
   function destoryFacility(bytes32 entityKey) public {
     require(_msgSender() != address(0), "Invalid sender address");
-    require(getOwnedBy(entityKey) == _msgSender(), "Sender does not own this entity");
+    require(OwnedBy.get(entityKey) == _msgSender(), "Sender does not own this entity");
 
     OwnedBy.deleteRecord(entityKey);
     EntityType.deleteRecord(entityKey);
