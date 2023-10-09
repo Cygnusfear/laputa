@@ -9,26 +9,43 @@ import { Directions } from "@/lib/utils";
 const gridSize = 1000;
 
 function GridRenderer() {
+  const {
+    input: { building },
+  } = useStore();
   const gridConfig = {
     cellSize: 1,
     cellThickness: 0.9,
-    cellColor: "#76EAE4",
     sectionSize: 5,
-    sectionThickness: 1,
-    sectionColor: "#76EAE4",
     fadeDistance: 40,
     fadeStrength: 2,
     followCamera: true,
     infiniteGrid: true,
     depthTest: false,
   } as GridProps;
-  return <Grid position={[0, 0, 50]} args={[30.5, 30.5]} {...gridConfig} />;
+  return (
+    <>
+      <Grid
+        position={[0, 0, 50]}
+        args={[30.5, 30.5]}
+        {...gridConfig}
+        cellColor={building ? "#76EAE4" : "#777777"}
+        sectionColor={building ? "#76EAE4" : "#777777"}
+        sectionThickness={building ? 1 : 0}
+      />
+      <Grid
+        position={[0, 0, 50]}
+        rotation={[-Math.PI, 0, 0]}
+        args={[30.5, 30.5]}
+        {...gridConfig}
+        cellColor={building ? "#76EAE4" : "#777777"}
+        sectionColor={building ? "#76EAE4" : "#777777"}
+        sectionThickness={building ? 1 : 0}
+      />
+    </>
+  );
 }
 
 function Ground() {
-  const {
-    input: { building },
-  } = useStore();
   const gridRef = createRef<THREE.Mesh>();
 
   const { onMouseMove } = useInput((event) => {
@@ -47,7 +64,7 @@ function Ground() {
 
   return (
     <>
-      {building && <GridRenderer />}
+      <GridRenderer />
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         receiveShadow
