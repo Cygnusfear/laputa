@@ -37,6 +37,12 @@ function Camera() {
         maxPolarAngle={Math.PI / 3.5}
         // @ts-ignore
         ref={orbitRef}
+        keys={{
+          LEFT: "a", //left arrow
+          UP: "w", // up arrow
+          RIGHT: "d", // right arrow
+          BOTTOM: "s", // down arrow
+        }}
       />
     </>
   );

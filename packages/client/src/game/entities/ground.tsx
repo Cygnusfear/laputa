@@ -28,7 +28,7 @@ function GridRenderer() {
         position={[0, 0, 50]}
         args={[30.5, 30.5]}
         {...gridConfig}
-        cellColor={building ? "#76EAE4" : "#777777"}
+        cellColor={"#76EAE4"}
         sectionColor={building ? "#76EAE4" : "#777777"}
         sectionThickness={building ? 1 : 0}
       />

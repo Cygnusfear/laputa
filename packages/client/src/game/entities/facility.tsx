@@ -24,12 +24,14 @@ const Facility = (props: IFacility) => {
       position: direction,
       direction: faceDirections[faceIndex!].clone().negate(),
     });
+    event.event.stopPropagation();
   }, entityRef);
 
-  const { onMouseDown, onMouseClick } = useInput(() => {
+  const { onMouseDown, onMouseClick } = useInput((event) => {
     if (faceIndex === undefined) return;
     buildFacility(cursor.position);
     setFaceIndex(undefined);
+    event.event.stopPropagation();
   }, entityRef);
 
   const { springScale } = useSpring({

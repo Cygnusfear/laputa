@@ -3,7 +3,7 @@
 }
 
 .card {
-  @apply relative flex flex-col items-center justify-end w-24 h-full m-2 text-white overflow-visible cursor-pointer;
+  @apply relative flex flex-col items-center justify-end w-24 h-full m-2 text-white overflow-visible cursor-pointer select-none;
   transition: opacity 1s ease-in-out;
 }
 

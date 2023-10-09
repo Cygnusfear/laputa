@@ -17,6 +17,7 @@ function Inventory() {
     world: { entities },
   } = useStore();
   const [loaded, setLoaded] = useState(false);
+  const [cardsLoaded, setcardsLoaded] = useState(false);
   const [facilities, setFacilities] = useState<FacilityDataType[]>([]);
 
   useEffect(() => {
@@ -28,7 +29,6 @@ function Inventory() {
       ]);
       setLoaded(true);
     });
-
     return () => {
       document.removeEventListener("gameLoaded", () => {});
     };
@@ -41,14 +41,16 @@ function Inventory() {
         (entity) =>
           entity.entityType === "facility" &&
           (entity as IFacility).type.name === "Gravity Hill"
-      )
+      ) &&
+      !cardsLoaded
     ) {
       const f = Object.entries(EntityData.facilities)
         .map(([, entityData]) => entityData)
         .filter((entityData) => !facilities.includes(entityData));
       setFacilities([...facilities, ...f]);
+      setcardsLoaded(true);
     }
-  }, [entities, facilities]);
+  }, [cardsLoaded, entities, facilities]);
 
   const listTransitions = useTransition(facilities, {
     config: config.gentle,
