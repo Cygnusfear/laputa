@@ -7,6 +7,7 @@ import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswith
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 import { Counter, CounterTableId, Position, PositionData } from "../src/codegen/index.sol";
+import { positionToEntityKey } from "../src/positionToEntityKey.sol";
 
 contract FacilitySystemTest is MudTest {
   IWorld public world;
