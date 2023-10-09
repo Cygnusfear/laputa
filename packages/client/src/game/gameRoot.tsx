@@ -4,6 +4,7 @@ import { ACESFilmicToneMapping, Color } from "three";
 
 import GameUI from "@/components/ui/gameUI";
 import Importer from "./utils/importer";
+import GameLoop from "./systems/gameLoop";
 
 function GameRoot() {
   return (
@@ -17,6 +18,7 @@ function GameRoot() {
         }}
       >
         <Importer />
+        <GameLoop />
         <GameScene />
       </Canvas>
       <GameUI />

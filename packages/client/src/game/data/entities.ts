@@ -11,8 +11,12 @@ export type DataType = {
   tags: EntityTag[];
 };
 
-export type EntityDataType = DataType & {
+export type FacilityDataType = DataType & {
   costs: [ResourceType, number][];
+};
+
+export type ResourceDataType = DataType & {
+  resourceType: ResourceType;
 };
 
 export const entityTags = [
@@ -28,7 +32,7 @@ const EntityData = {
     gravityhill: {
       name: "Gravity Hill",
       blurb: "Generates gravity",
-      description: `The Levitobble Contraptum works on the principle of "Harmonious Disarray." It contains a meticulously arranged collection of misaligned gears, perpetually confused springs, and bewilderingly coiled wires, all managed by a flock of diligent, tiny mechanical hummingbirds, named the "Buzzwizzards". These birds, with their flapping wings, create a subtle, chaotic energy that, quite accidentally, disrupts the gravitational pull beneath it.`,
+      description: `The contraption works on the principle of "Harmonious Disarray." It contains a meticulously arranged collection of misaligned gears, perpetually confused springs, and bewilderingly coiled wires, all managed by a flock of diligent, tiny mechanical hummingbirds, named the "srIørk". These birds, with their flapping wings, create a subtle, chaotic energy that, quite accidentally, disrupts the gravitational pull beneath it.`,
       image: "gravity.webp",
       costs: [["lapu", 500]],
       produces: [["gravity", 25, 1]],
@@ -39,7 +43,7 @@ const EntityData = {
       name: "Whirly Dynamo",
       blurb: "Generates power",
       description:
-        "The Whirligig Dynamo is an awe-inspiring, spiraled contraption, eternally spinning, twirling, and cascading in the breezy stratosphere. It contains an enormous, spiraled windmill, capturing the gentlest of breezes and the mightiest of gales.",
+        "The Whirly Dynamo is an awe-inspiring, spiraled contraption, eternally spinning, twirling, and cascading in the breezy stratosphere. It contains an enormous, spiraled windmill, capturing the gentlest of breezes and the mightiest of gales.",
       image: "engine.webp",
       costs: [["lapu", 200]],
       produces: [["power", 25, 1]],
@@ -57,7 +61,7 @@ const EntityData = {
       variants: [ModelData.block00, ModelData.block01, ModelData.block02],
       tags: [],
     },
-  } as { [key: string]: EntityDataType },
+  } as { [key: string]: FacilityDataType },
   resources: {
     crystalFloat: {
       name: "Floating Crystal",
@@ -65,12 +69,12 @@ const EntityData = {
       description:
         "A floating crystal. It is a crystal that floats. It is also a floating crystal.",
       image: "crystal.webp",
-      costs: [["lapu", 100]],
+      resourceType: "crystal",
       produces: [["gravity", 25, 1]],
       variants: [ModelData.crystal00, ModelData.crystal01, ModelData.crystal02],
       tags: [],
     },
-  } as { [key: string]: DataType },
+  } as { [key: string]: ResourceDataType },
 } as const;
 
 export type TEntityData = typeof EntityData;

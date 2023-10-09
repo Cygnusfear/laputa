@@ -1,4 +1,4 @@
-import EntityData, { EntityDataType } from "@/game/data/entities";
+import EntityData, { FacilityDataType } from "@/game/data/entities";
 import "./inventory.css";
 import { useStore } from "@/game/store";
 import { ResourceIcons, ResourceType } from "@/game/data/resources";
@@ -10,13 +10,14 @@ import {
   useTransition,
   type SpringValue,
 } from "@react-spring/web";
+import { IFacility } from "@/game/types/entities";
 
 function Inventory() {
   const {
     world: { entities },
   } = useStore();
   const [loaded, setLoaded] = useState(false);
-  const [facilities, setFacilities] = useState<EntityDataType[]>([]);
+  const [facilities, setFacilities] = useState<FacilityDataType[]>([]);
 
   useEffect(() => {
     document.addEventListener("gameLoaded", () => {
@@ -35,7 +36,13 @@ function Inventory() {
 
   useEffect(() => {
     // TODO: Remove hack to only show gravityhill at startup
-    if (entities.length > 0 && facilities.length < 2) {
+    if (
+      entities.find(
+        (entity) =>
+          entity.entityType === "facility" &&
+          (entity as IFacility).type.name === "Gravity Hill"
+      )
+    ) {
       const f = Object.entries(EntityData.facilities)
         .map(([, entityData]) => entityData)
         .filter((entityData) => !facilities.includes(entityData));
@@ -67,7 +74,7 @@ function Inventory() {
 }
 
 function InventoryItem(
-  props: EntityDataType & {
+  props: FacilityDataType & {
     style: {
       opacity: SpringValue<number>;
       transform: SpringValue<string>;
