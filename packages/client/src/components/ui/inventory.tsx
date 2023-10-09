@@ -91,68 +91,70 @@ function InventoryItem(
   };
 
   const handleClick = () => {
-    if (building === props) setInput({ building: undefined });
+    if (building?.name === props.name) setInput({ building: undefined });
     else setInput({ building: props });
   };
 
   return (
     <animated.div
-      className={cn("card", building === props && "selected-item")}
+      className={cn("card", building?.name === props.name && "selected-item")}
       onMouseOver={hideCursor}
       onMouseEnter={hideCursor}
       onClick={handleClick}
       style={style}
     >
-      <div className="card-content">
-        <div className="card-title">{name}</div>
-        <div className="card-blurb">{blurb}</div>
-      </div>
-      <div className="card-portrait">
-        <div
-          className="card-image"
-          style={{
-            backgroundImage: `url(icons/${image})`,
-          }}
-        ></div>
-        <div className="card-costs">
-          {Object.entries(costs).map(([key, value]) => {
-            const resource = value;
-            const IconComponent = ResourceIcons[resource[0] as ResourceType];
-            return (
-              <div
-                key={key}
-                className="card-produces-item flex flex-row items-center"
-              >
-                <span className="card-produces-item-value inline">
-                  {resource[1]}
-                </span>
-                {IconComponent && (
-                  <IconComponent className="ml-0.5 inline self-center" />
-                )}
-              </div>
-            );
-          })}
+      <animated.div className="card-wrapper">
+        <div className="card-content">
+          <div className="card-title">{name}</div>
+          <div className="card-blurb">{blurb}</div>
         </div>
-        <div className="card-produces">
-          {Object.entries(produces).map(([key, value]) => {
-            const resource = value;
-            const IconComponent = ResourceIcons[resource[0] as ResourceType];
-            return (
-              <div
-                key={key}
-                className="card-produces-item flex flex-row items-center"
-              >
-                <span className="card-produces-item-value inline">
-                  {resource[1]}
-                </span>
-                {IconComponent && (
-                  <IconComponent className="ml-0.5 inline self-center" />
-                )}
-              </div>
-            );
-          })}
+        <div className="card-portrait">
+          <div
+            className="card-image"
+            style={{
+              backgroundImage: `url(icons/${image})`,
+            }}
+          ></div>
+          <div className="card-costs">
+            {Object.entries(costs).map(([key, value]) => {
+              const resource = value;
+              const IconComponent = ResourceIcons[resource[0] as ResourceType];
+              return (
+                <div
+                  key={key}
+                  className="card-produces-item flex flex-row items-center"
+                >
+                  <span className="card-produces-item-value inline">
+                    {resource[1]}
+                  </span>
+                  {IconComponent && (
+                    <IconComponent className="ml-0.5 inline self-center" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <div className="card-produces">
+            {Object.entries(produces).map(([key, value]) => {
+              const resource = value;
+              const IconComponent = ResourceIcons[resource[0] as ResourceType];
+              return (
+                <div
+                  key={key}
+                  className="card-produces-item flex flex-row items-center"
+                >
+                  <span className="card-produces-item-value inline">
+                    {resource[1]}
+                  </span>
+                  {IconComponent && (
+                    <IconComponent className="ml-0.5 inline self-center" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      </animated.div>
     </animated.div>
   );
 }

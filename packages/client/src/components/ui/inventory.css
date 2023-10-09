@@ -1,13 +1,17 @@
 .inventory-bar {
-  @apply absolute bottom-3 flex-row flex items-center justify-center w-full h-40;
+  @apply absolute bottom-3 flex-row flex items-center justify-center w-full h-40 overflow-visible;
 }
 
 .card {
-  @apply relative flex flex-col items-center justify-end w-24 h-full m-2 text-white overflow-clip cursor-pointer;
+  @apply relative flex flex-col items-center justify-end w-24 h-full m-2 text-white overflow-visible cursor-pointer;
   transition: opacity 1s ease-in-out;
 }
 
-.card:hover {
+.card-wrapper {
+  @apply relative flex flex-col items-center justify-end w-24 h-full m-2 text-white overflow-clip cursor-pointer;
+}
+
+.card:hover .card-wrapper {
   transform: scale(1.1) translateY(-10px);
   transition: transform cubic-bezier(1, 0, 0, 1) 0.15s;
 }
@@ -17,7 +21,8 @@
   opacity: 0;
 }
 
-.card:hover .card-content {
+.card:hover .card-content,
+.card-selected .card-content {
   opacity: 1;
 }
 
@@ -27,6 +32,10 @@
 
 .card-image {
   @apply absolute top-[5%] left-[5%] bg-cover h-[90%] w-[90%];
+}
+
+.selected-item .card-wrapper {
+  transform: scale(1.1) translateY(-10px);
 }
 
 .selected-item .card-portrait {
