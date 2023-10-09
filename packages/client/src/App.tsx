@@ -9,7 +9,11 @@ import { useMUD } from "./useMUD";
 export const App = () => {
   const {
     components: { Counter },
-    systemCalls: { mudIsPositionEmpty, mudBuildFacility },
+    systemCalls: {
+      mudIsPositionEmpty,
+      mudBuildFacility,
+      mudGetEntityMetadataAtPosition,
+    },
   } = useMUD();
 
   const counter = useComponentValue(Counter, singletonEntity);
@@ -39,6 +43,19 @@ export const App = () => {
         }}
       >
         mudIsPositionEmpty
+      </button>
+      <button
+        type="button"
+        className="px-100 py-100 rounded-md border border-gray-300 bg-white text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+        onClick={async (event) => {
+          event.preventDefault();
+          console.log(
+            "mudGetEntityMetadataAtPosition:",
+            await mudGetEntityMetadataAtPosition()
+          );
+        }}
+      >
+        mudGetEntityMetadataAtPosition
       </button>
       <LoadingScreen />
     </RootLayout>

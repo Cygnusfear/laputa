@@ -30,6 +30,7 @@
     "@types/three": "^0.156.0",
     "clsx": "^2.0.0",
     "contracts": "workspace:*",
+    "ethers": "^5.7.0",
     "postprocessing": "^6.33.2",
     "pure-rand": "^6.0.4",
     "react": "^18.2.0",
