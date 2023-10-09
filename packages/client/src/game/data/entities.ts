@@ -1,15 +1,18 @@
 import ModelData, { ModelDataType } from "./models";
 import { ResourceType } from "./resources";
 
-export type EntityDataType = {
+export type DataType = {
   name: string;
   blurb: string;
   description: string;
   image: string;
-  costs: [ResourceType, number][];
   produces: [ResourceType, number, number][];
   variants: ModelDataType[];
   tags: EntityTag[];
+};
+
+export type EntityDataType = DataType & {
+  costs: [ResourceType, number][];
 };
 
 export const entityTags = [
@@ -55,6 +58,19 @@ const EntityData = {
       tags: [],
     },
   } as { [key: string]: EntityDataType },
+  resources: {
+    crystalFloat: {
+      name: "Floating Crystal",
+      blurb: "A floating crystal",
+      description:
+        "A floating crystal. It is a crystal that floats. It is also a floating crystal.",
+      image: "crystal.webp",
+      costs: [["lapu", 100]],
+      produces: [["gravity", 25, 1]],
+      variants: [ModelData.crystal00, ModelData.crystal01, ModelData.crystal02],
+      tags: [],
+    },
+  } as { [key: string]: DataType },
 } as const;
 
 export type TEntityData = typeof EntityData;

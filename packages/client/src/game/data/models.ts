@@ -5,7 +5,11 @@ export type ModelDataType = {
   colors: string[];
 };
 
-export const importModels = ["/models/plants.glb", "/models/facilities.glb"];
+export const importModels = [
+  "/models/plants.glb",
+  "/models/facilities.glb",
+  "/models/resources.glb",
+];
 export const importTextures = ["/textures/box01.webp"];
 
 const ModelData: { [key: string]: ModelDataType } = {
@@ -44,6 +48,24 @@ const ModelData: { [key: string]: ModelDataType } = {
     nodes: ["Well00", "Well00001"],
     materials: ["Well"],
     colors: ["secondary", "primary"],
+  },
+  crystal00: {
+    name: "Crystal000",
+    nodes: ["Crystal000"],
+    materials: ["MAT_crystal"],
+    colors: [],
+  },
+  crystal01: {
+    name: "Crystal001",
+    nodes: ["Crystal001"],
+    materials: ["MAT_crystal"],
+    colors: [],
+  },
+  crystal02: {
+    name: "Crystal002",
+    nodes: ["Crystal00"],
+    materials: ["MAT_crystal"],
+    colors: [],
   },
 } as const;
 

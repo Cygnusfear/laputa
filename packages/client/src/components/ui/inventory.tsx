@@ -3,9 +3,68 @@ import "./inventory.css";
 import { useStore } from "@/game/store";
 import { ResourceIcons, ResourceType } from "@/game/data/resources";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import {
+  animated,
+  config,
+  useTransition,
+  type SpringValue,
+} from "@react-spring/web";
 
-function InventoryItem(props: EntityDataType) {
-  const { name, blurb, image, produces, costs } = props;
+function Inventory() {
+  const [loaded, setLoaded] = useState(false);
+  const [facilities, setFacilities] = useState<EntityDataType[]>([]);
+
+  useEffect(() => {
+    document.addEventListener("gameLoaded", () => {
+      setFacilities(
+        Object.entries(EntityData.facilities).map(
+          ([, entityData]) => entityData
+        )
+      );
+      setTimeout(() => {
+        setLoaded(true);
+      }, 500);
+    });
+
+    return () => {
+      document.removeEventListener("gameLoaded", () => {});
+    };
+  }, []);
+
+  const listTransitions = useTransition(facilities, {
+    config: config.gentle,
+    from: { opacity: 1, transform: "translateX(250px) translateY(-5px)" },
+    enter: (_, index) => [
+      {
+        opacity: 1,
+        transform: "translateX(0px) translateY(0px)",
+        delay: (index + 1) * 150,
+      },
+    ],
+    leave: { opacity: 0, height: 0, transform: "translateX(-250px)" },
+    keys: facilities.map((_, index) => index),
+  });
+
+  return (
+    <div className="inventory-bar">
+      {loaded &&
+        listTransitions((styles, entityData) => (
+          <InventoryItem {...entityData} style={styles} />
+        ))}
+    </div>
+  );
+}
+
+function InventoryItem(
+  props: EntityDataType & {
+    style: {
+      opacity: SpringValue<number>;
+      transform: SpringValue<string>;
+    };
+  }
+) {
+  const { name, blurb, image, produces, costs, style } = props;
   const {
     input: { cursor, setInput, building },
   } = useStore();
@@ -20,11 +79,12 @@ function InventoryItem(props: EntityDataType) {
   };
 
   return (
-    <div
+    <animated.div
       className={cn("card", building === props && "selected-item")}
       onMouseOver={hideCursor}
       onMouseEnter={hideCursor}
       onClick={handleClick}
+      style={style}
     >
       <div className="card-content">
         <div className="card-title">{name}</div>
@@ -76,17 +136,7 @@ function InventoryItem(props: EntityDataType) {
           })}
         </div>
       </div>
-    </div>
-  );
-}
-
-function Inventory() {
-  return (
-    <div className="inventory-bar">
-      {Object.entries(EntityData.facilities).map(([, entityData], idx) => (
-        <InventoryItem key={idx} {...entityData} />
-      ))}
-    </div>
+    </animated.div>
   );
 }
 

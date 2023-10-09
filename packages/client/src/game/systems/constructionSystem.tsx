@@ -72,7 +72,6 @@ const buildFacility = (position: Vector3) => {
   addEntity(newFacility);
   // Move Input logic away from here
   setInput({ building: undefined });
-  console.log(newFacility);
 };
 
 export { buildFacility, canBuildAtPosition, getEntityInDirection };

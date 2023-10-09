@@ -1,5 +1,5 @@
 .loading-wrapper {
-  @apply fixed left-0 top-0 flex h-screen w-screen items-center justify-center overflow-hidden text-clip bg-clip-border flex-col z-[1000];
+  @apply fixed left-0 top-0 flex h-screen w-screen items-center justify-center overflow-hidden text-clip bg-clip-border flex-col z-[1000] select-none;
 }
 
 .loading-background {
@@ -38,5 +38,15 @@
   100% {
     opacity: (0);
     display: none;
+  }
+}
+
+@keyframes pulseShadow {
+  0%,
+  100% {
+    text-shadow: 0px 2px 20px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    text-shadow: 0px 5px 40px rgba(255, 255, 255, 0.3);
   }
 }
