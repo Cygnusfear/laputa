@@ -42,6 +42,7 @@ function Cursor() {
       position={position.toArray()}
       visible={cursorState !== "hidden"}
       scale={new Vector3(0.95, 0.95, 0.95)}
+      layers={30}
     >
       <mesh userData={{ type: "cursor" }} ref={cursorRef}>
         <boxGeometry args={[1, 1]} />
@@ -64,7 +65,7 @@ function Cursor() {
           count={7}
           scale={1.15}
           size={2.6}
-          visible={cursorState !== "hidden"}
+          visible={cursorState === "valid"}
         />
       </mesh>
       {/* 🐁 main cursor block */}

@@ -50,7 +50,8 @@ const buildFacility = (position: Vector3) => {
   const time = Date.now();
   const rng = prand.xoroshiro128plus(time);
 
-  const newFacility = {
+  const newFacility: IFacility = {
+    entityType: "facility",
     position: position,
     scale: new Vector3(1, 1, 1),
     colorPrimary: getRandom(palette.buildingPrimary),
@@ -67,12 +68,11 @@ const buildFacility = (position: Vector3) => {
         prand.unsafeUniformIntDistribution(0, building.variants.length - 1, rng)
       ],
     createdTime: time,
-  } as IFacility;
+  };
 
   addEntity(newFacility);
   // Move Input logic away from here
   setInput({ building: undefined });
-  console.log(newFacility);
 };
 
 export { buildFacility, canBuildAtPosition, getEntityInDirection };

@@ -5,7 +5,7 @@ import { Mesh, Object3D, Vector3 } from "three";
 import { create } from "zustand";
 import { IEntity } from "./types/entities";
 import { Assets } from "./utils/importer";
-import { EntityDataType } from "./data/entities";
+import { FacilityDataType } from "./data/entities";
 
 export interface World {
   entities: IEntity[];
@@ -29,7 +29,7 @@ export type InputMode = "select" | "build" | "delete";
 export interface Input {
   cursor: CursorProps;
   selection: IEntity | null;
-  building: EntityDataType | null;
+  building: FacilityDataType | null;
   mode: InputMode;
   setInput: (props: Partial<Omit<Input, "cursor">>) => void;
 }

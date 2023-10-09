@@ -1,75 +1,17 @@
-import { RefObject, useState } from "react";
+import { RefObject, useMemo, useState } from "react";
 import { useStore } from "../store";
 import { AdditiveBlending, DoubleSide, Mesh, Vector3 } from "three";
-import { animated } from "@react-spring/three";
+import { animated, useSpring } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
 import { buildFacility } from "../systems/constructionSystem";
 import { palette } from "../utils/palette";
-import { faceDirections } from "@/lib/utils";
+import { Directions, faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
-
-const Renderer = (props: IFacility) => {
-  const { colorPrimary, colorSecondary, variant, rotation } = props;
-  const {
-    assets: { meshes },
-  } = useStore();
-
-  const [prototypes] = useState(
-    Object.values(meshes).filter((node) => variant?.nodes.includes(node.name))
-  );
-
-  if (!variant || !prototypes || prototypes.length < 1) {
-    console.error("No prototypes found for variant", variant, prototypes);
-    return null;
-  }
-
-  return (
-    <group
-      dispose={null}
-      scale={new Vector3(1, 1, 1)}
-      position={[0, 0, 0]}
-      rotation={[0, rotation.y, 0]}
-    >
-      {prototypes!.map((proto, index) => {
-        let color = variant.colors[index];
-        switch (variant.colors[index]) {
-          case "primary":
-            color = colorPrimary!;
-            break;
-          case "secondary":
-            color = colorSecondary!;
-            break;
-        }
-        return (
-          <mesh
-            dispose={null}
-            position={[0, 0, 0]}
-            key={index}
-            geometry={proto.geometry.clone()}
-            receiveShadow
-            castShadow
-          >
-            {
-              // @ts-ignore
-              proto.material?.map ? (
-                <meshLambertMaterial
-                  attach="material"
-                  // @ts-ignore
-                  map={proto.material?.map}
-                />
-              ) : (
-                <meshLambertMaterial attach={`material`} color={color} />
-              )
-            }
-          </mesh>
-        );
-      })}
-    </group>
-  );
-};
+import prand from "pure-rand";
+import Wire from "./wire";
 
 const Facility = (props: IFacility) => {
-  const { position, scale, entityRef } = props;
+  const { position, entityRef } = props;
   const [faceIndex, setFaceIndex] = useState<number | undefined>(undefined);
   const {
     input: { cursor },
@@ -90,13 +32,20 @@ const Facility = (props: IFacility) => {
     setFaceIndex(undefined);
   }, entityRef);
 
+  const { springScale } = useSpring({
+    springScale: [1, 1, 1],
+    from: { springScale: [1.2, 0.9, 1.2] },
+    config: { mass: 1, tension: 1000, friction: 20, precision: 0.0001 },
+  });
+
   return (
-    <group dispose={null}>
+    <animated.group dispose={null}>
       <animated.mesh
         receiveShadow
         castShadow
         position={position}
-        scale={scale}
+        // @ts-ignore
+        scale={springScale}
         ref={entityRef as RefObject<Mesh>}
         userData={{ type: "facility", name: props.type.name }}
         onPointerDown={onMouseDown}
@@ -138,6 +87,80 @@ const Facility = (props: IFacility) => {
         ))}
         <Renderer {...props} />
       </animated.mesh>
+    </animated.group>
+  );
+};
+
+const Renderer = (props: IFacility) => {
+  const { colorPrimary, colorSecondary, variant, rotation, position } = props;
+  const {
+    assets: { meshes },
+    world: { getEntityByPosition },
+  } = useStore();
+
+  const [prototypes] = useState(
+    Object.values(meshes).filter((mesh) => variant?.nodes.includes(mesh.name))
+  );
+
+  const rand = useMemo(() => {
+    const seed = Date.now() ^ (Math.random() * 0x100000000);
+    return prand.xoroshiro128plus(seed);
+  }, []);
+
+  const numWires = useMemo(() => {
+    const entityBelow = getEntityByPosition(Directions.DOWN().add(position));
+    if (entityBelow) return 0;
+    return prand.unsafeUniformIntDistribution(0, 5, rand);
+  }, [rand, position, getEntityByPosition]);
+
+  if (!variant || !prototypes || prototypes.length < 1) {
+    console.error("No prototypes found for variant", variant, prototypes);
+    return null;
+  }
+
+  return (
+    <group
+      layers={30}
+      dispose={null}
+      scale={new Vector3(1, 1, 1)}
+      position={[0, 0, 0]}
+      rotation={[0, rotation.y, 0]}
+    >
+      {prototypes!.map((proto, index) => {
+        let color = variant.colors[index];
+        switch (variant.colors[index]) {
+          case "primary":
+            color = colorPrimary!;
+            break;
+          case "secondary":
+            color = colorSecondary!;
+            break;
+        }
+        return (
+          <mesh
+            dispose={null}
+            position={[0, 0, 0]}
+            key={index}
+            geometry={proto.geometry.clone()}
+            receiveShadow
+            castShadow
+          >
+            {
+              // @ts-ignore
+              proto.material?.map ? (
+                <meshLambertMaterial
+                  attach="material"
+                  // @ts-ignore
+                  map={proto.material?.map}
+                />
+              ) : (
+                <meshLambertMaterial attach={`material`} color={color} />
+              )
+            }
+          </mesh>
+        );
+      })}
+      <Wire numWires={numWires} />
     </group>
   );
 };

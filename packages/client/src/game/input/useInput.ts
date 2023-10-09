@@ -66,7 +66,6 @@ export function useInput(
   const onMouseClick = useCallback(
     (event: ThreeEvent<MouseEvent>) => {
       if (!mouseDownPosition) return;
-
       const [downX, downY] = mouseDownPosition;
       if (
         Math.abs(event.clientX - downX) > 2 ||
@@ -74,7 +73,6 @@ export function useInput(
       )
         return;
 
-      event.stopPropagation();
       fireCallback("click", event);
       setMouseDownPosition([event.point.x, event.point.y]);
     },

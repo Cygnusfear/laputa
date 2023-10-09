@@ -1,11 +1,87 @@
-import EntityData, { EntityDataType } from "@/game/data/entities";
+import EntityData, { FacilityDataType } from "@/game/data/entities";
 import "./inventory.css";
 import { useStore } from "@/game/store";
 import { ResourceIcons, ResourceType } from "@/game/data/resources";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import {
+  animated,
+  config,
+  useTransition,
+  type SpringValue,
+} from "@react-spring/web";
+import { IFacility } from "@/game/types/entities";
 
-function InventoryItem(props: EntityDataType) {
-  const { name, blurb, image, produces, costs } = props;
+function Inventory() {
+  const {
+    world: { entities },
+  } = useStore();
+  const [loaded, setLoaded] = useState(false);
+  const [facilities, setFacilities] = useState<FacilityDataType[]>([]);
+
+  useEffect(() => {
+    document.addEventListener("gameLoaded", () => {
+      setFacilities([
+        Object.entries(EntityData.facilities).map(
+          ([, entityData]) => entityData
+        )[0],
+      ]);
+      setLoaded(true);
+    });
+
+    return () => {
+      document.removeEventListener("gameLoaded", () => {});
+    };
+  }, []);
+
+  useEffect(() => {
+    // TODO: Remove hack to only show gravityhill at startup
+    if (
+      entities.find(
+        (entity) =>
+          entity.entityType === "facility" &&
+          (entity as IFacility).type.name === "Gravity Hill"
+      )
+    ) {
+      const f = Object.entries(EntityData.facilities)
+        .map(([, entityData]) => entityData)
+        .filter((entityData) => !facilities.includes(entityData));
+      setFacilities([...facilities, ...f]);
+    }
+  }, [entities, facilities]);
+
+  const listTransitions = useTransition(facilities, {
+    config: config.gentle,
+    from: { opacity: 1, transform: "translateX(250px) translateY(-5px)" },
+    enter: () => [
+      {
+        opacity: 1,
+        transform: "translateX(0px) translateY(0px)",
+      },
+    ],
+    leave: { opacity: 0, height: 0, transform: "translateX(-250px)" },
+    keys: facilities.map((_, index) => index),
+  });
+
+  return (
+    <div className="inventory-bar">
+      {loaded &&
+        listTransitions((styles, entityData) => (
+          <InventoryItem {...entityData} style={styles} />
+        ))}
+    </div>
+  );
+}
+
+function InventoryItem(
+  props: FacilityDataType & {
+    style: {
+      opacity: SpringValue<number>;
+      transform: SpringValue<string>;
+    };
+  }
+) {
+  const { name, blurb, image, produces, costs, style } = props;
   const {
     input: { cursor, setInput, building },
   } = useStore();
@@ -20,11 +96,12 @@ function InventoryItem(props: EntityDataType) {
   };
 
   return (
-    <div
+    <animated.div
       className={cn("card", building === props && "selected-item")}
       onMouseOver={hideCursor}
       onMouseEnter={hideCursor}
       onClick={handleClick}
+      style={style}
     >
       <div className="card-content">
         <div className="card-title">{name}</div>
@@ -76,17 +153,7 @@ function InventoryItem(props: EntityDataType) {
           })}
         </div>
       </div>
-    </div>
-  );
-}
-
-function Inventory() {
-  return (
-    <div className="inventory-bar">
-      {Object.entries(EntityData.facilities).map(([, entityData], idx) => (
-        <InventoryItem key={idx} {...entityData} />
-      ))}
-    </div>
+    </animated.div>
   );
 }
 
