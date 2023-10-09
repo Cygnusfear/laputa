@@ -12,19 +12,20 @@ import {
 } from "@react-spring/web";
 
 function Inventory() {
+  const {
+    world: { entities },
+  } = useStore();
   const [loaded, setLoaded] = useState(false);
   const [facilities, setFacilities] = useState<EntityDataType[]>([]);
 
   useEffect(() => {
     document.addEventListener("gameLoaded", () => {
-      setFacilities(
+      setFacilities([
         Object.entries(EntityData.facilities).map(
           ([, entityData]) => entityData
-        )
-      );
-      setTimeout(() => {
-        setLoaded(true);
-      }, 500);
+        )[0],
+      ]);
+      setLoaded(true);
     });
 
     return () => {
@@ -32,14 +33,22 @@ function Inventory() {
     };
   }, []);
 
+  useEffect(() => {
+    if (entities.length > 0 && facilities.length < 2) {
+      const f = Object.entries(EntityData.facilities)
+        .map(([, entityData]) => entityData)
+        .filter((entityData) => !facilities.includes(entityData));
+      setFacilities([...facilities, ...f]);
+    }
+  }, [entities, facilities]);
+
   const listTransitions = useTransition(facilities, {
     config: config.gentle,
     from: { opacity: 1, transform: "translateX(250px) translateY(-5px)" },
-    enter: (_, index) => [
+    enter: () => [
       {
         opacity: 1,
         transform: "translateX(0px) translateY(0px)",
-        delay: (index + 1) * 150,
       },
     ],
     leave: { opacity: 0, height: 0, transform: "translateX(-250px)" },
