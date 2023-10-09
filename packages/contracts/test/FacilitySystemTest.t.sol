@@ -72,21 +72,21 @@ contract FacilitySystemTest is MudTest {
     assertEq(posData03.x, 2);
   }
 
-  function testDestoryFacility() public {
+  function testDestroyFacility() public {
     vm.expectRevert(abi.encodePacked("Sender does not own this entity"));
-    world.destoryFacility(0);
+    world.destroyFacility(0);
 
     //build an entityTypeIdGroundLevel facility at position (1,1,1) with yaw 0
     bytes32 entityKey01 = world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0);
     PositionData memory posData01 = Position.get(entityKey01);
     assertEq(posData01.x, 1);
 
-    //destoryFacility should work as expected
-    world.destoryFacility(entityKey01);
+    //destroyFacility should work as expected
+    world.destroyFacility(entityKey01);
     PositionData memory posData01b = Position.get(entityKey01);
     assertNotEq(posData01b.x, 1);
 
-    //should now be able to build on the same position after the original one was destoryed
+    //should now be able to build on the same position after the original one was destroyed
     bytes32 entityKey02 = world.buildFacility(11, 1, 0, 1, 0);
     PositionData memory posData02 = Position.get(entityKey02);
     assertEq(posData02.x, 1);

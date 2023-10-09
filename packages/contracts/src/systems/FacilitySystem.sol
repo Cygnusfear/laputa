@@ -105,10 +105,10 @@ contract FacilitySystem is System {
   }
 
   /**
-   * @dev Destory the facility at the given position.
-   * @param entityKey The key of the facility to destory.
+   * @dev Destroy the facility at the given position.
+   * @param entityKey The key of the facility to destroy.
    */
-  function destoryFacility(bytes32 entityKey) public {
+  function destroyFacility(bytes32 entityKey) public {
     require(_msgSender() != address(0), "Invalid sender address");
     require(OwnedBy.get(entityKey) == _msgSender(), "Sender does not own this entity");
 
