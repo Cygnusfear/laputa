@@ -51,7 +51,6 @@ const buildFacility = (position: Vector3) => {
   const time = Date.now();
   const rng = prand.xoroshiro128plus(time);
 
-  console.log(position);
   const newFacility: IFacility = {
     entityType: "facility",
     position: position,
@@ -94,7 +93,6 @@ async function propagateGravity() {
   }
 
   for (const well of wells) {
-    console.log(well.type.name);
     const resource = well.type.produces.find((p) => p[0] === "gravity");
     if (resource) {
       const amount = resource[1];

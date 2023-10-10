@@ -19,6 +19,7 @@ import {
   PiXBold,
 } from "react-icons/pi";
 import { IconType } from "react-icons";
+import { FacilitySound } from "../audio/facilitySound";
 
 const Facility = (props: IFacility) => {
   const { position, entityRef } = props;
@@ -99,6 +100,7 @@ const Facility = (props: IFacility) => {
         ))}
         <Renderer {...props} />
       </animated.mesh>
+      <FacilitySound />
     </animated.group>
   );
 };
@@ -111,8 +113,12 @@ const Renderer = (props: IFacility) => {
     input: { building },
   } = useStore();
 
-  const [prototypes] = useState(
-    Object.values(meshes).filter((mesh) => variant?.nodes.includes(mesh.name))
+  const prototypes = useMemo(
+    () =>
+      Object.values(meshes).filter(
+        (mesh) => variant?.nodes.includes(mesh.name)
+      ),
+    [meshes, variant]
   );
 
   const rand = useMemo(() => {
@@ -198,12 +204,7 @@ const Renderer = (props: IFacility) => {
       {building && (
         <Html>
           <p className="gravity-ui flex flex-row items-center">
-            {IconWifi && (
-              <IconWifi
-                className="inline-flex text-white"
-                // opacity={props.gravity < 5 ? 1 : 0.3}
-              />
-            )}
+            {IconWifi && <IconWifi className="inline-flex text-white" />}
           </p>
         </Html>
       )}

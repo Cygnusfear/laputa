@@ -8,11 +8,9 @@ const HeightLine = () => {
   const [points, setPoints] = useState<Vector3[]>([]);
 
   useEffect(() => {
-    console.log("wut", lineRef);
     if (lineRef.current) {
       const p = lineRef.current.getWorldPosition(new Vector3(0, 0.5, 0));
       const ps = [new Vector3(0, -1, 0), new Vector3(0, -p.y, 0)];
-      console.log(p, lineRef.current.getWorldPosition(new Vector3(0, -1, 0)));
       setPoints(ps);
     }
   }, [lineRef]);
