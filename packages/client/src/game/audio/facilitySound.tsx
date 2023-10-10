@@ -1,29 +1,38 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PositionalAudio } from "@react-three/drei";
 import type { PositionalAudio as PositionalAudioImpl } from "three";
+import { getRandom } from "@/lib/utils";
 
-const vol = 0.1;
+const vol = 0.05;
 
-export const FacilitySound = () => {
+const files = ["/audio/plop00.wav", "/audio/plop01.wav"];
+
+export const Sound = ({
+  play,
+  volume,
+  source,
+}: {
+  play: boolean;
+  volume: number;
+  source: string;
+}) => {
   const ref = useRef<PositionalAudioImpl>(null!);
 
-  const handleClick = () => {
-    if (!ref.current.isPlaying) {
-      ref.current.setVolume(vol);
-      ref.current.play();
-    }
-  };
-
   useEffect(() => {
-    handleClick();
-  }, []);
+    const doPlay = () => {
+      if (!ref.current.isPlaying) {
+        ref.current.setVolume(volume);
+        ref.current.play();
+      }
+    };
 
-  return (
-    <PositionalAudio
-      ref={ref}
-      url="/audio/plop.wav"
-      distance={5}
-      loop={false}
-    />
-  );
+    doPlay();
+  }, [play, volume]);
+
+  return <PositionalAudio ref={ref} url={source} distance={5} loop={false} />;
+};
+export const FacilitySound = () => {
+  const [audio] = useState(getRandom(files));
+
+  return <Sound source={audio} play={true} volume={vol} />;
 };
