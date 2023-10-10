@@ -51,6 +51,7 @@ const buildFacility = (position: Vector3) => {
   const time = Date.now();
   const rng = prand.xoroshiro128plus(time);
 
+  console.log(position);
   const newFacility: IFacility = {
     entityType: "facility",
     position: position,

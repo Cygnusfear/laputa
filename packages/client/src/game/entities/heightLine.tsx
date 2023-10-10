@@ -10,19 +10,15 @@ const HeightLine = () => {
   useEffect(() => {
     console.log("wut", lineRef);
     if (lineRef.current) {
-      const p = lineRef.current
-        .getWorldPosition(new Vector3(0, 0, 0))
-        .negate()
-        .setX(0)
-        .setZ(0);
-      const ps = [new Vector3(0, -1, 0), p];
+      const p = lineRef.current.getWorldPosition(new Vector3(0, 0.5, 0));
+      const ps = [new Vector3(0, -1, 0), new Vector3(0, -p.y, 0)];
       console.log(p, lineRef.current.getWorldPosition(new Vector3(0, -1, 0)));
       setPoints(ps);
     }
   }, [lineRef]);
 
   return (
-    <group ref={lineRef}>
+    <group ref={lineRef} position={[0, 0, 0]}>
       {points.length > 0 && (
         <line>
           <bufferGeometry attach="geometry">

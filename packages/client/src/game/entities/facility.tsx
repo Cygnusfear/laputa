@@ -10,6 +10,15 @@ import { IFacility } from "../types/entities";
 import prand from "pure-rand";
 import Wire from "./wire";
 import { Html } from "@react-three/drei";
+import { MdOutlineSignalWifi4Bar } from "react-icons/md";
+import {
+  PiWifiHighFill,
+  PiWifiLowDuotone,
+  PiWifiMediumDuotone,
+  PiWifiNoneDuotone,
+  PiXBold,
+} from "react-icons/pi";
+import { IconType } from "react-icons";
 
 const Facility = (props: IFacility) => {
   const { position, entityRef } = props;
@@ -99,6 +108,7 @@ const Renderer = (props: IFacility) => {
   const {
     assets: { meshes },
     world: { getEntityByPosition },
+    input: { building },
   } = useStore();
 
   const [prototypes] = useState(
@@ -119,6 +129,27 @@ const Renderer = (props: IFacility) => {
   if (!variant || !prototypes || prototypes.length < 1) {
     console.error("No prototypes found for variant", variant, prototypes);
     return null;
+  }
+
+  let IconWifi: IconType | null = null;
+  switch (props.gravity) {
+    case 4:
+      IconWifi = MdOutlineSignalWifi4Bar;
+      break;
+    case 3:
+      IconWifi = PiWifiMediumDuotone;
+      break;
+    case 2:
+      IconWifi = PiWifiLowDuotone;
+      break;
+    case 1:
+      IconWifi = PiWifiNoneDuotone;
+      break;
+    case 0:
+      IconWifi = PiXBold;
+      break;
+    default:
+      IconWifi = PiWifiHighFill;
   }
 
   return (
@@ -164,13 +195,18 @@ const Renderer = (props: IFacility) => {
         );
       })}
       <Wire numWires={numWires} />
-      <Html>
-        <p className="gravity-ui">
-          {props.type.name}
-          <br />
-          {props.gravity.toString()}
-        </p>
-      </Html>
+      {building && (
+        <Html>
+          <p className="gravity-ui flex flex-row items-center">
+            {IconWifi && (
+              <IconWifi
+                className="inline-flex text-white"
+                // opacity={props.gravity < 5 ? 1 : 0.3}
+              />
+            )}
+          </p>
+        </Html>
+      )}
     </group>
   );
 };

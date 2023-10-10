@@ -31,7 +31,7 @@ const Renderer = (props: IResource) => {
   }
 
   return (
-    <group layers={30} dispose={null} scale={scale} position={[0, 0, 0]}>
+    <group layers={30} dispose={null} position={[0, 0, 0]}>
       {prototypes!.map((proto, index) => {
         return (
           <mesh
@@ -42,6 +42,7 @@ const Renderer = (props: IResource) => {
             receiveShadow
             castShadow
             rotation={[0, 0, 0]}
+            scale={scale}
           >
             {
               // @ts-ignore
