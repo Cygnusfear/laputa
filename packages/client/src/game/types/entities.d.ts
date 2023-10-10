@@ -9,6 +9,7 @@ export interface IEntity {
   rotation: Vector3;
   entityRef: RefObject<Object3D | Mesh>;
   createdTime: number;
+  gravity: number;
 }
 
 export interface IFacility extends IEntity {

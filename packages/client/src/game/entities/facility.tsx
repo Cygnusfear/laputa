@@ -9,6 +9,7 @@ import { Directions, faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
 import prand from "pure-rand";
 import Wire from "./wire";
+import { Html } from "@react-three/drei";
 
 const Facility = (props: IFacility) => {
   const { position, entityRef } = props;
@@ -163,6 +164,13 @@ const Renderer = (props: IFacility) => {
         );
       })}
       <Wire numWires={numWires} />
+      <Html>
+        <p className="gravity-ui">
+          {props.type.name}
+          <br />
+          {props.gravity.toString()}
+        </p>
+      </Html>
     </group>
   );
 };

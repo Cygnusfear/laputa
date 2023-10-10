@@ -7,15 +7,6 @@ body {
   @apply bg-[#76ADAB] text-black;
 }
 
-#mud-dev-tools > div > div > div {
-  /* @apply flex !flex-row items-end; */
-}
-
-#mud-dev-tools button.peer {
-  /* @apply self-start place-self-end;
-  content: "⚙️"; */
-}
-
 #mud-dev-tools button.peer::before {
   @apply bg-slate-800 p-2 rounded-lg;
   content: "⚙️";
@@ -31,4 +22,8 @@ body {
 
 #mud-dev-tools button.peer ~ span code {
   @apply bg-slate-200 border-t border-b border-b-slate-600 border-t-slate-100 flex-row text-black p-1 px-2 rounded-md inline-flex;
+}
+
+.gravity-ui {
+  @apply text-xs text-center pointer-events-none select-none;
 }

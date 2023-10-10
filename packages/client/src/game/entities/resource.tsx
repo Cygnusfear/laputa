@@ -1,6 +1,7 @@
 import { IResource } from "../types/entities";
 import { useState } from "react";
 import { useStore } from "../store";
+import HeightLine from "./heightLine";
 // import { Sparkles } from "@react-three/drei";
 
 function Resource(props: IResource) {
@@ -40,7 +41,7 @@ const Renderer = (props: IResource) => {
             geometry={proto.geometry.clone()}
             receiveShadow
             castShadow
-            rotation={[Math.PI / 2, 0, 0]}
+            rotation={[0, 0, 0]}
           >
             {
               // @ts-ignore
@@ -57,6 +58,7 @@ const Renderer = (props: IResource) => {
           </mesh>
         );
       })}
+      <HeightLine />
       {/* <Sparkles count={12} scale={5} size={5} color={"#FF6188"} /> */}
     </group>
   );

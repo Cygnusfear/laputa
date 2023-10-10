@@ -17,9 +17,9 @@ function ResourceFactory() {
   const randomEmptyPosition = () => {
     let attempts = 0;
     while (attempts < 300) {
-      const x = Math.floor(Math.random() * 100 - 50);
+      const x = Math.floor(Math.random() * 100 - 50) + 0.5;
       const y = Math.floor(Math.random() * 8);
-      const z = Math.floor(Math.random() * 100 - 50);
+      const z = Math.floor(Math.random() * 100 - 50) + 0.5;
       const position = new Vector3(x, y, z);
       const entity = getEntityByPosition(position);
       if (entity === undefined) {
@@ -52,6 +52,7 @@ function ResourceFactory() {
         ],
       entityRef: createRef<THREE.Mesh>(),
       createdTime: time,
+      gravity: 0,
     };
 
     const entityExists = getEntityByPosition(position);

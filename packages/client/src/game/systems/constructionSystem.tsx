@@ -5,6 +5,7 @@ import { getRandom } from "@/lib/utils";
 import { palette } from "../utils/palette";
 import { IFacility } from "../types/entities";
 import prand from "pure-rand";
+import { floodFill } from "../utils/floodFill";
 
 // TODO: Extract build conditions, can't build 1 tile below gravity well, only gravity well can build at y==1, etc
 const canBuildAtPosition = (position: Vector3) => {
@@ -68,11 +69,37 @@ const buildFacility = (position: Vector3) => {
         prand.unsafeUniformIntDistribution(0, building.variants.length - 1, rng)
       ],
     createdTime: time,
+    gravity: 0,
   };
 
   addEntity(newFacility);
   // Move Input logic away from here
   // setInput({ building: undefined });
+  propagateGravity();
 };
+
+async function propagateGravity() {
+  // update the gravity propagation for all wells
+  const wells = getState().world.entities.filter((entity) => {
+    return (
+      entity.entityType === "facility" &&
+      (entity as IFacility).type.tags.includes("producesGravity")
+    );
+  }) as IFacility[];
+
+  for (const entity of getState().world.entities) {
+    // zero out so we clean all gravity
+    entity.gravity = 0;
+  }
+
+  for (const well of wells) {
+    console.log(well.type.name);
+    const resource = well.type.produces.find((p) => p[0] === "gravity");
+    if (resource) {
+      const amount = resource[1];
+      floodFill(well.position, "gravity", amount);
+    }
+  }
+}
 
 export { buildFacility, canBuildAtPosition, getEntityInDirection };
