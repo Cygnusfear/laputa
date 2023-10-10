@@ -67,6 +67,12 @@ const ModelData: { [key: string]: ModelDataType } = {
     materials: ["MAT_crystal"],
     colors: [],
   },
+  rock00: {
+    name: "Rock000",
+    nodes: ["Rock000"],
+    materials: ["MAT_rock"],
+    colors: [],
+  },
 } as const;
 
 export type TModelData = typeof ModelData;

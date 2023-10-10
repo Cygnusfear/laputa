@@ -71,7 +71,7 @@ const EntityData = {
       image: "crystal.webp",
       resourceType: "crystal",
       produces: [["gravity", 25, 1]],
-      variants: [ModelData.crystal00, ModelData.crystal01, ModelData.crystal02],
+      variants: [ModelData.rock00, ModelData.crystal01, ModelData.crystal02],
       tags: [],
     },
   } as { [key: string]: ResourceDataType },
