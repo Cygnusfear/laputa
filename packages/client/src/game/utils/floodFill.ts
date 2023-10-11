@@ -5,7 +5,7 @@ import { getState } from "../store";
 
 export function floodFill(
   startPosition: Vector3,
-  propertyName: keyof IEntity,
+  // propertyName: keyof IEntity,
   initialValue: number
 ) {
   const { getEntityByPosition } = getState().world;
