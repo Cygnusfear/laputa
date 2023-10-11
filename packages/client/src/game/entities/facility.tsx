@@ -16,7 +16,6 @@ import {
   PiWifiNoneDuotone,
   PiXBold,
 } from "react-icons/pi";
-import { IconType } from "react-icons";
 import { FacilitySound } from "../audio/facilitySound";
 import useConstruction from "../systems/useConstruction";
 
@@ -132,30 +131,31 @@ const Renderer = (props: IFacility) => {
     return prand.unsafeUniformIntDistribution(0, 5, rand);
   }, [rand, position, getEntityByPosition]);
 
+  const IconWifi = useMemo(() => {
+    switch (props.gravity) {
+      case 4:
+        return MdWifi;
+        break;
+      case 3:
+        return PiWifiMediumDuotone;
+        break;
+      case 2:
+        return PiWifiLowDuotone;
+        break;
+      case 1:
+        return PiWifiNoneDuotone;
+        break;
+      case 0:
+        return PiXBold;
+        break;
+      default:
+        return MdWifi;
+    }
+  }, [props.gravity]);
+
   if (!variant || !prototypes || prototypes.length < 1) {
     console.error("No prototypes found for variant", variant, prototypes);
     return null;
-  }
-
-  let IconWifi: IconType | null = null;
-  switch (props.gravity) {
-    case 4:
-      IconWifi = MdWifi;
-      break;
-    case 3:
-      IconWifi = PiWifiMediumDuotone;
-      break;
-    case 2:
-      IconWifi = PiWifiLowDuotone;
-      break;
-    case 1:
-      IconWifi = PiWifiNoneDuotone;
-      break;
-    case 0:
-      IconWifi = PiXBold;
-      break;
-    default:
-      IconWifi = MdWifi;
   }
 
   return (
