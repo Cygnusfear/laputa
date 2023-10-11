@@ -22,11 +22,6 @@ function Inventory() {
 
   useEffect(() => {
     document.addEventListener("gameLoaded", () => {
-      setFacilities([
-        Object.entries(EntityData.facilities).map(
-          ([, entityData]) => entityData
-        )[0],
-      ]);
       setLoaded(true);
     });
     return () => {

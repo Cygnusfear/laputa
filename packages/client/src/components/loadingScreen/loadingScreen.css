@@ -4,19 +4,37 @@
 
 .loading-background {
   @apply fixed left-0 top-0 flex h-screen w-screen items-center justify-center overflow-hidden text-clip bg-[#76ADAB] bg-clip-border flex-col;
-  transition: opacity 1s ease-in-out;
+  transition: all 1s ease-in-out;
 }
 
 .game-title {
   @apply relative mx-auto text-6xl pt-4;
   font-family: "Anton", sans;
   animation: pulseShadow 5s infinite alternate;
-  transition: opacity 1s ease-in-out;
+  transition: all 1s ease-in-out;
+}
+
+.loading-container {
+  @apply relative h-60 w-60 overflow-hidden text-clip rounded-full bg-gradient-to-t from-white to-transparent to-90%;
+  transition: all 1.3s ease-in-out;
+}
+
+.synthwave-lines {
+  @apply relative top-0 left-0 w-full h-full bg-clip-border opacity-50 animate-pulse;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.2) 20px,
+    rgba(255, 255, 255, 0) 20px,
+    rgba(255, 255, 255, 0.2) 20px
+  );
+  animation: moveLines 5s linear infinite;
 }
 
 .fade-out {
   opacity: 0;
   pointer-events: none;
+  /* display: none; */
 }
 
 .wrapper-animate {
@@ -48,5 +66,23 @@
   }
   50% {
     text-shadow: 0px 5px 40px rgba(255, 255, 255, 0.3);
+  }
+}
+
+@keyframes moveLines {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100px);
+  }
+}
+
+@keyframes textPulse {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100px);
   }
 }
