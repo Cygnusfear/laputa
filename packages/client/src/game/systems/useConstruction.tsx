@@ -1,7 +1,7 @@
 import { useMUD } from "@/useMUD";
 import { Vector3 } from "three";
 import { getState } from "../store";
-import { buildFacility } from "./constructionSystem";
+import { buildFacility, canBuildAtPosition } from "./constructionSystem";
 import { queueAsyncCall } from "../utils/asyncQueue";
 
 function useConstruction() {
@@ -25,18 +25,22 @@ function useConstruction() {
       Math.floor(position.z),
       0,
     ];
-    queueAsyncCall(async () => {
-      console.trace("buildFacility hook", position);
-      console.log(build);
+    if (canBuildAtPosition(position)) {
+      queueAsyncCall(async () => {
+        console.trace("buildFacility hook", position);
+        console.log(build);
 
-      try {
-        const result = await mudBuildFacility(...build);
-        console.log("mudBuildFacility result", result);
-      } catch (error) {
-        console.error("mudBuildFacility error", error);
-      }
-    });
-    buildFacility(position);
+        try {
+          const result = await mudBuildFacility(...build);
+          console.log("mudBuildFacility result", result);
+        } catch (error) {
+          console.error("mudBuildFacility error", error);
+        }
+      });
+      buildFacility(position);
+    } else {
+      console.error("Cannot build here", position);
+    }
   };
 
   return { constructFacility };

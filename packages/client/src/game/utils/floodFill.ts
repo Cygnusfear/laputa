@@ -25,9 +25,9 @@ export function floodFill(
         position.clone().add(Directions.FORWARD()),
         position.clone().add(Directions.BACKWARD()),
       ];
-
+      const v = value - 1;
       neighbors.forEach((neighborPosition) => {
-        recursiveFill(neighborPosition, value - 1);
+        recursiveFill(neighborPosition, v);
       });
     }
   }
