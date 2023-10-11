@@ -8,6 +8,8 @@ import { useEntityQuery } from "@latticexyz/react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 import { useStore } from "../store";
 
+let loaded = false;
+
 function GameLoop() {
   const {
     // systemCalls: { mudGetAllFacilityEntityMetadatas },
@@ -44,39 +46,23 @@ function GameLoop() {
           continue;
         }
         buildFacility(position, building);
+        loaded = true;
       }
+    }
+    if (loaded) {
+      const event = new Event("gameLoaded");
+      document.dispatchEvent(event);
     }
   }, [facilities, getEntityByPosition]);
 
   // // Startup
   useEffect(() => {
-    //   const buildEntities = async () => {
-    //     const entities = await mudGetAllFacilityEntityMetadatas();
-    //     for (const entity of entities) {
-    //       console.log(entity);
-    //       const building = Object.values(EntityData.facilities).find(
-    //         (f) => f.entityTypeId === entity.entityTypeId?.typeId || ""
-    //       );
-    //       if (!entity.position || !building) {
-    //         console.error("Entity has no position", entity);
-    //         continue;
-    //       }
-    //       const position = new Vector3(
-    //         entity.position.x,
-    //         entity.p osition.y,
-    //         entity.position.z
-    //       );
-    //       buildFacility(position, building);
-    //     }
-    //   };
     for (let i = 0; i < 10; i++) {
       const { createResource, randomEmptyPosition } = resourceFactory();
       const position = randomEmptyPosition();
       createResource(EntityData.resources.crystalFloat, position!);
     }
-    // buildEntities();
   }, []);
-  // }, [mudGetAllFacilityEntityMetadatas]);
 
   return <></>;
 }
