@@ -116,6 +116,61 @@ export function createSystemCalls(
     };
   };
 
+  /*
+  example output
+  [
+  {
+    "entityKey": "0x5c6090c0461491a2941743bda5c3658bf1ea53bbd3edcde54e16205e18b45792",
+    "position": {
+      "x": 1,
+      "y": 0,
+      "z": 1,
+      "__staticData": "0x000000010000000000000001",
+      "__encodedLengths": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "__dynamicData": "0x"
+    },
+    "entityTypeId": {
+      "typeId": 10,
+      "__staticData": "0x0000000a"
+    },
+    "orientation": {
+      "yaw": 0,
+      "__staticData": "0x00000000"
+    },
+    "ownedBy": {
+      "owner": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "__staticData": "0x70997970c51812dc3a010c7d01b50e0d17dc79c8"
+    }
+  }
+  ]
+  */
+  const mudGetAllFacilityEntityMetadatas = async () => {
+    const allEntityKeys = await worldContract.read.getAllFacilityEntityKeys();
+
+    const allEntityMetadatas = [];
+
+    for (const entityKeyArray of allEntityKeys) {
+      for (const entityKey of entityKeyArray) {
+        const entityPos = await mudGetPosition(entityKey);
+        const entityTypeId = await mudGetEntityType(entityKey);
+        const orientation = await mudGetOrientation(entityKey);
+        const ownedBy = await mudGetOwnedBy(entityKey);
+
+        const entityMetadata = {
+          entityKey,
+          position: entityPos,
+          entityTypeId,
+          orientation,
+          ownedBy,
+        };
+
+        allEntityMetadatas.push(entityMetadata);
+      }
+    }
+
+    return allEntityMetadatas;
+  };
+
   return {
     increment,
     mudGetEntityType,
@@ -126,5 +181,6 @@ export function createSystemCalls(
     mudIsPositionEmpty,
     mudBuildFacility,
     mudGetEntityMetadataAtPosition,
+    mudGetAllFacilityEntityMetadatas,
   };
 }

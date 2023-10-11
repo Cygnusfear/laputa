@@ -10,7 +10,7 @@ export const App = () => {
   const {
     components: { Counter },
     systemCalls: {
-      mudIsPositionEmpty,
+      mudGetAllFacilityEntityMetadatas,
       mudBuildFacility,
       mudGetEntityMetadataAtPosition,
     },
@@ -39,10 +39,13 @@ export const App = () => {
         className="px-100 py-100 rounded-md border border-gray-300 bg-white text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50"
         onClick={async (event) => {
           event.preventDefault();
-          console.log("mudIsPositionEmpty:", await mudIsPositionEmpty());
+          console.log(
+            "mudGetAllFacilityEntityMetadatas:",
+            await mudGetAllFacilityEntityMetadatas()
+          );
         }}
       >
-        mudIsPositionEmpty
+        mudGetAllFacilityEntityMetadatas
       </button>
       <button
         type="button"
