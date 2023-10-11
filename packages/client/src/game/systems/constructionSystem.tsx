@@ -6,6 +6,7 @@ import { palette } from "../utils/palette";
 import { IFacility } from "../types/entities";
 import prand from "pure-rand";
 import { floodFill } from "../utils/floodFill";
+import { FacilityDataType } from "../data/entities";
 
 // TODO: Extract build conditions, can't build 1 tile below gravity well, only gravity well can build at y==1, etc
 const canBuildAtPosition = (position: Vector3) => {
@@ -29,9 +30,9 @@ const getEntityInDirection = (position: Vector3, direction: Vector3) => {
 
 // TODO: extract input logic from construction system [refactor]
 // Should accept a building type as arg
-const buildFacility = (position: Vector3) => {
+const buildFacility = (position: Vector3, building: FacilityDataType) => {
   const {
-    input: { cursor, building },
+    input: { cursor },
     world: { addEntity },
   } = getState();
 
@@ -73,8 +74,6 @@ const buildFacility = (position: Vector3) => {
   };
 
   addEntity(newFacility);
-  // Move Input logic away from here
-  // setInput({ building: undefined });
   propagateGravity();
 };
 
@@ -96,7 +95,7 @@ async function propagateGravity() {
     const resource = well.type.produces.find((p) => p[0] === "gravity");
     if (resource) {
       const amount = resource[1];
-      floodFill(well.position, "gravity", amount);
+      floodFill(well.position, amount);
     }
   }
 }
