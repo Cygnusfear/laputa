@@ -25,7 +25,7 @@ function GridRenderer() {
   return (
     <>
       <Grid
-        position={[0, 0, 50]}
+        position={[0.5, -0.5, 50.5]}
         args={[30.5, 30.5]}
         {...gridConfig}
         cellColor={"#76EAE4"}
@@ -33,7 +33,7 @@ function GridRenderer() {
         sectionThickness={building ? 1 : 0}
       />
       <Grid
-        position={[0, 0, 50]}
+        position={[0.5, -0.5, 50.5]}
         rotation={[-Math.PI, 0, 0]}
         args={[30.5, 30.5]}
         {...gridConfig}
@@ -48,11 +48,11 @@ function GridRenderer() {
 function Ground() {
   const gridRef = createRef<THREE.Mesh>();
   const { constructFacility } = useConstruction();
+  const {
+    input: { cursor },
+  } = getState();
 
   const { onMouseMove } = useInput((event) => {
-    const {
-      input: { cursor },
-    } = getState();
     cursor.setCursor({
       position: event.position,
       direction: Directions.DOWN(),

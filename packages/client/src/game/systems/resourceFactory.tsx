@@ -23,7 +23,7 @@ function ResourceFactory() {
       const position = new Vector3(x, y, z);
       const entity = getEntityByPosition(position);
       if (entity === undefined) {
-        return position.addScalar(0.5);
+        return position;
       }
       attempts++;
     }

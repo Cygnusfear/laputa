@@ -50,7 +50,7 @@ const buildFacility = (position: Vector3) => {
   // Use time for seeded random
   const time = Date.now();
   const rng = prand.xoroshiro128plus(time);
-
+  console.trace(position);
   const newFacility: IFacility = {
     entityType: "facility",
     position: position,
