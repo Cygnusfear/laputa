@@ -1,13 +1,13 @@
 import { RefObject, useMemo, useState } from "react";
 import { useStore } from "../store";
-import { AdditiveBlending, DoubleSide, Mesh, Vector3 } from "three";
+import { AdditiveBlending, DoubleSide, Mesh } from "three";
 import { animated, useSpring } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
 import { palette } from "../utils/palette";
 import { Directions, faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
 import prand from "pure-rand";
-import Wire from "./wire";
+import Wires from "./wires";
 // import { Html } from "@react-three/drei";
 // import { MdWifi } from "react-icons/md";
 // import {
@@ -79,10 +79,7 @@ const Facility = (props: IFacility) => {
           if (faceIndex !== undefined) setFaceIndex(undefined);
         }}
       >
-        <boxGeometry
-          attach="geometry"
-          args={new Vector3(1, 1, 1).multiplyScalar(1).toArray()}
-        />
+        <boxGeometry attach="geometry" args={[1, 1, 1]} />
         {[...Array(6)].map((_, index) => (
           <meshLambertMaterial
             attach={`material-${index}`}
@@ -108,7 +105,8 @@ const Facility = (props: IFacility) => {
 };
 
 const Renderer = (props: IFacility) => {
-  const { colorPrimary, colorSecondary, variant, rotation, position } = props;
+  const { colorPrimary, colorSecondary, variant, rotation, position, type } =
+    props;
   const {
     assets: { meshes },
     world: { getEntityByPosition },
@@ -165,7 +163,7 @@ const Renderer = (props: IFacility) => {
     <group
       layers={30}
       dispose={null}
-      scale={new Vector3(1, 1, 1)}
+      scale={[1, 1, 1]}
       position={[0, 0, 0]}
       rotation={[0, rotation.y, 0]}
     >
@@ -203,7 +201,7 @@ const Renderer = (props: IFacility) => {
           </mesh>
         );
       })}
-      <Wire numWires={numWires} />
+      {type.tags.includes("hasWires") && <Wires numWires={numWires} />}
       {/* {building && (
         <Html>
           <p className="gravity-ui flex flex-row items-center">

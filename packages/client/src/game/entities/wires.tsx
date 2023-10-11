@@ -8,7 +8,7 @@ interface WireProps {
   numWires?: number;
 }
 
-const Wire: React.FC<WireProps> = ({ numWires = 5 }) => {
+const Wires: React.FC<WireProps> = ({ numWires = 5 }) => {
   const colors = useMemo(() => {
     let c: string[] = [];
     for (let i = 0; i < numWires; i++) {
@@ -16,6 +16,7 @@ const Wire: React.FC<WireProps> = ({ numWires = 5 }) => {
     }
     return c;
   }, [numWires]);
+
   const wires = useMemo(() => {
     const seed = Date.now() ^ (Math.random() * 0x100000000);
     const rand = prand.unsafeUniformIntDistribution;
@@ -66,25 +67,35 @@ const Wire: React.FC<WireProps> = ({ numWires = 5 }) => {
   return (
     <>
       {wires.map((points, idx) => (
-        <line key={idx}>
-          <bufferGeometry attach="geometry">
-            <bufferAttribute
-              attach="attributes-position"
-              array={new Float32Array(points.flatMap((p) => p.toArray()))}
-              count={points.length}
-              itemSize={3}
-            />
-          </bufferGeometry>
-          <lineBasicMaterial
-            attach="material"
-            color={colors[idx]}
-            transparent
-            opacity={0.8}
-          />
-        </line>
+        <Wire points={points} key={idx} color={colors[idx]} />
       ))}
     </>
   );
 };
 
-export default Wire;
+const Wire = ({ points, color }: { points: Vector3[]; color: string }) => {
+  const array = useMemo(
+    () => new Float32Array(points.flatMap((p) => p.toArray())),
+    [points]
+  );
+  return (
+    <line>
+      <bufferGeometry attach="geometry">
+        <bufferAttribute
+          attach="attributes-position"
+          array={array}
+          count={points.length}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <lineBasicMaterial
+        attach="material"
+        color={color}
+        transparent
+        opacity={0.8}
+      />
+    </line>
+  );
+};
+
+export default Wires;

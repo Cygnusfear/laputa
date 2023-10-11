@@ -25,6 +25,7 @@ export const entityTags = [
   "producesPower",
   "producesGravity",
   "producesPopulation",
+  "hasWires",
 ] as const;
 export type EntityTag = (typeof entityTags)[number];
 
@@ -39,7 +40,7 @@ const EntityData = {
       costs: [["lapu", 500]],
       produces: [["gravity", 7, 1]],
       variants: [ModelData.well00],
-      tags: ["groundLevel", "producesGravity"],
+      tags: ["groundLevel", "hasWires", "producesGravity"],
     },
     dynamo: {
       entityTypeId: 102,
@@ -51,7 +52,7 @@ const EntityData = {
       costs: [["lapu", 200]],
       produces: [["power", 25, 1]],
       variants: [ModelData.engine00],
-      tags: [],
+      tags: ["hasWires"],
     },
     residence: {
       entityTypeId: 103,

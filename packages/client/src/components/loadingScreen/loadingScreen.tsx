@@ -62,7 +62,7 @@ function LoadingScreen() {
       >
         LAPUTA
         <div
-          className="loading-bar mt-0.5 block h-3 bg-white"
+          className="loading-bar mx-auto mt-0.5 block h-2.5 bg-white"
           style={{ width: `${progress}%` }}
         />
       </div>
