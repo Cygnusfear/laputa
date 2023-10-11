@@ -36,6 +36,7 @@ function Inventory() {
 
   useEffect(() => {
     // TODO: Remove hack to only show gravityhill at startup
+    if (!loaded) return;
     if (
       entities.find(
         (entity) =>
@@ -50,7 +51,7 @@ function Inventory() {
       setFacilities([...facilities, ...f]);
       setcardsLoaded(true);
     }
-  }, [cardsLoaded, entities, facilities]);
+  }, [cardsLoaded, entities, facilities, loaded]);
 
   const listTransitions = useTransition(facilities, {
     config: config.gentle,
