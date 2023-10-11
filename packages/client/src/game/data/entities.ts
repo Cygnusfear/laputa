@@ -2,6 +2,7 @@ import ModelData, { ModelDataType } from "./models";
 import { ResourceType } from "./resources";
 
 export type DataType = {
+  entityTypeId: number;
   name: string;
   blurb: string;
   description: string;
@@ -30,6 +31,7 @@ export type EntityTag = (typeof entityTags)[number];
 const EntityData = {
   facilities: {
     gravityhill: {
+      entityTypeId: 1,
       name: "Gravity Hill",
       blurb: "Generates gravity",
       description: `The contraption works on the principle of "Harmonious Disarray." It contains a meticulously arranged collection of misaligned gears, perpetually confused springs, and bewilderingly coiled wires, all managed by a flock of diligent, tiny mechanical hummingbirds, named the "srIørk". These birds, with their flapping wings, create a subtle, chaotic energy that, quite accidentally, disrupts the gravitational pull beneath it.`,
@@ -40,6 +42,7 @@ const EntityData = {
       tags: ["groundLevel", "producesGravity"],
     },
     dynamo: {
+      entityTypeId: 102,
       name: "Whirly Dynamo",
       blurb: "Generates power",
       description:
@@ -51,6 +54,7 @@ const EntityData = {
       tags: [],
     },
     residence: {
+      entityTypeId: 103,
       name: "Residence",
       blurb: "Common housing",
       description:
@@ -64,6 +68,7 @@ const EntityData = {
   } as { [key: string]: FacilityDataType },
   resources: {
     crystalFloat: {
+      entityTypeId: 701,
       name: "Floating Crystal",
       blurb: "A floating crystal",
       description:

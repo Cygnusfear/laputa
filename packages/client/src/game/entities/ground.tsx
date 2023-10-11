@@ -3,8 +3,8 @@ import { Grid, GridProps } from "@react-three/drei";
 
 import { useInput } from "../input/useInput";
 import { getState, useStore } from "../store";
-import { buildFacility } from "../systems/constructionSystem";
 import { Directions } from "@/lib/utils";
+import useConstruction from "../systems/useConstruction";
 
 const gridSize = 1000;
 
@@ -47,6 +47,7 @@ function GridRenderer() {
 
 function Ground() {
   const gridRef = createRef<THREE.Mesh>();
+  const { constructFacility } = useConstruction();
 
   const { onMouseMove } = useInput((event) => {
     const {
@@ -59,7 +60,7 @@ function Ground() {
   }, gridRef);
 
   const { onMouseDown, onMouseClick } = useInput((event) => {
-    buildFacility(event.position);
+    constructFacility(event.position);
   }, gridRef);
 
   return (

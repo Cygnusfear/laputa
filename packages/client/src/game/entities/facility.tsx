@@ -3,16 +3,14 @@ import { useStore } from "../store";
 import { AdditiveBlending, DoubleSide, Mesh, Vector3 } from "three";
 import { animated, useSpring } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
-import { buildFacility } from "../systems/constructionSystem";
 import { palette } from "../utils/palette";
 import { Directions, faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
 import prand from "pure-rand";
 import Wire from "./wire";
 import { Html } from "@react-three/drei";
-import { MdOutlineSignalWifi4Bar } from "react-icons/md";
+import { MdWifi } from "react-icons/md";
 import {
-  PiWifiHighFill,
   PiWifiLowDuotone,
   PiWifiMediumDuotone,
   PiWifiNoneDuotone,
@@ -20,9 +18,11 @@ import {
 } from "react-icons/pi";
 import { IconType } from "react-icons";
 import { FacilitySound } from "../audio/facilitySound";
+import useConstruction from "../systems/useConstruction";
 
 const Facility = (props: IFacility) => {
   const { position, entityRef } = props;
+  const { constructFacility } = useConstruction();
   const [faceIndex, setFaceIndex] = useState<number | undefined>(undefined);
   const {
     input: { cursor },
@@ -40,7 +40,7 @@ const Facility = (props: IFacility) => {
 
   const { onMouseDown, onMouseClick } = useInput((event) => {
     if (faceIndex === undefined) return;
-    buildFacility(cursor.position);
+    constructFacility(cursor.position);
     setFaceIndex(undefined);
     event.event.stopPropagation();
   }, entityRef);
@@ -140,7 +140,7 @@ const Renderer = (props: IFacility) => {
   let IconWifi: IconType | null = null;
   switch (props.gravity) {
     case 4:
-      IconWifi = MdOutlineSignalWifi4Bar;
+      IconWifi = MdWifi;
       break;
     case 3:
       IconWifi = PiWifiMediumDuotone;
@@ -155,7 +155,7 @@ const Renderer = (props: IFacility) => {
       IconWifi = PiXBold;
       break;
     default:
-      IconWifi = PiWifiHighFill;
+      IconWifi = MdWifi;
   }
 
   return (
