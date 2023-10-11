@@ -26,7 +26,11 @@ export function useInput(
     closest: THREE.Object3D
   ) =>
     closest.userData.type === "grid"
-      ? event.point.clone().addScalar(0.5).setY(0).floor()
+      ? event.point
+          .clone()
+          .setY(0)
+          .add(new Vector3(0.5, 0, 0.5))
+          .floor()
       : closest.getWorldPosition(new Vector3());
 
   const firstInterSection = (event: ThreeEvent<MouseEvent>) => {
