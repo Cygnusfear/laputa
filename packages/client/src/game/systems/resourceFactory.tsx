@@ -18,12 +18,12 @@ function ResourceFactory() {
     let attempts = 0;
     while (attempts < 300) {
       const x = Math.floor(Math.random() * 100 - 50);
-      const y = Math.floor(Math.random() * 8);
+      const y = Math.floor(Math.random() * 8) + 1;
       const z = Math.floor(Math.random() * 100 - 50);
       const position = new Vector3(x, y, z);
       const entity = getEntityByPosition(position);
       if (entity === undefined) {
-        return position;
+        return position.addScalar(0.5);
       }
       attempts++;
     }
@@ -32,6 +32,7 @@ function ResourceFactory() {
   };
 
   const createResource = (resource: ResourceDataType, position: Vector3) => {
+    console.log(position);
     const newResource: IResource = {
       entityType: "resource",
       position: position,
@@ -52,6 +53,7 @@ function ResourceFactory() {
         ],
       entityRef: createRef<THREE.Mesh>(),
       createdTime: time,
+      gravity: 0,
     };
 
     const entityExists = getEntityByPosition(position);

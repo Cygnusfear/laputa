@@ -9,6 +9,17 @@ import { Directions, faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
 import prand from "pure-rand";
 import Wire from "./wire";
+import { Html } from "@react-three/drei";
+import { MdOutlineSignalWifi4Bar } from "react-icons/md";
+import {
+  PiWifiHighFill,
+  PiWifiLowDuotone,
+  PiWifiMediumDuotone,
+  PiWifiNoneDuotone,
+  PiXBold,
+} from "react-icons/pi";
+import { IconType } from "react-icons";
+import { FacilitySound } from "../audio/facilitySound";
 
 const Facility = (props: IFacility) => {
   const { position, entityRef } = props;
@@ -89,6 +100,7 @@ const Facility = (props: IFacility) => {
         ))}
         <Renderer {...props} />
       </animated.mesh>
+      <FacilitySound />
     </animated.group>
   );
 };
@@ -98,10 +110,15 @@ const Renderer = (props: IFacility) => {
   const {
     assets: { meshes },
     world: { getEntityByPosition },
+    input: { building },
   } = useStore();
 
-  const [prototypes] = useState(
-    Object.values(meshes).filter((mesh) => variant?.nodes.includes(mesh.name))
+  const prototypes = useMemo(
+    () =>
+      Object.values(meshes).filter(
+        (mesh) => variant?.nodes.includes(mesh.name)
+      ),
+    [meshes, variant]
   );
 
   const rand = useMemo(() => {
@@ -118,6 +135,27 @@ const Renderer = (props: IFacility) => {
   if (!variant || !prototypes || prototypes.length < 1) {
     console.error("No prototypes found for variant", variant, prototypes);
     return null;
+  }
+
+  let IconWifi: IconType | null = null;
+  switch (props.gravity) {
+    case 4:
+      IconWifi = MdOutlineSignalWifi4Bar;
+      break;
+    case 3:
+      IconWifi = PiWifiMediumDuotone;
+      break;
+    case 2:
+      IconWifi = PiWifiLowDuotone;
+      break;
+    case 1:
+      IconWifi = PiWifiNoneDuotone;
+      break;
+    case 0:
+      IconWifi = PiXBold;
+      break;
+    default:
+      IconWifi = PiWifiHighFill;
   }
 
   return (
@@ -163,6 +201,13 @@ const Renderer = (props: IFacility) => {
         );
       })}
       <Wire numWires={numWires} />
+      {building && (
+        <Html>
+          <p className="gravity-ui flex flex-row items-center">
+            {IconWifi && <IconWifi className="inline-flex text-white" />}
+          </p>
+        </Html>
+      )}
     </group>
   );
 };

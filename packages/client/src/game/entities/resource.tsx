@@ -1,6 +1,7 @@
 import { IResource } from "../types/entities";
-import { useState } from "react";
+import { useMemo } from "react";
 import { useStore } from "../store";
+import HeightLine from "./heightLine";
 // import { Sparkles } from "@react-three/drei";
 
 function Resource(props: IResource) {
@@ -20,8 +21,12 @@ const Renderer = (props: IResource) => {
     assets: { meshes },
   } = useStore();
 
-  const [prototypes] = useState(
-    Object.values(meshes).filter((mesh) => variant?.nodes.includes(mesh.name))
+  const prototypes = useMemo(
+    () =>
+      Object.values(meshes).filter(
+        (mesh) => variant?.nodes.includes(mesh.name)
+      ),
+    [meshes, variant]
   );
 
   if (!variant || !prototypes || prototypes.length < 1) {
@@ -30,7 +35,7 @@ const Renderer = (props: IResource) => {
   }
 
   return (
-    <group layers={30} dispose={null} scale={scale} position={[0, 0, 0]}>
+    <group layers={30} dispose={null} position={[0, 0, 0]}>
       {prototypes!.map((proto, index) => {
         return (
           <mesh
@@ -40,7 +45,8 @@ const Renderer = (props: IResource) => {
             geometry={proto.geometry.clone()}
             receiveShadow
             castShadow
-            rotation={[Math.PI / 2, 0, 0]}
+            rotation={[0, 0, 0]}
+            scale={scale}
           >
             {
               // @ts-ignore
@@ -57,6 +63,7 @@ const Renderer = (props: IResource) => {
           </mesh>
         );
       })}
+      <HeightLine />
       {/* <Sparkles count={12} scale={5} size={5} color={"#FF6188"} /> */}
     </group>
   );

@@ -63,8 +63,14 @@ const ModelData: { [key: string]: ModelDataType } = {
   },
   crystal02: {
     name: "Crystal002",
-    nodes: ["Crystal00"],
+    nodes: ["Crystal002"],
     materials: ["MAT_crystal"],
+    colors: [],
+  },
+  rock00: {
+    name: "Rock000",
+    nodes: ["Rock000"],
+    materials: ["MAT_rock"],
     colors: [],
   },
 } as const;
