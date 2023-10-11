@@ -8,14 +8,14 @@ import { Directions, faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
 import prand from "pure-rand";
 import Wire from "./wire";
-import { Html } from "@react-three/drei";
-import { MdWifi } from "react-icons/md";
-import {
-  PiWifiLowDuotone,
-  PiWifiMediumDuotone,
-  PiWifiNoneDuotone,
-  PiXBold,
-} from "react-icons/pi";
+// import { Html } from "@react-three/drei";
+// import { MdWifi } from "react-icons/md";
+// import {
+//   PiWifiLowDuotone,
+//   PiWifiMediumDuotone,
+//   PiWifiNoneDuotone,
+//   PiXBold,
+// } from "react-icons/pi";
 import { FacilitySound } from "../audio/facilitySound";
 import useConstruction from "../systems/useConstruction";
 
@@ -109,7 +109,7 @@ const Renderer = (props: IFacility) => {
   const {
     assets: { meshes },
     world: { getEntityByPosition },
-    input: { building },
+    // input: { building },
   } = useStore();
 
   const prototypes = useMemo(
@@ -131,27 +131,27 @@ const Renderer = (props: IFacility) => {
     return prand.unsafeUniformIntDistribution(0, 5, rand);
   }, [rand, position, getEntityByPosition]);
 
-  const IconWifi = useMemo(() => {
-    switch (props.gravity) {
-      case 4:
-        return MdWifi;
-        break;
-      case 3:
-        return PiWifiMediumDuotone;
-        break;
-      case 2:
-        return PiWifiLowDuotone;
-        break;
-      case 1:
-        return PiWifiNoneDuotone;
-        break;
-      case 0:
-        return PiXBold;
-        break;
-      default:
-        return MdWifi;
-    }
-  }, [props.gravity]);
+  // const IconWifi = useMemo(() => {
+  //   switch (props.gravity) {
+  //     case 4:
+  //       return MdWifi;
+  //       break;
+  //     case 3:
+  //       return PiWifiMediumDuotone;
+  //       break;
+  //     case 2:
+  //       return PiWifiLowDuotone;
+  //       break;
+  //     case 1:
+  //       return PiWifiNoneDuotone;
+  //       break;
+  //     case 0:
+  //       return PiXBold;
+  //       break;
+  //     default:
+  //       return MdWifi;
+  //   }
+  // }, [props.gravity]);
 
   if (!variant || !prototypes || prototypes.length < 1) {
     console.error("No prototypes found for variant", variant, prototypes);
@@ -201,13 +201,13 @@ const Renderer = (props: IFacility) => {
         );
       })}
       <Wire numWires={numWires} />
-      {building && (
+      {/* {building && (
         <Html>
           <p className="gravity-ui flex flex-row items-center">
             {IconWifi && <IconWifi className="inline-flex text-white" />}
           </p>
         </Html>
-      )}
+      )} */}
     </group>
   );
 };

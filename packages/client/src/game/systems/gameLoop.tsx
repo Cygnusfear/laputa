@@ -4,42 +4,79 @@ import EntityData from "../data/entities";
 import { useMUD } from "@/useMUD";
 import { Vector3 } from "three";
 import { buildFacility } from "./constructionSystem";
+import { useEntityQuery } from "@latticexyz/react";
+import { Has, getComponentValueStrict } from "@latticexyz/recs";
+import { useStore } from "../store";
 
 function GameLoop() {
   const {
-    systemCalls: { mudGetAllFacilityEntityMetadatas },
+    // systemCalls: { mudGetAllFacilityEntityMetadatas },
+    components: { Position, EntityType },
   } = useMUD();
+  const {
+    world: { getEntityByPosition },
+  } = useStore();
 
-  // Startup
+  const facilities = useEntityQuery([Has(Position), Has(EntityType)]).map(
+    (entity) => {
+      const pos = getComponentValueStrict(Position, entity);
+      const type = getComponentValueStrict(EntityType, entity);
+      const e = {
+        entity,
+        typeId: type.typeId,
+        pos,
+        position: new Vector3(pos.x, pos.y, pos.z),
+      };
+      return e;
+    }
+  );
+
   useEffect(() => {
-    const buildEntities = async () => {
-      const entities = await mudGetAllFacilityEntityMetadatas();
-      for (const entity of entities) {
-        console.log(entity);
+    // we're going to check which entities don't exist yet and build new ones:
+    for (const facility of facilities) {
+      const { entity, typeId, position } = facility;
+      if (!getEntityByPosition(position)) {
         const building = Object.values(EntityData.facilities).find(
-          (f) => f.entityTypeId === entity.entityTypeId?.typeId || ""
+          (f) => f.entityTypeId === typeId || ""
         );
-        if (!entity.position || !building) {
+        if (!position || !building) {
           console.error("Entity has no position", entity);
           continue;
         }
-        const position = new Vector3(
-          entity.position.x,
-          entity.position.y,
-          entity.position.z
-        );
         buildFacility(position, building);
       }
-    };
+    }
+  }, [facilities, getEntityByPosition]);
 
+  // // Startup
+  useEffect(() => {
+    //   const buildEntities = async () => {
+    //     const entities = await mudGetAllFacilityEntityMetadatas();
+    //     for (const entity of entities) {
+    //       console.log(entity);
+    //       const building = Object.values(EntityData.facilities).find(
+    //         (f) => f.entityTypeId === entity.entityTypeId?.typeId || ""
+    //       );
+    //       if (!entity.position || !building) {
+    //         console.error("Entity has no position", entity);
+    //         continue;
+    //       }
+    //       const position = new Vector3(
+    //         entity.position.x,
+    //         entity.p osition.y,
+    //         entity.position.z
+    //       );
+    //       buildFacility(position, building);
+    //     }
+    //   };
     for (let i = 0; i < 10; i++) {
       const { createResource, randomEmptyPosition } = resourceFactory();
       const position = randomEmptyPosition();
       createResource(EntityData.resources.crystalFloat, position!);
     }
-
-    buildEntities();
-  }, [mudGetAllFacilityEntityMetadatas]);
+    // buildEntities();
+  }, []);
+  // }, [mudGetAllFacilityEntityMetadatas]);
 
   return <></>;
 }
