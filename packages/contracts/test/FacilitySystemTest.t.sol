@@ -70,6 +70,10 @@ contract FacilitySystemTest is MudTest {
     bytes32 entityKey03 = world.buildFacility(entityTypeIdGroundLevel, 2, 0, 1, 0);
     PositionData memory posData03 = Position.get(entityKey03);
     assertEq(posData03.x, 2);
+
+    //should return all entityKeys
+    bytes32[][] memory allEntityKeys = world.getAllFacilityEntityKeys();
+    assertEq(allEntityKeys.length, 2);
   }
 
   function testDestroyFacility() public {

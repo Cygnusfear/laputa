@@ -4,6 +4,7 @@ pragma solidity >=0.8.21;
 import { System } from "@latticexyz/world/src/System.sol";
 //import { getUniqueEntity } from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
+import { getKeysInTable } from "@latticexyz/world-modules/src/modules/keysintable/getKeysInTable.sol";
 import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
 
 import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy } from "../codegen/index.sol";
@@ -116,5 +117,9 @@ contract FacilitySystem is System {
     EntityType.deleteRecord(entityKey);
     Orientation.deleteRecord(entityKey);
     Position.deleteRecord(entityKey);
+  }
+
+  function getAllFacilityEntityKeys() public view returns (bytes32[][] memory) {
+    return getKeysInTable(PositionTableId);
   }
 }
