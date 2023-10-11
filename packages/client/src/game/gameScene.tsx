@@ -28,15 +28,13 @@ function GameScene() {
 
   return (
     <scene>
-      <Suspense fallback={null}>
-        <Camera />
-      </Suspense>
       <ambientLight intensity={1.2} />
       <directionalLight castShadow position={[5, 8, 5]} intensity={2.5} />
       <directionalLight castShadow position={[-5, 8, 5]} intensity={2.5} />
-      <Background />
-      <Ground />
       <Suspense fallback={null}>
+        <Background />
+        <Camera />
+        <Ground />
         {entities.map((entity, idx) => {
           switch (entity.entityType) {
             case "facility":

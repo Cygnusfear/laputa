@@ -184,7 +184,7 @@ const Renderer = (props: IFacility) => {
             dispose={null}
             position={[0, 0, 0]}
             key={index}
-            geometry={proto.geometry.clone()}
+            geometry={proto.geometry}
             receiveShadow
             castShadow
           >

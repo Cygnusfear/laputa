@@ -42,7 +42,7 @@ const Renderer = (props: IResource) => {
             dispose={null}
             position={[0, 0, 0]}
             key={index}
-            geometry={proto.geometry.clone()}
+            geometry={proto.geometry}
             receiveShadow
             castShadow
             rotation={[0, 0, 0]}
