@@ -16,9 +16,6 @@ export function useInput(
   const [mouseDownPosition, setMouseDownPosition] = useState<
     [number, number] | null
   >(null);
-  const [mousePosition, setMousePosition] = useState<
-    [number, number, number] | null
-  >(null);
 
   // Always get floor for intersections with grid
   const getClosestPosition = (
@@ -62,7 +59,6 @@ export function useInput(
   const onMouseMove = useCallback(
     (event: ThreeEvent<MouseEvent>) => {
       fireCallback("hover", event);
-      setMousePosition(event.point.toArray());
     },
     [fireCallback]
   );
@@ -91,7 +87,6 @@ export function useInput(
 
   return {
     mouseDownPosition,
-    mousePosition,
     onMouseDown,
     onMouseMove,
     onMouseClick,

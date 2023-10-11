@@ -49,7 +49,6 @@ const Facility = (props: IFacility) => {
     from: { springScale: [1.2, 0.9, 1.2] },
     config: { mass: 1, tension: 1000, friction: 20, precision: 0.0001 },
   });
-
   return (
     <animated.group dispose={null}>
       <animated.mesh
@@ -65,16 +64,20 @@ const Facility = (props: IFacility) => {
         onPointerMove={(e) => {
           // make sure we match the correct object
           if (e.object === e.eventObject) {
-            setFaceIndex(
-              e?.face?.materialIndex !== undefined
-                ? e.face.materialIndex
-                : undefined
-            );
+            if (faceIndex !== e?.face?.materialIndex) {
+              setFaceIndex(
+                e?.face?.materialIndex !== undefined
+                  ? e.face.materialIndex
+                  : undefined
+              );
+            }
             onMouseMove(e);
             e.stopPropagation();
           }
         }}
-        onPointerLeave={() => setFaceIndex(undefined)}
+        onPointerLeave={() => {
+          if (faceIndex !== undefined) setFaceIndex(undefined);
+        }}
       >
         <boxGeometry
           attach="geometry"

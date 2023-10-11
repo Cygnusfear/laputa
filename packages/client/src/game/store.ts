@@ -19,6 +19,7 @@ export interface World {
 export type CursorState = "valid" | "invalid" | "hidden";
 export interface CursorProps {
   position: Vector3;
+  point: number[];
   cursorState: CursorState;
   object: Object3D | Mesh | undefined;
   direction: Vector3;
@@ -88,6 +89,7 @@ const useStore = create<IState>((set, get) => ({
     },
     cursor: {
       position: new Vector3(),
+      point: [],
       cursorState: "valid",
       object: undefined,
       direction: Directions.UP(),

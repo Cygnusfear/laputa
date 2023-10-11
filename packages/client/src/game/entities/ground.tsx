@@ -53,10 +53,12 @@ function Ground() {
   } = getState();
 
   const { onMouseMove } = useInput((event) => {
-    cursor.setCursor({
-      position: event.position,
-      direction: Directions.DOWN(),
-    });
+    if (event.event.object === event.event.eventObject) {
+      cursor.setCursor({
+        position: event.position,
+        direction: Directions.DOWN(),
+      });
+    }
   }, gridRef);
 
   const { onMouseDown, onMouseClick } = useInput((event) => {
