@@ -10,7 +10,7 @@ import {
   useTransition,
   type SpringValue,
 } from "@react-spring/web";
-import { IFacility } from "@/game/types/entities";
+import { useOnce } from "@/lib/useOnce";
 
 function Inventory() {
   const {
@@ -20,37 +20,29 @@ function Inventory() {
   const [cardsLoaded, setcardsLoaded] = useState(false);
   const [facilities, setFacilities] = useState<FacilityDataType[]>([]);
 
-  useEffect(() => {
+  useOnce(() => {
+    const f = Object.entries(EntityData.facilities)
+      .map(([, entityData]) => entityData)
+      .filter((entityData) => entityData.tags.includes("startingItem"));
+    setFacilities(f);
     document.addEventListener("gameLoaded", () => {
-      setFacilities([
-        Object.entries(EntityData.facilities).map(
-          ([, entityData]) => entityData
-        )[0],
-      ]);
       setLoaded(true);
     });
     return () => {
       document.removeEventListener("gameLoaded", () => {});
     };
-  }, []);
+  });
 
   useEffect(() => {
     // TODO: Remove hack to only show gravityhill at startup
-    if (
-      entities.find(
-        (entity) =>
-          entity.entityType === "facility" &&
-          (entity as IFacility).type.name === "Gravity Hill"
-      ) &&
-      !cardsLoaded
-    ) {
-      const f = Object.entries(EntityData.facilities)
-        .map(([, entityData]) => entityData)
-        .filter((entityData) => !facilities.includes(entityData));
-      setFacilities([...facilities, ...f]);
-      setcardsLoaded(true);
-    }
-  }, [cardsLoaded, entities, facilities]);
+    if (!loaded) return;
+    if (cardsLoaded) return;
+    const f = Object.entries(EntityData.facilities)
+      .map(([, entityData]) => entityData)
+      .filter((entityData) => !facilities.includes(entityData));
+    setFacilities([...facilities, ...f]);
+    setcardsLoaded(true);
+  }, [cardsLoaded, entities, facilities, loaded]);
 
   const listTransitions = useTransition(facilities, {
     config: config.gentle,

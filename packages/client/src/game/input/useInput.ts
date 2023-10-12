@@ -16,9 +16,6 @@ export function useInput(
   const [mouseDownPosition, setMouseDownPosition] = useState<
     [number, number] | null
   >(null);
-  const [mousePosition, setMousePosition] = useState<
-    [number, number, number] | null
-  >(null);
 
   // Always get floor for intersections with grid
   const getClosestPosition = (
@@ -26,7 +23,11 @@ export function useInput(
     closest: THREE.Object3D
   ) =>
     closest.userData.type === "grid"
-      ? event.point.clone().setY(0).floor().addScalar(0.5)
+      ? event.point
+          .clone()
+          .setY(0)
+          .add(new Vector3(0.5, 0, 0.5))
+          .floor()
       : closest.getWorldPosition(new Vector3());
 
   const firstInterSection = (event: ThreeEvent<MouseEvent>) => {
@@ -58,7 +59,6 @@ export function useInput(
   const onMouseMove = useCallback(
     (event: ThreeEvent<MouseEvent>) => {
       fireCallback("hover", event);
-      setMousePosition(event.point.toArray());
     },
     [fireCallback]
   );
@@ -87,7 +87,6 @@ export function useInput(
 
   return {
     mouseDownPosition,
-    mousePosition,
     onMouseDown,
     onMouseMove,
     onMouseClick,

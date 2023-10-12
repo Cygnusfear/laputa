@@ -17,6 +17,7 @@ RUN pnpm install --frozen-lockfile
 # RUN ls -ls
 # RUN foundryup
 ENV SKIP_FOUNDRY=true
+ENV VITE_CHAIN_ID=4242
 RUN pnpm run build
 
 

@@ -19,6 +19,7 @@ export interface World {
 export type CursorState = "valid" | "invalid" | "hidden";
 export interface CursorProps {
   position: Vector3;
+  point: number[];
   cursorState: CursorState;
   object: Object3D | Mesh | undefined;
   direction: Vector3;
@@ -34,10 +35,17 @@ export interface Input {
   setInput: (props: Partial<Omit<Input, "cursor">>) => void;
 }
 
+export type TutorialState = "intro" | "gravityWell" | "regular";
+export type IPlayer = {
+  tutorialState: TutorialState;
+  setTutorialState: (state: TutorialState) => void;
+};
+
 export interface IState {
   world: World;
   input: Input;
   assets: Assets;
+  player: IPlayer;
 }
 
 const octreeScale = 1000;
@@ -46,6 +54,17 @@ const max = new Vector3(octreeScale, octreeScale, octreeScale);
 const octree = new PointOctree<IEntity>(min, max);
 
 const useStore = create<IState>((set, get) => ({
+  player: {
+    tutorialState: "intro",
+    setTutorialState: (state) => {
+      set((s) => ({
+        player: {
+          ...s.player,
+          tutorialState: state,
+        },
+      }));
+    },
+  },
   world: {
     entities: [],
     octree,
@@ -88,6 +107,7 @@ const useStore = create<IState>((set, get) => ({
     },
     cursor: {
       position: new Vector3(),
+      point: [],
       cursorState: "valid",
       object: undefined,
       direction: Directions.UP(),

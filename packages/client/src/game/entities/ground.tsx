@@ -3,8 +3,8 @@ import { Grid, GridProps } from "@react-three/drei";
 
 import { useInput } from "../input/useInput";
 import { getState, useStore } from "../store";
-import { buildFacility } from "../systems/constructionSystem";
 import { Directions } from "@/lib/utils";
+import useConstruction from "../systems/useConstruction";
 
 const gridSize = 1000;
 
@@ -25,7 +25,7 @@ function GridRenderer() {
   return (
     <>
       <Grid
-        position={[0, 0, 50]}
+        position={[0.5, -0.5, 50.5]}
         args={[30.5, 30.5]}
         {...gridConfig}
         cellColor={"#76EAE4"}
@@ -33,7 +33,7 @@ function GridRenderer() {
         sectionThickness={building ? 1 : 0}
       />
       <Grid
-        position={[0, 0, 50]}
+        position={[0.5, -0.5, 50.5]}
         rotation={[-Math.PI, 0, 0]}
         args={[30.5, 30.5]}
         {...gridConfig}
@@ -47,19 +47,22 @@ function GridRenderer() {
 
 function Ground() {
   const gridRef = createRef<THREE.Mesh>();
+  const { constructFacility } = useConstruction();
+  const {
+    input: { cursor },
+  } = getState();
 
   const { onMouseMove } = useInput((event) => {
-    const {
-      input: { cursor },
-    } = getState();
-    cursor.setCursor({
-      position: event.position,
-      direction: Directions.DOWN(),
-    });
+    if (event.event.object === event.event.eventObject) {
+      cursor.setCursor({
+        position: event.position,
+        direction: Directions.DOWN(),
+      });
+    }
   }, gridRef);
 
   const { onMouseDown, onMouseClick } = useInput((event) => {
-    buildFacility(event.position);
+    constructFacility(event.position);
   }, gridRef);
 
   return (

@@ -5,7 +5,7 @@ import { getState } from "../store";
 
 export function floodFill(
   startPosition: Vector3,
-  propertyName: keyof IEntity,
+  // propertyName: keyof IEntity,
   initialValue: number
 ) {
   const { getEntityByPosition } = getState().world;
@@ -25,9 +25,9 @@ export function floodFill(
         position.clone().add(Directions.FORWARD()),
         position.clone().add(Directions.BACKWARD()),
       ];
-
+      const v = value - 1;
       neighbors.forEach((neighborPosition) => {
-        recursiveFill(neighborPosition, value - 1);
+        recursiveFill(neighborPosition, v);
       });
     }
   }
