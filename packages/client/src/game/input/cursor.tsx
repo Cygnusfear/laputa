@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Sparkles } from "@react-three/drei";
-import { AdditiveBlending, DoubleSide, Vector3 } from "three";
+import { AdditiveBlending, DoubleSide } from "three";
 
 import { useStore } from "../store";
 import { palette } from "../utils/palette";
@@ -41,7 +41,7 @@ function Cursor() {
     <group
       position={position.toArray()}
       visible={cursorState !== "hidden"}
-      scale={new Vector3(0.95, 0.95, 0.95)}
+      scale={[0.95, 0.95, 0.95]}
       layers={30}
     >
       <mesh userData={{ type: "cursor" }} ref={cursorRef}>

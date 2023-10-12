@@ -35,6 +35,7 @@ function GameLoop() {
 
   useEffect(() => {
     // we're going to check which entities don't exist yet and build new ones:
+    // TODO: GameLoaded logic breaks when the map has zero entities [bug]
     for (const facility of facilities) {
       const { entity, typeId, position } = facility;
       if (!getEntityByPosition(position)) {

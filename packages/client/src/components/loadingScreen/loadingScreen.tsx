@@ -1,51 +1,36 @@
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { useNProgress } from "@tanem/react-nprogress";
 
 import "./loadingScreen.css";
-
-let interval: NodeJS.Timeout,
-  current_progress = 0,
-  step = 0.1;
 
 function LoadingScreen() {
   const [hide, setHide] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
 
   const fadeOut = () => {
-    current_progress = 100;
     setLoading(false);
+    setTimeout(() => {
+      setHide(true);
+    }, 5000);
   };
 
+  const { progress } = useNProgress({
+    isAnimating: loading,
+    animationDuration: 300,
+    incrementDuration: 200,
+    minimum: 0.1,
+  });
+
   useEffect(() => {
-    if (progress === 0) {
-      interval = setInterval(function () {
-        current_progress += step;
-        const p =
-          Math.round(
-            (Math.atan(current_progress) / (Math.PI / 2)) * 100 * 1000
-          ) / 1000;
-        setProgress(p);
-        if (progress >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            setHide(true);
-          }, 5000);
-        } else if (progress >= 50) {
-          step = 0.2;
-        }
-      }, 100);
+    document.addEventListener("gameLoaded", () => {
+      fadeOut();
+    });
 
-      document.addEventListener("gameLoaded", () => {
-        fadeOut();
-        setProgress(100);
-      });
-
-      return () => {
-        document.removeEventListener("gameLoaded", () => {});
-      };
-    }
-  }, [progress]);
+    return () => {
+      document.removeEventListener("gameLoaded", () => {});
+    };
+  }, []);
 
   if (hide) return null;
   return (
@@ -63,7 +48,7 @@ function LoadingScreen() {
         LAPUTA
         <div
           className="loading-bar mx-auto mt-0.5 block h-2.5 bg-white"
-          style={{ width: `${progress}%` }}
+          style={{ width: `${progress * 100}%` }}
         />
       </div>
     </div>
