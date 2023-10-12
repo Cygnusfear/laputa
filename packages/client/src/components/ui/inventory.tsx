@@ -10,6 +10,7 @@ import {
   useTransition,
   type SpringValue,
 } from "@react-spring/web";
+import { useOnce } from "@/lib/useOnce";
 
 function Inventory() {
   const {
@@ -19,7 +20,7 @@ function Inventory() {
   const [cardsLoaded, setcardsLoaded] = useState(false);
   const [facilities, setFacilities] = useState<FacilityDataType[]>([]);
 
-  useEffect(() => {
+  useOnce(() => {
     const f = Object.entries(EntityData.facilities)
       .map(([, entityData]) => entityData)
       .filter((entityData) => entityData.tags.includes("startingItem"));
@@ -30,7 +31,7 @@ function Inventory() {
     return () => {
       document.removeEventListener("gameLoaded", () => {});
     };
-  }, []);
+  });
 
   useEffect(() => {
     // TODO: Remove hack to only show gravityhill at startup

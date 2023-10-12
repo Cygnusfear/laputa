@@ -6,11 +6,7 @@ import { queueAsyncCall } from "../utils/asyncQueue";
 
 function useConstruction() {
   const {
-    systemCalls: {
-      // mudIsPositionEmpty,
-      mudBuildFacility,
-      // mudGetEntityMetadataAtPosition,
-    },
+    systemCalls: { mudBuildFacility },
   } = useMUD();
   const {
     input: { building },
@@ -29,7 +25,6 @@ function useConstruction() {
       queueAsyncCall(async () => {
         console.trace("buildFacility hook", position);
         console.log(build);
-
         try {
           const result = await mudBuildFacility(...build);
           console.log("mudBuildFacility result", result);

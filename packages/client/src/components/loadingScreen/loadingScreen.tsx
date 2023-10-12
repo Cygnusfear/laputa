@@ -7,14 +7,6 @@ import "./loadingScreen.css";
 function LoadingScreen() {
   const [hide, setHide] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const fadeOut = () => {
-    setLoading(false);
-    setTimeout(() => {
-      setHide(true);
-    }, 5000);
-  };
-
   const { progress } = useNProgress({
     isAnimating: loading,
     animationDuration: 300,
@@ -23,6 +15,13 @@ function LoadingScreen() {
   });
 
   useEffect(() => {
+    const fadeOut = () => {
+      setLoading(false);
+      setTimeout(() => {
+        setHide(true);
+      }, 5000);
+    };
+
     document.addEventListener("gameLoaded", () => {
       fadeOut();
     });

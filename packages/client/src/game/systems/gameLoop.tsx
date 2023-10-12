@@ -7,17 +7,26 @@ import { buildFacility } from "./constructionSystem";
 import { useEntityQuery } from "@latticexyz/react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 import { useStore } from "../store";
+import { useOnce } from "@/lib/useOnce";
 
 let loaded = false;
 
 function GameLoop() {
   const {
-    // systemCalls: { mudGetAllFacilityEntityMetadatas },
     components: { Position, EntityType },
   } = useMUD();
   const {
     world: { getEntityByPosition },
   } = useStore();
+
+  // Startup
+  useOnce(() => {
+    for (let i = 0; i < 10; i++) {
+      const { createResource, randomEmptyPosition } = resourceFactory();
+      const position = randomEmptyPosition();
+      createResource(EntityData.resources.crystalFloat, position!);
+    }
+  });
 
   const facilities = useEntityQuery([Has(Position), Has(EntityType)]).map(
     (entity) => {
@@ -55,15 +64,6 @@ function GameLoop() {
       document.dispatchEvent(event);
     }
   }, [facilities, getEntityByPosition]);
-
-  // // Startup
-  useEffect(() => {
-    for (let i = 0; i < 10; i++) {
-      const { createResource, randomEmptyPosition } = resourceFactory();
-      const position = randomEmptyPosition();
-      createResource(EntityData.resources.crystalFloat, position!);
-    }
-  }, []);
 
   return <></>;
 }
