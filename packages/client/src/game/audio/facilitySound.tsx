@@ -4,7 +4,7 @@ import type { PositionalAudio as PositionalAudioImpl } from "three";
 import { getRandom } from "@/lib/utils";
 import { useStore } from "../store";
 
-const vol = 0.4;
+const vol = 1;
 
 const files = ["/audio/plop00.wav", "/audio/plop01.wav"];
 

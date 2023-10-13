@@ -3,7 +3,7 @@ import { PositionalAudio } from "@react-three/drei";
 import type { PositionalAudio as PositionalAudioImpl } from "three";
 import { useStore } from "../store";
 
-const vol = 0.3;
+const vol = 1;
 
 const files = ["/audio/uptone.webm", "/audio/serene.webm"];
 
