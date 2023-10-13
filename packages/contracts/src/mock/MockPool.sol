@@ -6,13 +6,14 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 import "../interfaces/IPool.sol";
+import "../interfaces/IMockERC20.sol";
 import "./MockERC20.sol";
 
 contract MockPool is Context, IPool {
-  MockERC20 public aToken;
+  IMockERC20 public aToken;
 
-  constructor() {
-    aToken = new MockERC20("Mock aToken", "maToken");
+  constructor(IMockERC20 aToken_) {
+    aToken = aToken_;
   }
 
   /**

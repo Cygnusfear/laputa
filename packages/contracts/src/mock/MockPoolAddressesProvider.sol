@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import "../interfaces/IPoolAddressesProvider.sol";
 
-contract MockPoolAddressProvider is IPoolAddressesProvider {
+contract MockPoolAddressesProvider is IPoolAddressesProvider {
   address poolAddress;
 
   constructor(address poolAddress_) {
