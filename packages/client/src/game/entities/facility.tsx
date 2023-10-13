@@ -209,6 +209,7 @@ const Renderer = (props: IFacility) => {
         );
       })}
       {type.tags.includes("hasWires") && <Wires numWires={numWires} />}
+      {type.components?.map((Component, idx) => <Component key={idx} />)}
       {/* {building && (
         <Html>
           <p className="gravity-ui flex flex-row items-center">

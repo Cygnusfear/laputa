@@ -1,3 +1,4 @@
+import { GeneratorSound } from "../audio/generatorSound";
 import ModelData, { ModelDataType } from "./models";
 import { ResourceType } from "./resources";
 
@@ -14,6 +15,7 @@ export type DataType = {
 
 export type FacilityDataType = DataType & {
   costs: [ResourceType, number][];
+  components?: (() => JSX.Element)[];
 };
 
 export type ResourceDataType = DataType & {
@@ -42,6 +44,7 @@ const EntityData = {
       produces: [["gravity", 7, 1]],
       variants: [ModelData.well00],
       tags: ["groundLevel", "hasWires", "producesGravity", "startingItem"],
+      components: [GeneratorSound],
     },
     dynamo: {
       entityTypeId: 102,
@@ -54,6 +57,7 @@ const EntityData = {
       produces: [["power", 25, 1]],
       variants: [ModelData.engine00],
       tags: ["hasWires"],
+      components: [],
     },
     residence: {
       entityTypeId: 103,
@@ -66,6 +70,7 @@ const EntityData = {
       produces: [["population", 5, 1]],
       variants: [ModelData.block00, ModelData.block01, ModelData.block02],
       tags: [],
+      components: [],
     },
   } as { [key: string]: FacilityDataType },
   resources: {
