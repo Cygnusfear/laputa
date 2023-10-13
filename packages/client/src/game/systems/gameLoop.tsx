@@ -14,7 +14,7 @@ function GameLoop() {
     components: { Position, EntityType },
   } = useMUD();
   const {
-    player: { setPlayerState, gameLoaded },
+    player: { setPlayerState, gameLoaded, audioContextCanStart },
     world: { getEntityByPosition },
   } = useStore();
 
@@ -26,6 +26,20 @@ function GameLoop() {
       createResource(EntityData.resources.crystalFloat, position!);
     }
   });
+
+  // Delayed start for audiocontexts
+  useEffect(() => {
+    const startAudioContexts = () => {
+      if (!audioContextCanStart) {
+        setPlayerState({ audioContextCanStart: true });
+      }
+    };
+
+    document.addEventListener("click", startAudioContexts);
+    return () => {
+      document.removeEventListener("click", startAudioContexts);
+    };
+  }, [audioContextCanStart, setPlayerState]);
 
   const facilities = useEntityQuery([Has(Position), Has(EntityType)]).map(
     (entity) => {
@@ -59,10 +73,10 @@ function GameLoop() {
       }
     }
     if (!gameLoaded) {
-      console.log("game loaded");
+      console.log("Game loaded");
       const event = new Event("gameLoaded");
       document.dispatchEvent(event);
-      setPlayerState({ gameLoaded: true });
+      setPlayerState({ gameLoaded: true, startTime: Date.now() });
     }
   }, [facilities, setPlayerState, getEntityByPosition, gameLoaded]);
 

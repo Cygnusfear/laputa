@@ -24,6 +24,7 @@ const Facility = (props: IFacility) => {
   const { constructFacility } = useConstruction();
   const [faceIndex, setFaceIndex] = useState<number | undefined>(undefined);
   const {
+    player: { startTime },
     input: { cursor },
   } = useStore((state) => state);
 
@@ -49,6 +50,12 @@ const Facility = (props: IFacility) => {
     from: { springScale: [1.2, 0.9, 1.2] },
     config: { mass: 1, tension: 1000, friction: 20, precision: 0.0001 },
   });
+
+  const playSound = useMemo(
+    () => props.createdTime > startTime,
+    [props.createdTime, startTime]
+  );
+
   return (
     <animated.group dispose={null}>
       <animated.mesh
@@ -99,7 +106,7 @@ const Facility = (props: IFacility) => {
         ))}
         <Renderer {...props} />
       </animated.mesh>
-      <FacilitySound />
+      {playSound && <FacilitySound />}
     </animated.group>
   );
 };

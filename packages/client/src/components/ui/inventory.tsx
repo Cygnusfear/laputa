@@ -15,8 +15,8 @@ import { useOnce } from "@/lib/useOnce";
 function Inventory() {
   const {
     world: { entities },
+    player: { gameLoaded },
   } = useStore();
-  const [loaded, setLoaded] = useState(false);
   const [cardsLoaded, setcardsLoaded] = useState(false);
   const [facilities, setFacilities] = useState<FacilityDataType[]>([]);
 
@@ -25,24 +25,17 @@ function Inventory() {
       .map(([, entityData]) => entityData)
       .filter((entityData) => entityData.tags.includes("startingItem"));
     setFacilities(f);
-    document.addEventListener("gameLoaded", () => {
-      setLoaded(true);
-    });
-    return () => {
-      document.removeEventListener("gameLoaded", () => {});
-    };
   });
 
   useEffect(() => {
     // TODO: Remove hack to only show gravityhill at startup
-    if (!loaded) return;
-    if (cardsLoaded) return;
+    if (!gameLoaded || cardsLoaded) return;
     const f = Object.entries(EntityData.facilities)
       .map(([, entityData]) => entityData)
       .filter((entityData) => !facilities.includes(entityData));
     setFacilities([...facilities, ...f]);
     setcardsLoaded(true);
-  }, [cardsLoaded, entities, facilities, loaded]);
+  }, [cardsLoaded, entities, facilities, gameLoaded]);
 
   const listTransitions = useTransition(facilities, {
     config: config.gentle,
@@ -59,7 +52,7 @@ function Inventory() {
 
   return (
     <div className="inventory-bar">
-      {loaded &&
+      {gameLoaded &&
         listTransitions((styles, entityData) => (
           <InventoryItem {...entityData} style={styles} />
         ))}

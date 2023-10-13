@@ -38,6 +38,8 @@ export interface Input {
 export type TutorialState = "intro" | "gravityWell" | "regular";
 export type IPlayer = {
   gameLoaded: boolean;
+  audioContextCanStart: boolean;
+  startTime: number;
   tutorialState: TutorialState;
   setPlayerState: (state: Partial<Omit<IPlayer, "setPlayerState">>) => void;
 };
@@ -57,6 +59,8 @@ const octree = new PointOctree<IEntity>(min, max);
 const useStore = create<IState>((set, get) => ({
   player: {
     gameLoaded: false,
+    audioContextCanStart: false,
+    startTime: -1,
     tutorialState: "intro",
     setPlayerState: (props: Partial<IPlayer>) => {
       set((s) => ({

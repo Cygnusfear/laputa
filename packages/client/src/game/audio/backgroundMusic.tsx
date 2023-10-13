@@ -52,7 +52,7 @@ export const Sound = ({
 export const BackgroundMusic = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const {
-    player: { gameLoaded },
+    player: { gameLoaded, audioContextCanStart },
   } = useStore();
   const [trackIndex, setTrackIndex] = useState(0);
 
@@ -61,14 +61,14 @@ export const BackgroundMusic = () => {
   };
 
   useEffect(() => {
-    if (gameLoaded) {
+    if (gameLoaded && audioContextCanStart) {
       setTimeout(() => {
         setGameStarted(true);
       }, 4000);
     }
-  }, [gameLoaded]);
+  }, [gameLoaded, audioContextCanStart]);
 
-  if (!gameStarted) return null;
+  if (!gameStarted || !audioContextCanStart) return null;
   return (
     <Sound
       source={files[trackIndex]}
