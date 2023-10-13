@@ -12,7 +12,7 @@ contract LapuVaultTest is Test {
   LapuVault lapuVault;
 
   function setUp() public {
-    mockERC20 = new MockERC20();
+    mockERC20 = new MockERC20("FakeDAI", "fDAI");
     mockERC20.faucet(address(this), 1000);
     lapuVault = new LapuVault(IERC20(address(mockERC20)), "LapuVault", "LAPU");
   }
