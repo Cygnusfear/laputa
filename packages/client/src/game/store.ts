@@ -32,13 +32,14 @@ export interface Input {
   selection: IEntity | null;
   building: FacilityDataType | null;
   mode: InputMode;
-  setInput: (props: Partial<Omit<Input, "cursor">>) => void;
+  setInput: (props: Partial<Omit<Input, "cursor" | "setInput">>) => void;
 }
 
 export type TutorialState = "intro" | "gravityWell" | "regular";
 export type IPlayer = {
+  gameLoaded: boolean;
   tutorialState: TutorialState;
-  setTutorialState: (state: TutorialState) => void;
+  setPlayerState: (state: Partial<Omit<IPlayer, "setPlayerState">>) => void;
 };
 
 export interface IState {
@@ -55,12 +56,13 @@ const octree = new PointOctree<IEntity>(min, max);
 
 const useStore = create<IState>((set, get) => ({
   player: {
+    gameLoaded: false,
     tutorialState: "intro",
-    setTutorialState: (state) => {
+    setPlayerState: (props: Partial<IPlayer>) => {
       set((s) => ({
         player: {
           ...s.player,
-          tutorialState: state,
+          ...props,
         },
       }));
     },

@@ -4,6 +4,7 @@ import {
   OrbitControlsProps,
   PerspectiveCamera,
 } from "@react-three/drei";
+import { BackgroundMusic } from "../audio/backgroundMusic";
 
 function Camera() {
   const orbitRef = useRef<OrbitControlsProps>(null!);
@@ -44,6 +45,7 @@ function Camera() {
           BOTTOM: "s", // down arrow
         }}
       />
+      <BackgroundMusic />
     </>
   );
 }

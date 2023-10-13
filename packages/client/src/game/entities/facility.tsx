@@ -25,7 +25,7 @@ const Facility = (props: IFacility) => {
   const [faceIndex, setFaceIndex] = useState<number | undefined>(undefined);
   const {
     input: { cursor },
-  } = useStore();
+  } = useStore((state) => state);
 
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
     if (faceIndex === undefined) return;

@@ -9,13 +9,12 @@ import { Has, getComponentValueStrict } from "@latticexyz/recs";
 import { useStore } from "../store";
 import { useOnce } from "@/lib/useOnce";
 
-let loaded = false;
-
 function GameLoop() {
   const {
     components: { Position, EntityType },
   } = useMUD();
   const {
+    player: { setPlayerState, gameLoaded },
     world: { getEntityByPosition },
   } = useStore();
 
@@ -45,6 +44,7 @@ function GameLoop() {
   useEffect(() => {
     // we're going to check which entities don't exist yet and build new ones:
     // TODO: GameLoaded logic breaks when the map has zero entities [bug]
+    if (facilities.length < 1) return;
     for (const facility of facilities) {
       const { entity, typeId, position } = facility;
       if (!getEntityByPosition(position)) {
@@ -56,14 +56,15 @@ function GameLoop() {
           continue;
         }
         buildFacility(position, building);
-        loaded = true;
       }
     }
-    if (loaded) {
+    if (!gameLoaded) {
+      console.log("game loaded");
       const event = new Event("gameLoaded");
       document.dispatchEvent(event);
+      setPlayerState({ gameLoaded: true });
     }
-  }, [facilities, getEntityByPosition]);
+  }, [facilities, setPlayerState, getEntityByPosition, gameLoaded]);
 
   return <></>;
 }
