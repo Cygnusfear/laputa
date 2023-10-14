@@ -4,8 +4,6 @@ import type { PositionalAudio as PositionalAudioImpl } from "three";
 import { getRandom } from "@/lib/utils";
 import { useStore } from "../store";
 
-const vol = 0.1;
-
 const files = ["/audio/generator-idle.webm"];
 
 export const Sound = ({
@@ -36,8 +34,10 @@ export const Sound = ({
 
   return <PositionalAudio ref={ref} url={source} distance={5} loop={true} />;
 };
+
 export const GeneratorSound = () => {
   const [audio] = useState(getRandom(files));
+  const [vol] = useState(0.025);
 
   return <Sound source={audio} play={true} volume={vol} />;
 };
