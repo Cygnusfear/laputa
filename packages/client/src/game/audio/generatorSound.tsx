@@ -4,7 +4,7 @@ import type { PositionalAudio as PositionalAudioImpl } from "three";
 import { getRandom } from "@/lib/utils";
 import { useStore } from "../store";
 
-const files = ["/audio/generator-idle.webm"];
+const files = [""]; //"/audio/generator-idle.webm"];
 
 export const Sound = ({
   play,

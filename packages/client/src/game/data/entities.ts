@@ -1,4 +1,4 @@
-import { GeneratorSound } from "../audio/generatorSound";
+// import { GeneratorSound } from "../audio/generatorSound";
 import ModelData, { ModelDataType } from "./models";
 import { ResourceType } from "./resources";
 
@@ -44,7 +44,7 @@ const EntityData = {
       produces: [["gravity", 7, 1]],
       variants: [ModelData.well00],
       tags: ["groundLevel", "hasWires", "producesGravity", "startingItem"],
-      components: [GeneratorSound],
+      // components: [GeneratorSound],
     },
     dynamo: {
       entityTypeId: 102,
