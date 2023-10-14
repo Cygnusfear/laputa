@@ -24,3 +24,9 @@ fs_permissions = [{ access = "read", path = "./"}]
 
 [profile.lattice-testnet]
 eth_rpc_url = "https://follower.testnet-chain.linfra.xyz"
+
+[profile.zkevm-testnet]
+eth_rpc_url = "https://rpc.public.zkevm-test.net"
+
+[profile.zkevm-mainnet]
+eth_rpc_url = "https://zkevm-rpc.com"
