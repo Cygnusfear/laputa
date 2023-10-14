@@ -13,6 +13,10 @@ import "./interfaces/IPoolAddressesProvider.sol";
 import "./interfaces/IPool.sol";
 
 contract LapuVault is Ownable, ERC4626 {
+  event LAPUMintedFromDeFiYield(uint256 amount);
+
+  event LAPURewardsTransferredTo(address indexed to, uint256 amount);
+
   using Math for uint256;
 
   IPoolAddressesProvider public poolAddressProvider;
@@ -49,6 +53,9 @@ contract LapuVault is Ownable, ERC4626 {
     return shares;
   }
 
+  /**
+   * @dev emitting event Deposit(caller, receiver, assets, shares);
+   */
   function deposit(uint256 assets, address receiver) public virtual override returns (uint256) {
     uint256 maxAssets = maxDeposit(receiver);
     if (assets > maxAssets) {
@@ -66,6 +73,9 @@ contract LapuVault is Ownable, ERC4626 {
     return shares;
   }
 
+  /**
+   * @dev emitting event Withdraw(caller, receiver, owner_, assets, shares)
+   */
   function withdraw(uint256 assets, address receiver, address owner_) public virtual override returns (uint256) {
     uint256 maxAssets = maxWithdraw(owner_);
     if (assets > maxAssets) {
@@ -82,6 +92,9 @@ contract LapuVault is Ownable, ERC4626 {
     return shares;
   }
 
+  /**
+   * @dev emitting event LAPUMintedFromDeFiYield(yield)
+   */
   function mintLAPUAccordingToDeFiYield() external onlyOwner returns (uint256) {
     uint256 currentLAPUTotalShare = totalSupply();
     uint256 currentATokenBalance = aToken.balanceOf(address(this));
@@ -89,18 +102,21 @@ contract LapuVault is Ownable, ERC4626 {
       uint256 yield = currentATokenBalance - currentLAPUTotalShare;
       //mint the yield as new LAPU shares owned by this contract, such that they can be distributed to players as rewards at a later time
       _mint(address(this), yield);
+      emit LAPUMintedFromDeFiYield(yield);
       return yield;
     } else {
       return 0;
     }
   }
 
+  /**
+   * @dev emitting event LAPURewardsTransferredTo(to, amount)
+   */
   function transferLAPURewardsTo(address to, uint256 amount) external onlyOwner {
     require(to != address(0), "LapuVault: cannot transfer to zero address");
     require(amount > 0, "LapuVault: cannot transfer zero amount");
     require(amount <= balanceOf(address(this)), "LapuVault: insufficient balance");
     _transfer(address(this), to, amount);
+    emit LAPURewardsTransferredTo(to, amount);
   }
-
-  //TODO: add events
 }
