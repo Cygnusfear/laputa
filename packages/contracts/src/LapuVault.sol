@@ -7,22 +7,27 @@ import { ERC4626 } from "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import { Math } from "@openzeppelin/contracts/utils/math/Math.sol";
 import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 
 import "./interfaces/IPoolAddressesProvider.sol";
 import "./interfaces/IPool.sol";
 
-contract LapuVault is ERC4626 {
+contract LapuVault is Ownable, ERC4626 {
   using Math for uint256;
 
   IPoolAddressesProvider public poolAddressProvider;
+  IERC20 public aToken;
 
   constructor(
+    address initialOwner_,
     IERC20 underlying_,
     string memory name_,
     string memory symbol_,
-    IPoolAddressesProvider poolAddressProvider_
-  ) ERC4626(underlying_) ERC20(name_, symbol_) {
+    IPoolAddressesProvider poolAddressProvider_,
+    IERC20 aToken_
+  ) Ownable(initialOwner_) ERC4626(underlying_) ERC20(name_, symbol_) {
     poolAddressProvider = poolAddressProvider_;
+    aToken = aToken_;
   }
 
   function convertToShares(uint256 assets) public view override returns (uint256) {
@@ -61,10 +66,10 @@ contract LapuVault is ERC4626 {
     return shares;
   }
 
-  function withdraw(uint256 assets, address receiver, address owner) public virtual override returns (uint256) {
-    uint256 maxAssets = maxWithdraw(owner);
+  function withdraw(uint256 assets, address receiver, address owner_) public virtual override returns (uint256) {
+    uint256 maxAssets = maxWithdraw(owner_);
     if (assets > maxAssets) {
-      revert ERC4626ExceededMaxWithdraw(owner, assets, maxAssets);
+      revert ERC4626ExceededMaxWithdraw(owner_, assets, maxAssets);
     }
 
     //withdraw assets from DeFi pool to this contract
@@ -72,11 +77,30 @@ contract LapuVault is ERC4626 {
     IPool(poolAddress).withdraw(asset(), assets, address(this));
 
     uint256 shares = previewWithdraw(assets);
-    _withdraw(_msgSender(), receiver, owner, assets, shares);
+    _withdraw(_msgSender(), receiver, owner_, assets, shares);
 
     return shares;
   }
 
-  //TODO: harvest the yield from DeFi pool and turn it into LAPU
-  //TODO: distribute LAPU tokens owned by this vault as player rewards
+  function mintLAPUAccordingToDeFiYield() external onlyOwner returns (uint256) {
+    uint256 currentLAPUTotalShare = totalSupply();
+    uint256 currentATokenBalance = aToken.balanceOf(address(this));
+    if (currentATokenBalance > currentLAPUTotalShare) {
+      uint256 yield = currentATokenBalance - currentLAPUTotalShare;
+      //mint the yield as new LAPU shares owned by this contract, such that they can be distributed to players as rewards at a later time
+      _mint(address(this), yield);
+      return yield;
+    } else {
+      return 0;
+    }
+  }
+
+  function transferLAPURewardsTo(address to, uint256 amount) external onlyOwner {
+    require(to != address(0), "LapuVault: cannot transfer to zero address");
+    require(amount > 0, "LapuVault: cannot transfer zero amount");
+    require(amount <= balanceOf(address(this)), "LapuVault: insufficient balance");
+    _transfer(address(this), to, amount);
+  }
+
+  //TODO: add events
 }
