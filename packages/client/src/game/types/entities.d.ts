@@ -10,6 +10,7 @@ export interface IEntity {
   entityRef: RefObject<Object3D | Mesh>;
   createdTime: number;
   gravity: number;
+  seed: number;
 }
 
 export interface IFacility extends IEntity {

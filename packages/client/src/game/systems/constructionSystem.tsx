@@ -54,7 +54,11 @@ const buildFacility = (
 
   // Use time for seeded random
   const time = Date.now();
-  const rng = prand.xoroshiro128plus(time);
+  const rot = yaw || Math.PI * (Math.floor((Math.random() - 0.5) * 4) / 2);
+  const seed =
+    (position.x * 10 * position.z * 10 * position.y * time * rot) ^
+    (Math.random() * 0x100000000);
+  const rng = prand.xoroshiro128plus(seed);
 
   const newFacility: IFacility = {
     entityType: "facility",
@@ -63,11 +67,7 @@ const buildFacility = (
     colorPrimary: getRandom(palette.buildingPrimary),
     colorSecondary: getRandom(palette.buildingSecondary),
     entityRef: createRef<THREE.Mesh>(),
-    rotation: new Vector3(
-      0,
-      yaw || Math.PI * (Math.floor((Math.random() - 0.5) * 4) / 2),
-      0
-    ),
+    rotation: new Vector3(0, rot, 0),
     type: building,
     variant:
       building.variants[
@@ -75,6 +75,7 @@ const buildFacility = (
       ],
     createdTime: time,
     gravity: 0,
+    seed: seed,
   };
 
   addEntity(newFacility);
