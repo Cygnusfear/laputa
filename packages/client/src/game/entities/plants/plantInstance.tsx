@@ -4,6 +4,7 @@ import { getRandom } from "@/lib/utils";
 import { Instance } from "@react-three/drei";
 import { useMemo, useState } from "react";
 import { Vector3 } from "three";
+import prand from "pure-rand";
 
 export type PlantProps = {
   positions: [number, number, number][];
@@ -12,21 +13,24 @@ export type PlantProps = {
   grassColors: string[];
 };
 
+const rand = prand.unsafeUniformIntDistribution;
+
 // Helper functions for veggie instance props
-const CreatePosition = (position: Vector3) =>
+const CreatePosition = (position: Vector3, rng: prand.RandomGenerator) =>
   [
-    (Math.random() * 2 - 1) * 0.3 + position.x,
+    ((rand(0, 1000, rng) / 1000) * 2 - 1) * 0.3 + position.x,
     0.4 + position.y,
-    (Math.random() * 2 - 1) * 0.3 + position.z,
+    ((rand(0, 1000, rng) / 1000) * 2 - 1) * 0.3 + position.z,
   ] as [number, number, number];
 
-const CreateRotation = () =>
-  [0, Math.random() * 360, 0] as [number, number, number];
+const CreateRotation = (rng: prand.RandomGenerator) =>
+  [0, (rand(0, 1000, rng) / 1000) * 360, 0] as [number, number, number];
 
-const CreateScale = () => 0.05 + Math.random() * 0.2;
+const CreateScale = (rng: prand.RandomGenerator) =>
+  0.05 + (rand(0, 1000, rng) / 1000) * 0.2;
 
 export function PlantInstance(props: IFacility) {
-  const { position } = props;
+  const { position, seed } = props;
   const [amount, setAmount] = useState(0);
   const [properties, setProperties] = useState<PlantProps>({
     positions: [],
@@ -34,40 +38,28 @@ export function PlantInstance(props: IFacility) {
     rotations: [],
     grassColors: [],
   });
-  const vegetationTier = 4;
+  const [rng] = useState(prand.xoroshiro128plus(seed));
   const limit = 4;
+  const vegetationTier = useMemo(() => {
+    return prand.unsafeUniformIntDistribution(0, limit, rng);
+  }, [rng]);
 
   const plantProps = useMemo(() => {
     setAmount(Math.min(vegetationTier, limit));
-    // if (vegetationTier >= limit) {
-    //   if (vine === undefined) {
-    //     // 🌿 spawn vine?
-    //     if (Math.random() > 0.6) {
-    //       console.log("🌿 spawn vine");
-    //       setVine(
-    //         properties.positions[
-    //           Math.floor(Math.random() * properties.positions.length - 1)
-    //         ]
-    //       );
-    //     } else {
-    //       setVine(null);
-    //     }
-    //   }
-    // }
     if (properties.positions.length >= amount) {
       return properties;
     }
     const { positions, scales, rotations, grassColors } = properties;
 
     const p = {
-      positions: [...positions, CreatePosition(position)],
-      scales: [...scales, CreateScale()],
-      rotations: [...rotations, CreateRotation()],
+      positions: [...positions, CreatePosition(position, rng)],
+      scales: [...scales, CreateScale(rng)],
+      rotations: [...rotations, CreateRotation(rng)],
       grassColors: [...grassColors, getRandom(palette.grassColors)],
     };
     setProperties(p);
     return { ...properties };
-  }, [properties, amount, position]);
+  }, [vegetationTier, properties, amount, position, rng]);
 
   return (
     <>
