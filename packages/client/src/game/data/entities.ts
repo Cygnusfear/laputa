@@ -26,6 +26,7 @@ export const entityTags = [
   "producesGravity",
   "producesPopulation",
   "hasWires",
+  "hasPlants",
   "startingItem",
 ] as const;
 export type EntityTag = (typeof entityTags)[number];
@@ -65,7 +66,7 @@ const EntityData = {
       costs: [["lapu", 100]],
       produces: [["population", 5, 1]],
       variants: ModelData.residence,
-      tags: [],
+      tags: ["hasPlants"],
     },
   } as { [key: string]: FacilityDataType },
   resources: {

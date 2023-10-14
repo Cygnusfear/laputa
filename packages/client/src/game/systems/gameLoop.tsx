@@ -13,7 +13,7 @@ let loaded = false;
 
 function GameLoop() {
   const {
-    components: { Position, EntityType },
+    components: { Position, EntityType, Orientation },
   } = useMUD();
   const {
     world: { getEntityByPosition },
@@ -28,19 +28,23 @@ function GameLoop() {
     }
   });
 
-  const facilities = useEntityQuery([Has(Position), Has(EntityType)]).map(
-    (entity) => {
-      const pos = getComponentValueStrict(Position, entity);
-      const type = getComponentValueStrict(EntityType, entity);
-      const e = {
-        entity,
-        typeId: type.typeId,
-        pos,
-        position: new Vector3(pos.x, pos.y, pos.z),
-      };
-      return e;
-    }
-  );
+  const facilities = useEntityQuery([
+    Has(Position),
+    Has(EntityType),
+    Has(Orientation),
+  ]).map((entity) => {
+    const pos = getComponentValueStrict(Position, entity);
+    const yaw = getComponentValueStrict(Orientation, entity);
+    const type = getComponentValueStrict(EntityType, entity);
+    const e = {
+      entity,
+      typeId: type.typeId,
+      pos,
+      position: new Vector3(pos.x, pos.y, pos.z),
+      yaw: yaw,
+    };
+    return e;
+  });
 
   useEffect(() => {
     // we're going to check which entities don't exist yet and build new ones:

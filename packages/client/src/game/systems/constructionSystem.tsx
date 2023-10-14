@@ -30,7 +30,11 @@ const getEntityInDirection = (position: Vector3, direction: Vector3) => {
 
 // TODO: extract input logic from construction system [refactor]
 // Should accept a building type as arg
-const buildFacility = (position: Vector3, building: FacilityDataType) => {
+const buildFacility = (
+  position: Vector3,
+  building: FacilityDataType,
+  yaw?: number
+) => {
   const {
     input: { cursor },
     world: { addEntity },
@@ -61,7 +65,7 @@ const buildFacility = (position: Vector3, building: FacilityDataType) => {
     entityRef: createRef<THREE.Mesh>(),
     rotation: new Vector3(
       0,
-      Math.PI * (Math.floor((Math.random() - 0.5) * 4) / 2),
+      yaw || Math.PI * (Math.floor((Math.random() - 0.5) * 4) / 2),
       0
     ),
     type: building,

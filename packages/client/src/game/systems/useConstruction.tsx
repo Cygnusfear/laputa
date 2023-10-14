@@ -19,7 +19,7 @@ function useConstruction() {
       Math.floor(position.x),
       Math.floor(position.y),
       Math.floor(position.z),
-      0,
+      Math.floor(Math.random() * 360),
     ];
     if (canBuildAtPosition(position)) {
       queueAsyncCall(async () => {
@@ -32,7 +32,7 @@ function useConstruction() {
           console.error("mudBuildFacility error", error);
         }
       });
-      buildFacility(position, building);
+      buildFacility(position, building, build[4]);
     } else {
       console.error("Cannot build here", position);
     }
