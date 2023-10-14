@@ -57,7 +57,7 @@ export function VineInstance(facilityProps: IFacility) {
   const rand = () => prand.unsafeUniformIntDistribution(0, 1000, rng) / 1000;
   const [render] = useState(
     rand() > 0.6 &&
-      getEntityByPosition(Directions.DOWN().add(position)) !== undefined
+      getEntityByPosition(Directions.UP().add(position)) === undefined
   );
 
   const [amt] = useState(limit);
