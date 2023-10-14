@@ -9,9 +9,9 @@ function LoadingScreen() {
   const [loading, setLoading] = useState(true);
   const { progress } = useNProgress({
     isAnimating: loading,
-    animationDuration: 300,
-    incrementDuration: 200,
-    minimum: 0.1,
+    animationDuration: 1300,
+    incrementDuration: 50,
+    minimum: 0.01,
   });
 
   useEffect(() => {
