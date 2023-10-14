@@ -4,7 +4,7 @@
 
 .loading-background {
   @apply fixed left-0 top-0 flex h-screen w-screen items-center justify-center overflow-hidden text-clip bg-[#76ADAB] bg-clip-border flex-col;
-  transition: all 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
 }
 
 .game-title {

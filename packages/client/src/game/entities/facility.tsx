@@ -140,8 +140,9 @@ const Renderer = (props: IFacility) => {
       matrixWorldAutoUpdate={false}
     >
       {prototypes!.map((proto, index) => {
-        let color = variant.colors[index];
-        switch (variant.colors[index]) {
+        const variantIndex = variant.nodes.indexOf(proto.name);
+        let color = variant.colors[variantIndex];
+        switch (variant.colors[variantIndex]) {
           case "primary":
             color = colorPrimary!;
             break;

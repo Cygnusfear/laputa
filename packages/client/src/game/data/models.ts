@@ -31,6 +31,36 @@ const ModelData: { [key: string]: ModelDataType } = {
     materials: ["Block.Material.001", "Block.Material.001"],
     colors: ["primary", "primary"],
   },
+  residence00: {
+    name: "Residence00",
+    nodes: ["CubaMid000", "CubaTop000"],
+    materials: [],
+    colors: ["secondary", "primary"],
+  },
+  residence01: {
+    name: "Residence00",
+    nodes: ["CubaMid000", "CubaTop001"],
+    materials: [],
+    colors: ["secondary", "primary"],
+  },
+  residence02: {
+    name: "Residence00",
+    nodes: ["CubaMid000", "CubaTop001", "CubaBottom000"],
+    materials: [],
+    colors: ["secondary", "primary", "primary"],
+  },
+  residence03: {
+    name: "Residence00",
+    nodes: ["CubaMid001", "CubaTop001", "CubaBottom000"],
+    materials: [],
+    colors: ["secondary", "primary", "primary"],
+  },
+  residence04: {
+    name: "Residence00",
+    nodes: ["CubaMid002", "CubaTop001", "CubaBottom000"],
+    materials: [],
+    colors: ["secondary", "primary", "primary"],
+  },
   engine00: {
     name: "Engine00",
     nodes: ["dynamo00", "dynamo00001"],
@@ -39,7 +69,7 @@ const ModelData: { [key: string]: ModelDataType } = {
   },
   doubleside00: {
     name: "DoubleSide00",
-    nodes: ["Double00", "Double00001"],
+    nodes: ["Double000", "Double001"],
     materials: [],
     colors: ["secondary", "primary"],
   },
