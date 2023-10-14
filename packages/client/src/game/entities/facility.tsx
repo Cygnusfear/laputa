@@ -1,9 +1,8 @@
-import { RefObject, useMemo, useState } from "react";
+import { RefObject, useMemo } from "react";
 import { useStore } from "../store";
-import { AdditiveBlending, DoubleSide, Mesh } from "three";
+import { Mesh } from "three";
 import { animated, useSpring } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
-import { palette } from "../utils/palette";
 import { Directions, faceDirections } from "@/lib/utils";
 import { IFacility } from "../types/entities";
 import prand from "pure-rand";
@@ -22,25 +21,23 @@ import useConstruction from "../systems/useConstruction";
 const Facility = (props: IFacility) => {
   const { position, entityRef } = props;
   const { constructFacility } = useConstruction();
-  const [faceIndex, setFaceIndex] = useState<number | undefined>(undefined);
   const {
     input: { cursor },
   } = useStore();
 
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
-    if (faceIndex === undefined) return;
-    const direction = event.position.clone().add(faceDirections[faceIndex!]);
+    if (event.event.faceIndex === undefined) return;
+    const idx = Math.floor(event.event.faceIndex / 2);
+    const direction = event.position.clone().add(faceDirections[idx!]);
     cursor.setCursor({
       position: direction,
-      direction: faceDirections[faceIndex!].clone().negate(),
+      direction: faceDirections[idx!].clone().negate(),
     });
     event.event.stopPropagation();
   }, entityRef);
 
   const { onMouseDown, onMouseClick } = useInput((event) => {
-    if (faceIndex === undefined) return;
     constructFacility(cursor.position);
-    setFaceIndex(undefined);
     event.event.stopPropagation();
   }, entityRef);
 
@@ -62,41 +59,14 @@ const Facility = (props: IFacility) => {
         onPointerDown={onMouseDown}
         onPointerUp={onMouseClick}
         onPointerMove={(e) => {
-          // make sure we match the correct object
-          if (e.object === e.eventObject) {
-            if (faceIndex !== e?.face?.materialIndex) {
-              setFaceIndex(
-                e?.face?.materialIndex !== undefined
-                  ? e.face.materialIndex
-                  : undefined
-              );
-            }
+          if (e.object === e.eventObject && e.faceIndex !== undefined) {
             onMouseMove(e);
             e.stopPropagation();
           }
         }}
-        onPointerLeave={() => {
-          if (faceIndex !== undefined) setFaceIndex(undefined);
-        }}
       >
         <boxGeometry attach="geometry" args={[1, 1, 1]} />
-        {[...Array(6)].map((_, index) => (
-          <meshLambertMaterial
-            attach={`material-${index}`}
-            key={index}
-            color={
-              faceIndex !== undefined && faceIndex === index
-                ? palette.cursor
-                : "black"
-            }
-            visible={false}
-            transparent={true}
-            // TODO: Remove the face highlighting completely, or use alternative face highlighting like in Townscraper
-            opacity={0}
-            blending={AdditiveBlending}
-            side={DoubleSide}
-          />
-        ))}
+        <meshBasicMaterial attach="material" visible={false} />
         <Renderer {...props} />
       </animated.mesh>
       <FacilitySound />
@@ -166,6 +136,8 @@ const Renderer = (props: IFacility) => {
       scale={[1, 1, 1]}
       position={[0, 0, 0]}
       rotation={[0, rotation.y, 0]}
+      matrixAutoUpdate={false}
+      matrixWorldAutoUpdate={false}
     >
       {prototypes!.map((proto, index) => {
         let color = variant.colors[index];
