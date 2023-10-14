@@ -13,24 +13,6 @@ export const importModels = [
 export const importTextures = ["/textures/box01.webp"];
 
 const ModelData: { [key: string]: ModelDataType } = {
-  block00: {
-    name: "GenericBlock00",
-    nodes: ["CubaBase", "Block02"],
-    materials: ["Block.Material.001", "Block.Material.001"],
-    colors: ["primary", "primary"],
-  },
-  block01: {
-    name: "GenericBlock01",
-    nodes: ["CubaBase", "Block02"],
-    materials: ["Block.Material.001", "Block.Material.001"],
-    colors: ["primary", "secondary"],
-  },
-  block02: {
-    name: "GenericBlock02",
-    nodes: ["CubaBase", "Block01"],
-    materials: ["Block.Material.001", "Block.Material.001"],
-    colors: ["primary", "primary"],
-  },
   residence00: {
     name: "Residence00",
     nodes: ["CubaMid000", "CubaTop000"],
@@ -58,6 +40,12 @@ const ModelData: { [key: string]: ModelDataType } = {
   residence04: {
     name: "Residence00",
     nodes: ["CubaMid002", "CubaTop001", "CubaBottom000"],
+    materials: [],
+    colors: ["secondary", "primary", "primary"],
+  },
+  residence05: {
+    name: "Residence00",
+    nodes: ["CubaMid004", "CubaTop001", "CubaBottom000"],
     materials: [],
     colors: ["secondary", "primary", "primary"],
   },

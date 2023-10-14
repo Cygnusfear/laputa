@@ -65,11 +65,12 @@ const EntityData = {
       costs: [["lapu", 100]],
       produces: [["population", 5, 1]],
       variants: [
-        ModelData.residence00,
+        // ModelData.residence00,
         ModelData.residence01,
         ModelData.residence02,
         ModelData.residence03,
         ModelData.residence04,
+        ModelData.residence05,
       ],
       tags: [],
     },
