@@ -37,7 +37,7 @@ function Vegetation() {
 
   return (
     <>
-      <Instances limit={limit} range={200} geometry={mesh} material={mat}>
+      <Instances limit={limit} range={1000} geometry={mesh} material={mat}>
         {plantFacilities.map((facility, idx) => {
           return (
             <>
