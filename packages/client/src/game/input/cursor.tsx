@@ -5,7 +5,10 @@ import { AdditiveBlending, DoubleSide } from "three";
 import { useStore } from "../store";
 import { palette } from "../utils/palette";
 import { faceDirections } from "@/lib/utils";
-import { canBuildAtPosition } from "../systems/constructionSystem";
+import {
+  canAffordBuilding,
+  canBuildAtPosition,
+} from "../systems/constructionSystem";
 
 function Cursor() {
   const cursorRef = useRef<THREE.Mesh>(null);
@@ -26,7 +29,7 @@ function Cursor() {
 
   useEffect(() => {
     if (building) {
-      if (!canBuildAtPosition(position)) {
+      if (!canBuildAtPosition(position) || !canAffordBuilding(building)) {
         setCursor({ cursorState: "invalid" });
       } else {
         setCursor({ cursorState: "valid" });
