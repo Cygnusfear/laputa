@@ -3,7 +3,8 @@ import { useGLTF, useTexture } from "@react-three/drei";
 import { Material, Mesh, Texture } from "three";
 import type { GLTF } from "three-stdlib";
 import { useStore } from "../store";
-import { importModels, importTextures } from "../data/models";
+import { importModels } from "../data/models";
+import { importTextures } from "../data/resources";
 
 export interface Assets {
   meshes: Record<string, Mesh>;

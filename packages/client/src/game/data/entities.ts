@@ -39,7 +39,7 @@ const EntityData = {
       blurb: "Generates gravity",
       description: `The contraption works on the principle of "Harmonious Disarray." It contains a meticulously arranged collection of misaligned gears, perpetually confused springs, and bewilderingly coiled wires, all managed by a flock of diligent, tiny mechanical hummingbirds, named the "srIørk". These birds, with their flapping wings, create a subtle, chaotic energy that, quite accidentally, disrupts the gravitational pull beneath it.`,
       image: "gravity.webp",
-      costs: [["lapu", 500]],
+      costs: [["LAPU", 500]],
       produces: [["gravity", 7, 1]],
       variants: ModelData.well,
       tags: ["groundLevel", "hasWires", "producesGravity", "startingItem"],
@@ -51,7 +51,7 @@ const EntityData = {
       description:
         "The Whirly Dynamo is an awe-inspiring, spiraled contraption, eternally spinning, twirling, and cascading in the breezy stratosphere. It contains an enormous, spiraled windmill, capturing the gentlest of breezes and the mightiest of gales.",
       image: "engine.webp",
-      costs: [["lapu", 200]],
+      costs: [["LAPU", 200]],
       produces: [["power", 25, 1]],
       variants: ModelData.engine,
       tags: ["hasWires"],
@@ -63,7 +63,7 @@ const EntityData = {
       description:
         "The Residence is a humble abode for the citizens of your city. It is a place of rest, relaxation, and rejuvenation. It is a place to call home.",
       image: "residence.webp",
-      costs: [["lapu", 100]],
+      costs: [["LAPU", 100]],
       produces: [["population", 5, 1]],
       variants: ModelData.residence,
       tags: ["hasPlants"],

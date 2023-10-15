@@ -28,22 +28,42 @@ const getEntityInDirection = (position: Vector3, direction: Vector3) => {
   return getEntityByPosition(position.add(direction));
 };
 
+export const canAffordBuilding = (building: FacilityDataType) => {
+  const {
+    player: { hasResources },
+  } = getState();
+  return hasResources(
+    building.costs.map((c) => {
+      return { resource: c[0], amount: c[1] };
+    })
+  );
+};
+
 // TODO: extract input logic from construction system [refactor]
 // Should accept a building type as arg
 const buildFacility = (
   position: Vector3,
   building: FacilityDataType,
+  levelInit = false,
   yaw?: number
 ) => {
   const {
     input: { cursor },
     world: { addEntity },
+    player: { spendResouces },
   } = getState();
 
   // Move Input logic away from here
   if (!building) {
     console.error("No building selected");
     return;
+  }
+  // Can afford?
+  if (!levelInit) {
+    if (!canAffordBuilding(building)) {
+      console.error("Sir you have no moolah");
+      return;
+    }
   }
 
   if (!canBuildAtPosition(position)) {
@@ -53,7 +73,7 @@ const buildFacility = (
   }
 
   // Use time for seeded random
-  const time = Date.now();
+  const time = Date.now(); // NEED BLOCKTIME
   const rot = yaw || Math.PI * (Math.floor((Math.random() - 0.5) * 4) / 2);
   const seed =
     (position.x * 10 * position.z * 10 * position.y * time * rot) ^
@@ -73,11 +93,19 @@ const buildFacility = (
       building.variants[
         prand.unsafeUniformIntDistribution(0, building.variants.length - 1, rng)
       ],
-    createdTime: time,
+    createdTime: levelInit ? time - 100000 : time, // HACK NEED BLOCKTIME
     gravity: 0,
     seed: seed,
   };
 
+  console.log(newFacility, levelInit);
+  if (!levelInit) {
+    const expenses = building.costs.map((c) => {
+      return { resource: c[0], amount: c[1] };
+    });
+    console.log(expenses);
+    spendResouces(expenses);
+  }
   addEntity(newFacility);
   propagateGravity();
 };

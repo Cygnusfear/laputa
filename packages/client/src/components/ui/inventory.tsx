@@ -3,7 +3,7 @@ import "./inventory.css";
 import { useStore } from "@/game/store";
 import { ResourceIcons, ResourceType } from "@/game/data/resources";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   animated,
   config,
@@ -11,6 +11,7 @@ import {
   type SpringValue,
 } from "@react-spring/web";
 import { useOnce } from "@/lib/useOnce";
+import { canAffordBuilding } from "@/game/systems/constructionSystem";
 
 function Inventory() {
   const {
@@ -80,6 +81,8 @@ function InventoryItem(
     input: { cursor, setInput, building },
   } = useStore();
 
+  const tooExpensive = useMemo(() => !canAffordBuilding(props), [props]);
+
   const hideCursor = () => {
     cursor.setCursor({ cursorState: "hidden" });
   };
@@ -91,7 +94,11 @@ function InventoryItem(
 
   return (
     <animated.div
-      className={cn("card", building?.name === props.name && "selected-item")}
+      className={cn(
+        "card",
+        building?.name === props.name && "selected-item",
+        tooExpensive && "too-expensive"
+      )}
       onMouseOver={hideCursor}
       onMouseEnter={hideCursor}
       onClick={handleClick}

@@ -10,7 +10,7 @@ export type ResourceType =
   | "gravity"
   | "water"
   | "food"
-  | "lapu"
+  | "LAPU"
   | "crystal"
   | "population";
 
@@ -19,10 +19,15 @@ const ResourceIcons: { [key in ResourceType]: typeof IoFastFood } = {
   gravity: GiOrbitalRays,
   water: GiWaterDrop,
   food: IoFastFood,
-  lapu: HiTicket,
+  LAPU: HiTicket,
   crystal: GiFloatingCrystal,
   population: FaPersonRays,
 };
+
+export const importTextures = [
+  "/textures/box01.webp",
+  "/textures/rockface.webp",
+];
 
 export const DefaultMaterials = {
   PlantsMat: new MeshStandardMaterial({
@@ -32,6 +37,15 @@ export const DefaultMaterials = {
     emissiveIntensity: 0.8,
     transparent: true,
     opacity: 0.95,
+  }),
+  rockMat: new MeshStandardMaterial({
+    roughness: 0.5,
+    metalness: 0.6,
+    side: DoubleSide,
+    emissiveIntensity: 0.8,
+    transparent: true,
+    opacity: 0.95,
+    color: "red",
   }),
 } as const;
 

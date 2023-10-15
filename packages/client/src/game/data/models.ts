@@ -14,8 +14,6 @@ export const importModels = [
   "/models/facilities.glb",
   "/models/resources.glb",
 ];
-export const importTextures = ["/textures/box01.webp"];
-
 const ModelData: ModelDataGroupType = {
   residence: [
     {

@@ -59,7 +59,7 @@ function GameLoop() {
           console.error("Entity has no position", entity);
           continue;
         }
-        buildFacility(position, building);
+        buildFacility(position, building, true);
         loaded = true;
       }
     }

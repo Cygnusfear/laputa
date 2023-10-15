@@ -32,7 +32,7 @@ function useConstruction() {
           console.error("mudBuildFacility error", error);
         }
       });
-      buildFacility(position, building, build[4]);
+      buildFacility(position, building, false, build[4]);
     } else {
       console.error("Cannot build here", position);
     }

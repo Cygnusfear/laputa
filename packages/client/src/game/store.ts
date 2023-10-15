@@ -6,7 +6,8 @@ import { create } from "zustand";
 import { IEntity } from "./types/entities";
 import { Assets } from "./utils/importer";
 import { FacilityDataType } from "./data/entities";
-import { DefaultMaterials } from "./data/resources";
+import { DefaultMaterials, ResourceType } from "./data/resources";
+import { PlayerData, createNewPlayerData } from "./data/player";
 
 export interface World {
   entities: IEntity[];
@@ -39,7 +40,17 @@ export interface Input {
 export type TutorialState = "intro" | "gravityWell" | "regular";
 export type IPlayer = {
   tutorialState: TutorialState;
+  playerData: PlayerData;
   setTutorialState: (state: TutorialState) => void;
+  hasResources: (
+    resources: { resource: ResourceType; amount: number }[]
+  ) => boolean;
+  spendResouces: (
+    resources: { resource: ResourceType; amount: number }[]
+  ) => void;
+  addResources: (
+    resources: { resource: ResourceType; amount: number }[]
+  ) => void;
 };
 
 export interface IState {
@@ -57,11 +68,51 @@ const octree = new PointOctree<IEntity>(min, max);
 const useStore = create<IState>((set, get) => ({
   player: {
     tutorialState: "intro",
+    playerData: createNewPlayerData(),
     setTutorialState: (state) => {
       set((s) => ({
         player: {
           ...s.player,
           tutorialState: state,
+        },
+      }));
+    },
+    hasResources: (
+      resources: { resource: ResourceType; amount: number }[]
+    ): boolean => {
+      return resources.every(({ resource, amount }) => {
+        return get().player.playerData.resources[resource] >= amount;
+      });
+    },
+    spendResouces: (
+      resources: { resource: ResourceType; amount: number }[]
+    ): void => {
+      set((s) => ({
+        player: {
+          ...s.player,
+          playerData: {
+            ...s.player.playerData,
+            resources: resources.reduce((acc, { resource, amount }) => {
+              acc[resource] -= amount;
+              return acc;
+            }, s.player.playerData.resources),
+          },
+        },
+      }));
+    },
+    addResources: (
+      resources: { resource: ResourceType; amount: number }[]
+    ): void => {
+      set((s) => ({
+        player: {
+          ...s.player,
+          playerData: {
+            ...s.player.playerData,
+            resources: resources.reduce((acc, { resource, amount }) => {
+              acc[resource] += amount;
+              return acc;
+            }, s.player.playerData.resources),
+          },
         },
       }));
     },
