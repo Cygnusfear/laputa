@@ -23,7 +23,7 @@ function Background() {
           color="#C59885"
           fade={120}
           position={[0, -5, 0]}
-          opacity={0.23}
+          opacity={0.3}
           speed={0.02}
           concentrate={"inside"}
         />

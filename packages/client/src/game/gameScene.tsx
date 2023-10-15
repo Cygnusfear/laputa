@@ -7,6 +7,7 @@ import { IFacility, IResource } from "./types/entities";
 import Background from "./entities/background";
 import Resource from "./entities/resource";
 import { Suspense } from "react";
+import { Vegetation } from "./entities/vegetation";
 
 function GameScene() {
   const {
@@ -19,8 +20,10 @@ function GameScene() {
       <directionalLight castShadow position={[5, 8, 5]} intensity={2.5} />
       <directionalLight castShadow position={[-5, 8, 5]} intensity={2.5} />
       <Suspense fallback={null}>
-        <Background />
         <Camera />
+      </Suspense>
+      <Suspense fallback={null}>
+        <Background />
         <Ground />
         {entities.map((entity, idx) => {
           switch (entity.entityType) {
@@ -32,6 +35,7 @@ function GameScene() {
               return null;
           }
         })}
+        <Vegetation />
       </Suspense>
       <Cursor />
     </scene>

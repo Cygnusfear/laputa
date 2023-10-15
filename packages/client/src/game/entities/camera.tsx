@@ -4,6 +4,7 @@ import {
   OrbitControlsProps,
   PerspectiveCamera,
 } from "@react-three/drei";
+import { useOnce } from "@/lib/useOnce";
 
 function Camera() {
   const orbitRef = useRef<OrbitControlsProps>(null!);
@@ -16,9 +17,9 @@ function Camera() {
     }
   };
 
-  useEffect(() => {
+  useOnce(() => {
     setCameraAngle();
-  }, [orbitRef]);
+  });
 
   useEffect(() => {
     document.addEventListener("gameLoaded", setCameraAngle);

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Sparkles } from "@react-three/drei";
 import { AdditiveBlending, DoubleSide } from "three";
 
@@ -16,12 +16,11 @@ function Cursor() {
     },
     assets: { textures },
   } = useStore();
-  const [faceIndex, setFaceIndex] = useState(0);
 
-  useEffect(() => {
+  const faceIndex = useMemo(() => {
     if (direction) {
       const idx = faceDirections.findIndex((dir) => dir.equals(direction));
-      setFaceIndex(idx);
+      return idx;
     }
   }, [direction]);
 

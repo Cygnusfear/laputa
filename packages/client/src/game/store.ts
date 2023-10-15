@@ -6,6 +6,7 @@ import { create } from "zustand";
 import { IEntity } from "./types/entities";
 import { Assets } from "./utils/importer";
 import { FacilityDataType } from "./data/entities";
+import { DefaultMaterials } from "./data/resources";
 
 export interface World {
   entities: IEntity[];
@@ -149,13 +150,13 @@ const useStore = create<IState>((set, get) => ({
         },
       }));
     },
-    materials: {},
+    materials: DefaultMaterials,
     addMaterial: (name, material) => {
       set((state) => ({
         assets: {
           ...state.assets,
-          material: {
-            ...state.assets.textures,
+          materials: {
+            ...state.assets.materials,
             [name]: material,
           },
         },

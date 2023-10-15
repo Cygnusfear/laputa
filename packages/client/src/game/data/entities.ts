@@ -26,6 +26,7 @@ export const entityTags = [
   "producesGravity",
   "producesPopulation",
   "hasWires",
+  "hasPlants",
   "startingItem",
 ] as const;
 export type EntityTag = (typeof entityTags)[number];
@@ -40,7 +41,7 @@ const EntityData = {
       image: "gravity.webp",
       costs: [["lapu", 500]],
       produces: [["gravity", 7, 1]],
-      variants: [ModelData.well00],
+      variants: ModelData.well,
       tags: ["groundLevel", "hasWires", "producesGravity", "startingItem"],
     },
     dynamo: {
@@ -52,7 +53,7 @@ const EntityData = {
       image: "engine.webp",
       costs: [["lapu", 200]],
       produces: [["power", 25, 1]],
-      variants: [ModelData.engine00],
+      variants: ModelData.engine,
       tags: ["hasWires"],
     },
     residence: {
@@ -64,8 +65,8 @@ const EntityData = {
       image: "residence.webp",
       costs: [["lapu", 100]],
       produces: [["population", 5, 1]],
-      variants: [ModelData.block00, ModelData.block01, ModelData.block02],
-      tags: [],
+      variants: ModelData.residence,
+      tags: ["hasPlants"],
     },
   } as { [key: string]: FacilityDataType },
   resources: {
@@ -78,7 +79,7 @@ const EntityData = {
       image: "crystal.webp",
       resourceType: "crystal",
       produces: [["gravity", 25, 1]],
-      variants: [ModelData.rock00, ModelData.crystal01, ModelData.crystal02],
+      variants: [...ModelData.rock, ...ModelData.crystal],
       tags: [],
     },
   } as { [key: string]: ResourceDataType },
