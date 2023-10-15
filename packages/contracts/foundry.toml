@@ -33,3 +33,6 @@ eth_rpc_url = "https://zkevm-rpc.com"
 
 [profile.scroll-sepolia-testnet]
 eth_rpc_url = "https://sepolia-rpc.scroll.io/"
+
+[profile.mantle-testnet]
+eth_rpc_url = "https://rpc.testnet.mantle.xyz"
