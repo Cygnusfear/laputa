@@ -18,6 +18,7 @@ RUN pnpm install --frozen-lockfile
 # RUN foundryup
 ENV SKIP_FOUNDRY=true
 ENV VITE_CHAIN_ID=4242
+ENV VITE_COMETH_API=7cd8f855-7a63-4230-988a-d4d842a5bab1
 RUN pnpm run build
 
 

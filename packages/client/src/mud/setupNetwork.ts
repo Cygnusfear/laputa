@@ -5,7 +5,6 @@
  */
 import {
   ContractWrite,
-  createBurnerAccount,
   getContract,
   transportObserver,
 } from "@latticexyz/common";
@@ -21,11 +20,11 @@ import { encodeEntity, syncToRecs } from "@latticexyz/store-sync/recs";
  */
 import mudConfig from "contracts/mud.config";
 import IWorldAbi from "contracts/out/IWorld.sol/IWorld.abi.json";
+
 import { share, Subject } from "rxjs";
 import {
   ClientConfig,
   createPublicClient,
-  createWalletClient,
   fallback,
   Hex,
   http,
@@ -35,6 +34,7 @@ import {
 
 import { getNetworkConfig } from "./getNetworkConfig";
 import { world } from "./world";
+import { setupWallet } from "./wallet";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
@@ -53,15 +53,10 @@ export async function setupNetwork() {
 
   const publicClient = createPublicClient(clientOptions);
 
-  /*
-   * Create a temporary wallet and a viem client for it
-   * (see https://viem.sh/docs/clients/wallet.html).
+  /**
+   * Sets up the player wallet client.
    */
-  const burnerAccount = createBurnerAccount(networkConfig.privateKey as Hex);
-  const burnerWalletClient = createWalletClient({
-    ...clientOptions,
-    account: burnerAccount,
-  });
+  const playerWallet = await setupWallet(clientOptions);
 
   /*
    * Create an observable for contract writes that we can
@@ -76,7 +71,7 @@ export async function setupNetwork() {
     address: networkConfig.worldAddress as Hex,
     abi: IWorldAbi,
     publicClient,
-    walletClient: burnerWalletClient,
+    walletClient: playerWallet,
     onWrite: (write) => write$.next(write),
   });
 
@@ -101,7 +96,7 @@ export async function setupNetwork() {
    * run out.
    */
   if (networkConfig.faucetServiceUrl) {
-    const address = burnerAccount.address;
+    const address = playerWallet.account.address;
     console.info("[Dev Faucet]: Player address -> ", address);
 
     const faucet = createFaucetService(networkConfig.faucetServiceUrl);
@@ -128,10 +123,10 @@ export async function setupNetwork() {
     components,
     playerEntity: encodeEntity(
       { address: "address" },
-      { address: burnerWalletClient.account.address }
+      { address: playerWallet.account.address }
     ),
     publicClient,
-    walletClient: burnerWalletClient,
+    walletClient: playerWallet,
     latestBlock$,
     storedBlockLogs$,
     waitForTransaction,
