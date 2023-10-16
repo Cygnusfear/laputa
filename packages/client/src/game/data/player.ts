@@ -18,7 +18,7 @@ export const createNewPlayerData = (name = "New Player"): PlayerData => {
       power: 0,
       water: 0,
       food: 0,
-      crystal: 0,
+      crystal: 1,
     },
     facilities: [],
     name,
