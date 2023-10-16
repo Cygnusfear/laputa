@@ -12,13 +12,13 @@ export type PlayerData = {
 export const createNewPlayerData = (name = "New Player"): PlayerData => {
   return {
     resources: {
-      power: 0,
+      LAPU: 1000,
       gravity: 0,
+      population: 0,
+      power: 0,
       water: 0,
       food: 0,
-      LAPU: 1000,
       crystal: 0,
-      population: 0,
     },
     facilities: [],
     name,

@@ -1,8 +1,8 @@
-import { GiWaterDrop, GiFloatingCrystal } from "react-icons/gi";
+import { GiWaterDrop } from "react-icons/gi";
 import { HiTicket } from "react-icons/hi";
 import { HiBolt, HiWifi } from "react-icons/hi2";
 import { IoFastFood } from "react-icons/io5";
-import { FaPersonRays } from "react-icons/fa6";
+import { FaGem, FaPersonRays } from "react-icons/fa6";
 import { DoubleSide, MeshStandardMaterial } from "three";
 
 export type ResourceType =
@@ -20,7 +20,7 @@ const ResourceIcons: { [key in ResourceType]: typeof IoFastFood } = {
   water: GiWaterDrop,
   food: IoFastFood,
   LAPU: HiTicket,
-  crystal: GiFloatingCrystal,
+  crystal: FaGem,
   population: FaPersonRays,
 };
 
