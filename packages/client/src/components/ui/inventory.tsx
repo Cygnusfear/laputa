@@ -91,7 +91,10 @@ function InventoryItem(
 
   const handleClick = () => {
     if (building?.name === props.name) setInput({ building: undefined });
-    else setInput({ building: props });
+    else {
+      setInput({ building: props });
+      cursor.setCursor({ variant: 0 });
+    }
   };
 
   return (

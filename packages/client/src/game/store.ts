@@ -26,6 +26,8 @@ export interface CursorProps {
   object: Object3D | Mesh | undefined;
   direction: Vector3;
   color: string | undefined;
+  yaw: number;
+  variant: number;
   setCursor: (props: Partial<CursorProps>) => void;
 }
 
@@ -159,11 +161,13 @@ const useStore = create<IState>((set, get) => ({
       }));
     },
     cursor: {
+      variant: 0,
       color: undefined,
       position: new Vector3(),
       point: [],
       cursorState: "valid",
       object: undefined,
+      yaw: 0,
       direction: Directions.UP(),
       setCursor: (props: Partial<CursorProps>) => {
         set((state) => ({

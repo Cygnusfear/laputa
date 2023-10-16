@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
 import { getState } from "../store";
 import { createRef } from "react";
-import { getRandom } from "@/lib/utils";
+import { degreesToRadians, getRandom } from "@/lib/utils";
 import { palette } from "../utils/palette";
 import { IFacility } from "../types/entities";
 import { floodFill } from "../utils/floodFill";
@@ -51,7 +51,7 @@ const buildFacility = ({
   position: Vector3;
   building: FacilityDataType;
   levelInit: boolean;
-  yaw?: number;
+  yaw: number;
   color: string;
   variant: number;
 }) => {
@@ -82,7 +82,7 @@ const buildFacility = ({
 
   // Use time for seeded random
   const time = Date.now(); // NEED BLOCKTIME
-  const rot = yaw || Math.PI * (Math.floor((Math.random() - 0.5) * 4) / 2);
+  const rot = yaw;
   const seed =
     (position.x * 10 * position.z * 10 * position.y * time * rot) ^
     (Math.random() * 0x100000000);
@@ -94,7 +94,7 @@ const buildFacility = ({
     colorPrimary: getRandom(palette.buildingPrimary),
     colorSecondary: color,
     entityRef: createRef<THREE.Mesh>(),
-    rotation: new Vector3(0, rot, 0),
+    rotation: new Vector3(0, degreesToRadians(rot), 0),
     type: building,
     variant: building.variants[variant],
     createdTime: levelInit ? time - 100000 : time, // HACK NEED BLOCKTIME

@@ -23,6 +23,11 @@ function GameLoop() {
   } = useMUD();
   const {
     world: { getEntityByPosition },
+    input: {
+      building,
+      cursor: { setCursor, yaw, variant },
+    },
+    player: { addResources },
   } = useStore();
 
   // Startup
@@ -33,6 +38,50 @@ function GameLoop() {
       createResource(EntityData.resources.crystalFloat, position!);
     }
   });
+
+  useEffect(() => {
+    const rotation = 90;
+
+    const normalizeAngle = (angle: number) => {
+      const normalized = angle % 360;
+      return Math.floor(normalized < 0 ? normalized + 360 : normalized);
+    };
+
+    const rotateCursor = (amount: number) => {
+      const rot = normalizeAngle(yaw + amount * rotation);
+      setCursor({ yaw: rot });
+      console.log(rot, yaw);
+    };
+
+    const nextVariant = () => {
+      const length = building?.variants.length || 0;
+      const next = (variant + 1) % length;
+      setCursor({ variant: next });
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "q") {
+        rotateCursor(-1);
+      }
+      if (e.key === "e") {
+        rotateCursor(1);
+      }
+      if (e.key === "r") {
+        nextVariant();
+      }
+      if (e.key === "t") {
+        addResources([
+          { resource: "LAPU", amount: 1000 },
+          { resource: "crystal", amount: 5 },
+        ]);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [addResources, building?.variants.length, setCursor, variant, yaw]);
 
   const facilities = useEntityQuery([
     Has(Position),
@@ -61,6 +110,7 @@ function GameLoop() {
     // Debug for hiding the loading screen on new world
     const event = new Event("gameLoaded");
     document.dispatchEvent(event);
+
     // we're going to check which entities don't exist yet and build new ones:
     // TODO: GameLoaded logic breaks when the map has zero entities [bug]
     for (const facility of facilities) {

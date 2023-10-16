@@ -67,3 +67,7 @@ export const faceDirections: Vector3[] = [
   Directions.FORWARD(),
   Directions.BACKWARD(),
 ];
+
+export const degreesToRadians = (degrees: number) => {
+  return degrees * (Math.PI / 180);
+};
