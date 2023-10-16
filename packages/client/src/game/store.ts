@@ -37,11 +37,8 @@ export interface Input {
   setInput: (props: Partial<Omit<Input, "cursor">>) => void;
 }
 
-export type TutorialState = "intro" | "gravityWell" | "regular";
 export type IPlayer = {
-  tutorialState: TutorialState;
   playerData: PlayerData;
-  setTutorialState: (state: TutorialState) => void;
   hasResources: (
     resources: { resource: ResourceType; amount: number }[]
   ) => boolean;
@@ -51,6 +48,7 @@ export type IPlayer = {
   addResources: (
     resources: { resource: ResourceType; amount: number }[]
   ) => void;
+  setTutorialIndex: (step: number) => void;
 };
 
 export interface IState {
@@ -67,13 +65,15 @@ const octree = new PointOctree<IEntity>(min, max);
 
 const useStore = create<IState>((set, get) => ({
   player: {
-    tutorialState: "intro",
     playerData: createNewPlayerData(),
-    setTutorialState: (state) => {
+    setTutorialIndex: (step) => {
       set((s) => ({
         player: {
           ...s.player,
-          tutorialState: state,
+          playerData: {
+            ...s.player.playerData,
+            tutorialIndex: step,
+          },
         },
       }));
     },

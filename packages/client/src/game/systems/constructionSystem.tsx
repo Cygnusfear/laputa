@@ -50,7 +50,7 @@ const buildFacility = (
   const {
     input: { cursor },
     world: { addEntity },
-    player: { spendResouces },
+    player: { spendResouces, addResources },
   } = getState();
 
   // Move Input logic away from here
@@ -102,8 +102,12 @@ const buildFacility = (
     const expenses = building.costs.map((c) => {
       return { resource: c[0], amount: c[1] };
     });
-    console.log(expenses);
     spendResouces(expenses);
+    const gains = building.produces.map((c) => {
+      return { resource: c[0], amount: c[1] };
+    });
+    addResources(gains);
+    console.log("net", gains, expenses);
   }
   addEntity(newFacility);
   propagateGravity();

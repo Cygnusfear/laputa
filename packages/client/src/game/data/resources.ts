@@ -1,22 +1,22 @@
-import { GiOrbitalRays, GiWaterDrop, GiFloatingCrystal } from "react-icons/gi";
+import { GiWaterDrop, GiFloatingCrystal } from "react-icons/gi";
 import { HiTicket } from "react-icons/hi";
-import { HiBolt } from "react-icons/hi2";
+import { HiBolt, HiWifi } from "react-icons/hi2";
 import { IoFastFood } from "react-icons/io5";
 import { FaPersonRays } from "react-icons/fa6";
 import { DoubleSide, MeshStandardMaterial } from "three";
 
 export type ResourceType =
-  | "power"
+  | "LAPU"
   | "gravity"
+  | "population"
+  | "power"
   | "water"
   | "food"
-  | "LAPU"
-  | "crystal"
-  | "population";
+  | "crystal";
 
 const ResourceIcons: { [key in ResourceType]: typeof IoFastFood } = {
   power: HiBolt,
-  gravity: GiOrbitalRays,
+  gravity: HiWifi,
   water: GiWaterDrop,
   food: IoFastFood,
   LAPU: HiTicket,

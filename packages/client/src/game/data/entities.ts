@@ -51,8 +51,11 @@ const EntityData = {
       description:
         "The Whirly Dynamo is an awe-inspiring, spiraled contraption, eternally spinning, twirling, and cascading in the breezy stratosphere. It contains an enormous, spiraled windmill, capturing the gentlest of breezes and the mightiest of gales.",
       image: "engine.webp",
-      costs: [["LAPU", 300]],
-      produces: [["power", 25, 1]],
+      costs: [
+        ["gravity", 2],
+        ["LAPU", 300],
+      ],
+      produces: [["power", 6, 1]],
       variants: ModelData.engine,
       tags: ["hasWires"],
     },
@@ -63,7 +66,11 @@ const EntityData = {
       description:
         "The Residence is a humble abode for the citizens of your city. It is a place of rest, relaxation, and rejuvenation. It is a place to call home.",
       image: "residence.webp",
-      costs: [["LAPU", 200]],
+      costs: [
+        ["gravity", 1],
+        ["power", 2],
+        ["LAPU", 200],
+      ],
       produces: [["population", 5, 1]],
       variants: ModelData.residence,
       tags: ["hasPlants"],
@@ -74,7 +81,10 @@ const EntityData = {
       blurb: "Metastructure",
       description: "",
       image: "scaffold.webp",
-      costs: [["LAPU", 100]],
+      costs: [
+        ["gravity", 1],
+        ["LAPU", 100],
+      ],
       produces: [],
       variants: ModelData.scaffold,
       tags: [],

@@ -6,6 +6,7 @@ export type PlayerData = {
   resources: { [key in ResourceType]: number };
   facilities: IFacility[];
   name: string;
+  tutorialIndex: number;
 };
 
 export const createNewPlayerData = (name = "New Player"): PlayerData => {
@@ -21,6 +22,7 @@ export const createNewPlayerData = (name = "New Player"): PlayerData => {
     },
     facilities: [],
     name,
+    tutorialIndex: 0,
   };
 };
 
@@ -55,3 +57,19 @@ export const tutorialSteps = [
     ],
   },
 ] as TutorialStep[];
+
+export const initializePlayer = () => {
+  const player = window.localStorage.getItem("playerData");
+  if (player) {
+    return JSON.parse(player);
+  } else {
+    const newPlayer = createNewPlayerData();
+    savePlayer(newPlayer);
+    return newPlayer;
+  }
+};
+
+export const savePlayer = (playerData: PlayerData) => {
+  window.localStorage.setItem("playerData", JSON.stringify(playerData));
+  console.log("Saved player data");
+};
