@@ -69,6 +69,14 @@ const ModelData: ModelDataGroupType = {
       colors: ["secondary", "primary"],
     },
   ],
+  scaffold: [
+    {
+      name: "Scaffold000",
+      nodes: ["Scaffold000"],
+      materials: [],
+      colors: ["primary"],
+    },
+  ],
   crystal: [
     {
       name: "Crystal000",

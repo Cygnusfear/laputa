@@ -98,7 +98,6 @@ const buildFacility = (
     seed: seed,
   };
 
-  console.log(newFacility, levelInit);
   if (!levelInit) {
     const expenses = building.costs.map((c) => {
       return { resource: c[0], amount: c[1] };

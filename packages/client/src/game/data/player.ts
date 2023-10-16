@@ -1,4 +1,5 @@
 import { IFacility } from "../types/entities";
+import EntityData, { FacilityDataType } from "./entities";
 import { ResourceType } from "./resources";
 
 export type PlayerData = {
@@ -22,3 +23,35 @@ export const createNewPlayerData = (name = "New Player"): PlayerData => {
     name,
   };
 };
+
+export type TutorialStep = {
+  name: string;
+  text: string;
+  inventory: FacilityDataType[];
+};
+
+export const tutorialSteps = [
+  {
+    name: "intro",
+    text: "Let's start by building a Gravity Hill",
+    inventory: [EntityData.facilities.gravityhill],
+  },
+  {
+    name: "power-up",
+    text: "Power it all up",
+    inventory: [
+      EntityData.facilities.gravityhill,
+      EntityData.facilities.dynamo,
+    ],
+  },
+  {
+    name: "living",
+    text: "Make it a life worth living",
+    inventory: [
+      EntityData.facilities.gravityhill,
+      EntityData.facilities.dynamo,
+      EntityData.facilities.residence,
+      EntityData.facilities.scaffold,
+    ],
+  },
+] as TutorialStep[];
