@@ -23,6 +23,12 @@ const ModelData: ModelDataGroupType = {
       colors: ["secondary", "primary"],
     },
     {
+      name: "Residence00",
+      nodes: ["CubaMid005", "CubaTop003", "CubaPole003"],
+      materials: [],
+      colors: ["secondary", "primary", "primary"],
+    },
+    {
       name: "Residence02",
       nodes: ["CubaMid000", "CubaTop001", "CubaBottom000"],
       materials: [],
@@ -72,6 +78,14 @@ const ModelData: ModelDataGroupType = {
       name: "Well00",
       nodes: ["Well00", "Well00001"],
       materials: ["Well"],
+      colors: ["secondary", "primary"],
+    },
+  ],
+  miner: [
+    {
+      name: "Miner000",
+      nodes: ["Miner000", "Miner001"],
+      materials: [],
       colors: ["secondary", "primary"],
     },
   ],

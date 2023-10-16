@@ -1,11 +1,15 @@
 import { useState } from "react";
 import Wheel from "@uiw/react-color-wheel";
-import { ColorResult, hsvaToHex } from "@uiw/color-convert";
+import { ColorResult, hexToHsva } from "@uiw/color-convert";
 import { useStore } from "@/game/store";
+import { getRandom } from "@/lib/utils";
+import { palette } from "@/game/utils/palette";
+
+const randomColor = getRandom(palette.buildingSecondary);
 
 function ColorWheel() {
-  const [hsva, setHsva] = useState({ h: 214, s: 43, v: 90, a: 1 });
-  const [hex, setHex] = useState(hsvaToHex({ h: 214, s: 43, v: 90, a: 1 }));
+  const [hsva, setHsva] = useState(hexToHsva(randomColor));
+  const [hex, setHex] = useState(randomColor);
   const {
     input: {
       cursor: { setCursor },
