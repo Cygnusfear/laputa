@@ -73,6 +73,8 @@ function GameLoop() {
         addResources([
           { resource: "LAPU", amount: 1000 },
           { resource: "crystal", amount: 5 },
+          { resource: "power", amount: 15 },
+          { resource: "gravity", amount: 15 },
         ]);
       }
     };

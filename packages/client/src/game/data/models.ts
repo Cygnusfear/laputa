@@ -52,6 +52,12 @@ const ModelData: ModelDataGroupType = {
       materials: [],
       colors: ["secondary", "primary", "primary", "primary"],
     },
+    {
+      name: "Residence05",
+      nodes: ["CubaMid004", "CubaTop002", "CubaPole002"],
+      materials: [],
+      colors: ["secondary", "primary", "primary"],
+    },
   ],
   engine: [
     {
