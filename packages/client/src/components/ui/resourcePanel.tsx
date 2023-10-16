@@ -33,7 +33,7 @@ function ResourceItem({
     setAnimatedProps({
       from: {
         opacity: 0.5,
-        fontSize: "2rem",
+        fontSize: "1rem",
         transform: "scaleX(1.5)",
       },
       to: {
