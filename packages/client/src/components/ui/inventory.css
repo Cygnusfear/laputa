@@ -78,5 +78,5 @@
 }
 
 .card-wheel {
-  @apply relative flex h-24 w-24 self-end cursor-pointer;
+  @apply relative flex h-24 w-24  cursor-pointer rounded-lg items-center shadow-md;
 }
