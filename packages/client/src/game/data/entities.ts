@@ -72,7 +72,7 @@ const EntityData = {
       costs: [
         ["gravity", 1],
         ["power", 2],
-        ["LAPU", 200],
+        ["LAPU", 75],
       ],
       produces: [["population", 5, 1]],
       variants: ModelData.residence,
@@ -86,7 +86,7 @@ const EntityData = {
       image: "scaffold.webp",
       costs: [
         ["gravity", 1],
-        ["LAPU", 100],
+        ["LAPU", 50],
       ],
       produces: [],
       variants: ModelData.scaffold,

@@ -13,6 +13,12 @@ export default mudConfig({
         z: "int32",
       },
     },
+    EntityCustomization: {
+      valueSchema: {
+        variant: "uint32",
+        color: "string",
+      },
+    },
     Orientation: {
       valueSchema: {
         yaw: "int32",

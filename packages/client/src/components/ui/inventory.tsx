@@ -12,6 +12,7 @@ import {
 } from "@react-spring/web";
 import { useOnce } from "@/lib/useOnce";
 import { canAffordBuilding } from "@/game/systems/constructionSystem";
+import ColorWheel from "./colorWheel";
 
 function Inventory() {
   const {
@@ -60,6 +61,7 @@ function Inventory() {
 
   return (
     <div className="inventory-bar">
+      <ColorWheel />
       {loaded &&
         listTransitions((styles, entityData) => (
           <InventoryItem {...entityData} style={styles} />

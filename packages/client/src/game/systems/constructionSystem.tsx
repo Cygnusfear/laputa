@@ -4,7 +4,6 @@ import { createRef } from "react";
 import { getRandom } from "@/lib/utils";
 import { palette } from "../utils/palette";
 import { IFacility } from "../types/entities";
-import prand from "pure-rand";
 import { floodFill } from "../utils/floodFill";
 import { FacilityDataType } from "../data/entities";
 
@@ -41,12 +40,21 @@ export const canAffordBuilding = (building: FacilityDataType) => {
 
 // TODO: extract input logic from construction system [refactor]
 // Should accept a building type as arg
-const buildFacility = (
-  position: Vector3,
-  building: FacilityDataType,
+const buildFacility = ({
+  position,
+  building,
   levelInit = false,
-  yaw?: number
-) => {
+  yaw,
+  color,
+  variant,
+}: {
+  position: Vector3;
+  building: FacilityDataType;
+  levelInit: boolean;
+  yaw?: number;
+  color: string;
+  variant: number;
+}) => {
   const {
     input: { cursor },
     world: { addEntity },
@@ -78,21 +86,17 @@ const buildFacility = (
   const seed =
     (position.x * 10 * position.z * 10 * position.y * time * rot) ^
     (Math.random() * 0x100000000);
-  const rng = prand.xoroshiro128plus(seed);
 
   const newFacility: IFacility = {
     entityType: "facility",
     position: position,
     scale: new Vector3(1, 1, 1),
     colorPrimary: getRandom(palette.buildingPrimary),
-    colorSecondary: getRandom(palette.buildingSecondary),
+    colorSecondary: color,
     entityRef: createRef<THREE.Mesh>(),
     rotation: new Vector3(0, rot, 0),
     type: building,
-    variant:
-      building.variants[
-        prand.unsafeUniformIntDistribution(0, building.variants.length - 1, rng)
-      ],
+    variant: building.variants[variant],
     createdTime: levelInit ? time - 100000 : time, // HACK NEED BLOCKTIME
     gravity: 0,
     seed: seed,

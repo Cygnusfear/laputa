@@ -7,7 +7,7 @@ import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswith
 import { getKeysInTable } from "@latticexyz/world-modules/src/modules/keysintable/getKeysInTable.sol";
 import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
 
-import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy } from "../codegen/index.sol";
+import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy, EntityCustomization } from "../codegen/index.sol";
 import { positionToEntityKey } from "../positionToEntityKey.sol";
 
 contract FacilitySystem is System {
@@ -88,7 +88,7 @@ contract FacilitySystem is System {
    * @param yaw The yaw of the facility to build.
    * @return The key of the entity that was created.
    */
-  function buildFacility(uint32 entityTypeId, int32 x, int32 y, int32 z, int32 yaw) public returns (bytes32) {
+  function buildFacility(uint32 entityTypeId, int32 x, int32 y, int32 z, int32 yaw, string calldata color, uint32 variant) public returns (bytes32) {
     require(_msgSender() != address(0), "Invalid sender address");
     require(canPlayerBuildFacilityType(_msgSender(), entityTypeId), "Cannot build this facility type");
     require(canBuildFacilityTypeAtPosition(entityTypeId, x, y, z), "This facility cannot be built at this position");
@@ -100,6 +100,7 @@ contract FacilitySystem is System {
     Position.set(entityKey, x, y, z);
     Orientation.set(entityKey, yaw);
     EntityType.set(entityKey, entityTypeId);
+    EntityCustomization.set(entityKey, variant, color);
     OwnedBy.set(entityKey, _msgSender());
 
     return entityKey;
@@ -117,6 +118,7 @@ contract FacilitySystem is System {
     EntityType.deleteRecord(entityKey);
     Orientation.deleteRecord(entityKey);
     Position.deleteRecord(entityKey);
+    EntityCustomization.deleteRecord(entityKey);
   }
 
   function getAllFacilityEntityKeys() public view returns (bytes32[][] memory) {

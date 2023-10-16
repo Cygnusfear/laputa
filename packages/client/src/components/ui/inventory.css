@@ -76,3 +76,7 @@
     0px 0px 8px rgba(0, 0, 0, 0.1),
     0px 1px 2px rgba(0, 0, 0, 0.4);
 }
+
+.card-wheel {
+  @apply relative flex h-24 w-24 self-end cursor-pointer;
+}
