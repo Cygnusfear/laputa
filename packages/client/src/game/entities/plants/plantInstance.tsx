@@ -74,6 +74,7 @@ export function PlantInstance(props: IFacility) {
             position={position}
             scale={[scales[index], scales[index], scales[index]]}
             rotation={rotations[index]}
+            frustumCulled={false}
           />
         );
       })}

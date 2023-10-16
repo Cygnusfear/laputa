@@ -98,6 +98,7 @@ export function VineInstance(facilityProps: IFacility) {
             scale={props.scales}
             rotation={props.rotations[i]}
             visible={i < amt}
+            frustumCulled={false}
           />
         );
       })}

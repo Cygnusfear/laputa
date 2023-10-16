@@ -4,7 +4,7 @@ import { MeshStandardMaterial } from "three";
 function Background() {
   return (
     <group>
-      <Environment preset="forest" />
+      <Environment preset="forest" far={50} />
       <Clouds material={MeshStandardMaterial}>
         <Cloud
           bounds={[200, 10, 200]}
@@ -14,6 +14,7 @@ function Background() {
           position={[0, -2, 0]}
           fade={120}
           opacity={0.09}
+          frustumCulled={false}
         />
         <Cloud
           bounds={[100, 2, 100]}
@@ -26,6 +27,7 @@ function Background() {
           opacity={0.3}
           speed={0.02}
           concentrate={"inside"}
+          frustumCulled={false}
         />
       </Clouds>
     </group>
