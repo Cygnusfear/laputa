@@ -4,6 +4,7 @@ import {
   Chain,
   ClientConfig,
   createWalletClient,
+  custom,
   // custom,
   Hex,
   // http,
@@ -78,23 +79,27 @@ export async function setupWallet(
   //   return walletClient as TWalletClient;
   // }
 
-  // this could be using Cometh or Metamask
-  // if they have, then we can just use that wallet
   if ("ethereum" in window) {
-    console.log("Extension wallet found", window.ethereum);
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const extensionWallet = window.ethereum as any;
-      // if (extensionWallet.connected) {
-      const [account] = await extensionWallet.request({
-        method: "eth_requestAccounts",
-      });
       const walletClient = createWalletClient({
-        account,
         ...clientOptions,
+        transport: custom(extensionWallet),
       });
-      return walletClient as TWalletClient;
-      // }
+      const accounts = await walletClient.requestAddresses();
+      console.log(extensionWallet, walletClient);
+      if (walletClient.chain!.id === networkConfig.chainId) {
+        console.log(
+          `Connected to extension wallet -> ChainID ${networkConfig.chainId}`
+        );
+        walletClient.account = {
+          address: accounts[0] as Hex,
+          type: "json-rpc",
+        };
+        return walletClient as TWalletClient;
+      }
+      console.error("Wallet does not have the correct ChainID");
     } catch (error) {
       console.error("Error connecting to extension wallet: ", error);
     }
