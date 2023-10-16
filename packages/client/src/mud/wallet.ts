@@ -138,18 +138,28 @@ export async function connectExtensionWallet(
       } catch (switchError) {
         // This error code indicates that the chain has not been added to MetaMask.
         // @ts-ignore
-        if (switchError.code === 4902) {
+        if (switchError.code === 4902 || switchError.code === -32603) {
           try {
             // Add wallet to Extension Wallet
+            console.log(networkConfig.chain.rpcUrls);
             await extensionWallet.request({
               method: "wallet_addEthereumChain",
               params: [
                 {
-                  chainId: toHex(networkConfig.chainId),
+                  chainId: toHex(networkConfig.chainId).toString(),
                   chainName: networkConfig.chain.name,
-                  rpcUrls: networkConfig.chain.rpcUrls,
+                  rpcUrls: [networkConfig.chain.rpcUrls.default.http[0]],
+                  nativeCurrency: {
+                    name: networkConfig.chain.nativeCurrency.name,
+                    symbol: networkConfig.chain.nativeCurrency.symbol,
+                    decimals: networkConfig.chain.nativeCurrency.decimals,
+                  },
                 },
               ],
+            });
+            await extensionWallet.request({
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: toHex(networkConfig.chain.id) }],
             });
           } catch (addError) {
             console.error(addError);
