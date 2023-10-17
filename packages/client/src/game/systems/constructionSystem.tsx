@@ -47,6 +47,7 @@ const buildFacility = ({
   yaw,
   color,
   variant,
+  owner,
 }: {
   position: Vector3;
   building: FacilityDataType;
@@ -54,11 +55,12 @@ const buildFacility = ({
   yaw: number;
   color: string;
   variant: number;
+  owner: string;
 }) => {
   const {
     input: { cursor },
     world: { addEntity },
-    player: { spendResouces, addResources },
+    player: { spendResouces, addResources, playerData, setPlayerData },
   } = getState();
 
   // Move Input logic away from here
@@ -100,6 +102,7 @@ const buildFacility = ({
     createdTime: levelInit ? time - 100000 : time, // HACK NEED BLOCKTIME
     gravity: 0,
     seed: seed,
+    owner: owner,
   };
 
   if (!levelInit) {
@@ -107,13 +110,23 @@ const buildFacility = ({
       return { resource: c[0], amount: c[1] };
     });
     spendResouces(expenses);
-    const gains = building.produces.map((c) => {
+    const gains = building.produces?.map((c) => {
       return { resource: c[0], amount: c[1] };
     });
-    addResources(gains);
+    if (gains) addResources(gains);
     console.log("net", gains, expenses);
   }
   addEntity(newFacility);
+  console.log("Added", newFacility, owner, playerData.address);
+  if (owner === playerData.address) {
+    // player is the owner of this facility
+    setPlayerData({
+      ...playerData,
+      facilities: [...playerData.facilities, newFacility],
+    });
+    const buildEvent = new Event("buildFacility");
+    document.dispatchEvent(buildEvent);
+  }
   propagateGravity();
 };
 
@@ -132,7 +145,7 @@ async function propagateGravity() {
   }
 
   for (const well of wells) {
-    const resource = well.type.produces.find((p) => p[0] === "gravity");
+    const resource = well.type.produces?.find((p) => p[0] === "gravity");
     if (resource) {
       const amount = resource[1];
       floodFill(well.position, amount);

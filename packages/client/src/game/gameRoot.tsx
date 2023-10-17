@@ -5,8 +5,23 @@ import { ACESFilmicToneMapping, Color } from "three";
 import GameUI from "@/components/ui/gameUI";
 import Importer from "./utils/importer";
 import GameLoop from "./systems/gameLoop";
+import { useMUD } from "@/useMUD";
+import { getState } from "./store";
+import { initializePlayer } from "./data/player";
+import { useEffect } from "react";
 
 function GameRoot() {
+  const {
+    network: {
+      walletClient: { account },
+    },
+  } = useMUD();
+
+  useEffect(() => {
+    const player = initializePlayer({ address: account.address });
+    getState().player.setPlayerData(player);
+  }, [account]);
+
   return (
     <>
       <Canvas

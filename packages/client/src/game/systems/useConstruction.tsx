@@ -16,6 +16,9 @@ function useConstruction() {
   } = useMUD();
   const {
     input: { building },
+    player: {
+      playerData: { address },
+    },
   } = getState();
 
   const constructFacility = async (position: Vector3) => {
@@ -58,6 +61,7 @@ function useConstruction() {
         levelInit: false,
         variant,
         color,
+        owner: address,
       });
     } else {
       console.error("Cannot build here", position);

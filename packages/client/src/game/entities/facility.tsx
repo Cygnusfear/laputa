@@ -1,5 +1,5 @@
 import { RefObject, useMemo } from "react";
-import { useStore } from "../store";
+import { getState, useStore } from "../store";
 import { Mesh } from "three";
 import { animated, useSpring } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
@@ -17,19 +17,17 @@ import Wires from "./wires";
 // } from "react-icons/pi";
 import { FacilitySound } from "../audio/facilitySound";
 import useConstruction from "../systems/useConstruction";
+// import { ResourceGenerator } from "../effects/resourceGenerator";
 
 const Facility = (props: IFacility) => {
   const { position, entityRef } = props;
   const { constructFacility } = useConstruction();
-  const {
-    input: { cursor },
-  } = useStore();
 
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
     if (event.event.faceIndex === undefined) return;
     const idx = Math.floor(event.event.faceIndex / 2);
     const direction = event.position.clone().add(faceDirections[idx!]);
-    cursor.setCursor({
+    getState().input.cursor.setCursor({
       position: direction,
       direction: faceDirections[idx!].clone().negate(),
     });
@@ -37,7 +35,7 @@ const Facility = (props: IFacility) => {
   }, entityRef);
 
   const { onMouseDown, onMouseClick } = useInput((event) => {
-    constructFacility(cursor.position);
+    constructFacility(getState().input.cursor.position);
     event.event.stopPropagation();
   }, entityRef);
 
@@ -70,6 +68,14 @@ const Facility = (props: IFacility) => {
         <FacilityRenderer {...props} />
       </animated.mesh>
       <FacilitySound />
+      {/* {props.type.generates?.map((resource, index) => (
+        <ResourceGenerator
+          key={`generator-${index}`}
+          interval={resource[2]}
+          resources={[{ resource: resource[0], amount: resource[1] }]}
+          owner={props.owner}
+        />
+      ))} */}
     </animated.group>
   );
 };
@@ -79,7 +85,6 @@ const FacilityRenderer = (props: IFacility) => {
     props;
   const {
     assets: { meshes },
-    world: { getEntityByPosition },
   } = useStore();
 
   const prototypes = useMemo(
@@ -96,10 +101,11 @@ const FacilityRenderer = (props: IFacility) => {
   }, []);
 
   const numWires = useMemo(() => {
+    const { getEntityByPosition } = getState().world;
     const entityBelow = getEntityByPosition(Directions.DOWN().add(position));
     if (entityBelow) return 0;
     return prand.unsafeUniformIntDistribution(0, 5, rand);
-  }, [rand, position, getEntityByPosition]);
+  }, [rand, position]);
 
   // const IconWifi = useMemo(() => {
   //   switch (props.gravity) {

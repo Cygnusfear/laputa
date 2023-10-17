@@ -7,7 +7,8 @@ export type DataType = {
   blurb: string;
   description: string;
   image: string;
-  produces: [ResourceType, number, number][];
+  produces?: [ResourceType, number][];
+  generates?: [ResourceType, number, number][];
   variants: ModelDataType[];
   tags: EntityTag[];
 };
@@ -43,7 +44,7 @@ const EntityData = {
         ["LAPU", 400],
         ["crystal", 1],
       ],
-      produces: [["gravity", 10, 1]],
+      produces: [["gravity", 10]],
       variants: ModelData.well,
       tags: ["groundLevel", "hasWires", "producesGravity", "startingItem"],
     },
@@ -58,7 +59,8 @@ const EntityData = {
         ["gravity", 2],
         ["LAPU", 300],
       ],
-      produces: [["power", 6, 1]],
+      produces: [["power", 6]],
+      // generates: [["power", 1, 5000]],
       variants: ModelData.engine,
       tags: ["hasWires"],
     },
@@ -74,7 +76,8 @@ const EntityData = {
         ["power", 2],
         ["LAPU", 75],
       ],
-      produces: [["population", 5, 1]],
+      produces: [["population", 2]],
+      generates: [["LAPU", 1, 5000]],
       variants: ModelData.residence,
       tags: ["hasPlants"],
     },
@@ -117,7 +120,7 @@ const EntityData = {
         "A floating crystal. It is a crystal that floats. It is also a floating crystal.",
       image: "crystal.webp",
       resourceType: "crystal",
-      produces: [["gravity", 25, 1]],
+      produces: [["crystal", 25]],
       variants: [...ModelData.rock, ...ModelData.crystal],
       tags: [],
     },

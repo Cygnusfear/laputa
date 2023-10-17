@@ -6,8 +6,9 @@ import { Vector3 } from "three";
 import { buildFacility } from "./constructionSystem";
 import { useEntityQuery } from "@latticexyz/react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
-import { useStore } from "../store";
+import { getState } from "../store";
 import { useOnce } from "@/lib/useOnce";
+import { createNewPlayerData, savePlayer } from "../data/player";
 
 let loaded = false;
 
@@ -21,14 +22,6 @@ function GameLoop() {
       OwnedBy,
     },
   } = useMUD();
-  const {
-    world: { getEntityByPosition },
-    input: {
-      building,
-      cursor: { setCursor, yaw, variant },
-    },
-    player: { addResources },
-  } = useStore();
 
   // Startup
   useOnce(() => {
@@ -40,6 +33,7 @@ function GameLoop() {
   });
 
   useEffect(() => {
+    const { setCursor, yaw, variant } = getState().input.cursor;
     const rotation = 90;
 
     const normalizeAngle = (angle: number) => {
@@ -54,7 +48,7 @@ function GameLoop() {
     };
 
     const nextVariant = () => {
-      const length = building?.variants.length || 0;
+      const length = getState().input.building?.variants.length || 0;
       const next = (variant + 1) % length;
       setCursor({ variant: next });
     };
@@ -70,12 +64,18 @@ function GameLoop() {
         nextVariant();
       }
       if (e.key === "t") {
-        addResources([
+        getState().player.addResources([
           { resource: "LAPU", amount: 1000 },
           { resource: "crystal", amount: 5 },
           { resource: "power", amount: 15 },
           { resource: "gravity", amount: 15 },
         ]);
+      }
+      if (e.key === "y") {
+        const newPlayer = createNewPlayerData({
+          address: getState().player.playerData.address,
+        });
+        savePlayer(newPlayer);
       }
     };
 
@@ -83,7 +83,7 @@ function GameLoop() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [addResources, building?.variants.length, setCursor, variant, yaw]);
+  }, []);
 
   const facilities = useEntityQuery([
     Has(Position),
@@ -96,6 +96,7 @@ function GameLoop() {
     const orientation = getComponentValueStrict(Orientation, entity);
     const type = getComponentValueStrict(EntityType, entity);
     const customization = getComponentValueStrict(EntityCustomization, entity);
+    const { owner } = getComponentValueStrict(OwnedBy, entity);
     const e = {
       entity,
       typeId: type.typeId,
@@ -104,20 +105,21 @@ function GameLoop() {
       yaw: orientation.yaw,
       color: customization.color,
       variant: customization.variant,
+      owner,
     };
     return e;
   });
 
   useEffect(() => {
     // Debug for hiding the loading screen on new world
-    const event = new Event("gameLoaded");
-    document.dispatchEvent(event);
+    // const event = new Event("gameLoaded");
+    // document.dispatchEvent(event);
 
     // we're going to check which entities don't exist yet and build new ones:
     // TODO: GameLoaded logic breaks when the map has zero entities [bug]
     for (const facility of facilities) {
       const { entity, typeId, position, yaw, color, variant } = facility;
-      if (!getEntityByPosition(position)) {
+      if (!getState().world.getEntityByPosition(position)) {
         const building = Object.values(EntityData.facilities).find(
           (f) => f.entityTypeId === typeId || ""
         );
@@ -132,6 +134,7 @@ function GameLoop() {
           yaw,
           color,
           variant,
+          owner: facility.owner,
         });
         loaded = true;
       }
@@ -140,7 +143,7 @@ function GameLoop() {
       const event = new Event("gameLoaded");
       document.dispatchEvent(event);
     }
-  }, [facilities, getEntityByPosition]);
+  }, [facilities]);
 
   return <></>;
 }

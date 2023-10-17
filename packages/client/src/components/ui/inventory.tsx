@@ -1,6 +1,6 @@
 import EntityData, { FacilityDataType } from "@/game/data/entities";
 import "./inventory.css";
-import { useStore } from "@/game/store";
+import { getState, useStore } from "@/game/store";
 import { ResourceIcons, ResourceType } from "@/game/data/resources";
 import { cn } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
@@ -10,41 +10,37 @@ import {
   useTransition,
   type SpringValue,
 } from "@react-spring/web";
-import { useOnce } from "@/lib/useOnce";
 import { canAffordBuilding } from "@/game/systems/constructionSystem";
 import ColorWheel from "./colorWheel";
+import { tutorialSteps } from "@/game/data/tutorial";
 
 function Inventory() {
   const {
-    world: { entities },
+    player: {
+      playerData: { tutorialIndex },
+    },
   } = useStore();
-  const [loaded, setLoaded] = useState(false);
-  const [cardsLoaded, setcardsLoaded] = useState(false);
   const [facilities, setFacilities] = useState<FacilityDataType[]>([]);
 
-  useOnce(() => {
-    const f = Object.entries(EntityData.facilities)
-      .map(([, entityData]) => entityData)
-      .filter((entityData) => entityData.tags.includes("startingItem"));
-    setFacilities(f);
-    document.addEventListener("gameLoaded", () => {
-      setLoaded(true);
-    });
-    return () => {
-      document.removeEventListener("gameLoaded", () => {});
-    };
-  });
-
   useEffect(() => {
-    // TODO: Remove hack to only show gravityhill at startup
-    if (!loaded) return;
-    if (cardsLoaded) return;
-    const f = Object.entries(EntityData.facilities)
-      .map(([, entityData]) => entityData)
-      .filter((entityData) => !facilities.includes(entityData));
-    setFacilities([...facilities, ...f]);
-    setcardsLoaded(true);
-  }, [cardsLoaded, entities, facilities, loaded]);
+    const loadInventoryItems = () => {
+      if (tutorialIndex <= tutorialSteps.length - 1) {
+        const f = Object.entries(EntityData.facilities)
+          .map(([, entityData]) => entityData)
+          .filter((entityData) =>
+            tutorialSteps[tutorialIndex].inventory.includes(entityData)
+          );
+        setFacilities(f);
+      } else {
+        const f = Object.entries(EntityData.facilities).map(
+          ([, entityData]) => entityData
+        );
+        setFacilities(f);
+      }
+    };
+
+    loadInventoryItems();
+  }, [tutorialIndex]);
 
   const listTransitions = useTransition(facilities, {
     config: config.gentle,
@@ -62,10 +58,9 @@ function Inventory() {
   return (
     <div className="inventory-bar">
       <ColorWheel />
-      {loaded &&
-        listTransitions((styles, entityData) => (
-          <InventoryItem {...entityData} style={styles} />
-        ))}
+      {listTransitions((styles, entityData) => (
+        <InventoryItem {...entityData} style={styles} />
+      ))}
     </div>
   );
 }
@@ -78,9 +73,9 @@ function InventoryItem(
     };
   }
 ) {
-  const { name, blurb, image, produces, costs, style } = props;
+  const { name, blurb, image, produces, generates, costs, style } = props;
   const {
-    input: { cursor, setInput, building },
+    input: { building },
   } = useStore();
 
   const tooExpensive = useMemo(() => !canAffordBuilding(props), [props]);
@@ -90,6 +85,7 @@ function InventoryItem(
   };
 
   const handleClick = () => {
+    const { setInput, cursor } = getState().input;
     if (building?.name === props.name) setInput({ building: undefined });
     else {
       setInput({ building: props });
@@ -141,23 +137,44 @@ function InventoryItem(
             })}
           </div>
           <div className="card-produces">
-            {Object.entries(produces).map(([key, value]) => {
-              const resource = value;
-              const IconComponent = ResourceIcons[resource[0] as ResourceType];
-              return (
-                <div
-                  key={key}
-                  className="card-produces-item flex flex-row items-center"
-                >
-                  <span className="card-produces-item-value inline">
-                    {resource[1]}
-                  </span>
-                  {IconComponent && (
-                    <IconComponent className="ml-0.5 inline self-center" />
-                  )}
-                </div>
-              );
-            })}
+            {produces &&
+              Object.entries(produces).map(([key, value]) => {
+                const resource = value;
+                const IconComponent =
+                  ResourceIcons[resource[0] as ResourceType];
+                return (
+                  <div
+                    key={key}
+                    className="card-produces-item flex flex-row items-center"
+                  >
+                    <span className="card-produces-item-value inline">
+                      {resource[1]}
+                    </span>
+                    {IconComponent && (
+                      <IconComponent className="ml-0.5 inline self-center" />
+                    )}
+                  </div>
+                );
+              })}
+            {generates &&
+              Object.entries(generates).map(([key, value]) => {
+                const resource = value;
+                const IconComponent =
+                  ResourceIcons[resource[0] as ResourceType];
+                return (
+                  <div
+                    key={key}
+                    className="card-produces-item flex flex-row items-center"
+                  >
+                    <span className="card-produces-item-value inline">
+                      {resource[1]}
+                    </span>
+                    {IconComponent && (
+                      <IconComponent className="ml-0.5 inline self-center" />
+                    )}
+                  </div>
+                );
+              })}
           </div>
         </div>
       </animated.div>

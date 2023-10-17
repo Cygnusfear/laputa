@@ -5,6 +5,8 @@ import { IResource } from "../types/entities";
 import { ResourceDataType } from "../data/entities";
 import prand from "pure-rand";
 
+const mapScale = 1000;
+
 function ResourceFactory() {
   const {
     world: { addEntity, getEntityByPosition },
@@ -17,9 +19,9 @@ function ResourceFactory() {
   const randomEmptyPosition = () => {
     let attempts = 0;
     while (attempts < 300) {
-      const x = Math.floor(Math.random() * 100 - 50);
+      const x = Math.floor(Math.random() * mapScale - mapScale * 0.5);
       const y = Math.floor(Math.random() * 8) + 1;
-      const z = Math.floor(Math.random() * 100 - 50);
+      const z = Math.floor(Math.random() * mapScale - mapScale * 0.5);
       const position = new Vector3(x, y, z);
       const entity = getEntityByPosition(position);
       if (entity === undefined) {

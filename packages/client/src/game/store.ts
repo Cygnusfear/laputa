@@ -7,7 +7,7 @@ import { IEntity } from "./types/entities";
 import { Assets } from "./utils/importer";
 import { FacilityDataType } from "./data/entities";
 import { DefaultMaterials, ResourceType } from "./data/resources";
-import { PlayerData, createNewPlayerData } from "./data/player";
+import { PlayerData, initializePlayer } from "./data/player";
 
 export interface World {
   entities: IEntity[];
@@ -42,6 +42,7 @@ export interface Input {
 
 export type IPlayer = {
   playerData: PlayerData;
+  setPlayerData: (playerData: PlayerData) => void;
   hasResources: (
     resources: { resource: ResourceType; amount: number }[]
   ) => boolean;
@@ -51,7 +52,6 @@ export type IPlayer = {
   addResources: (
     resources: { resource: ResourceType; amount: number }[]
   ) => void;
-  setTutorialIndex: (step: number) => void;
 };
 
 export interface IState {
@@ -68,15 +68,16 @@ const octree = new PointOctree<IEntity>(min, max);
 
 const useStore = create<IState>((set, get) => ({
   player: {
-    playerData: createNewPlayerData(),
-    setTutorialIndex: (step) => {
+    playerData: initializePlayer({}),
+    setPlayerData(playerData) {
+      const newPlayerData = {
+        ...get().player.playerData,
+        ...playerData,
+      };
       set((s) => ({
         player: {
           ...s.player,
-          playerData: {
-            ...s.player.playerData,
-            tutorialIndex: step,
-          },
+          playerData: newPlayerData,
         },
       }));
     },
@@ -90,15 +91,18 @@ const useStore = create<IState>((set, get) => ({
     spendResouces: (
       resources: { resource: ResourceType; amount: number }[]
     ): void => {
+      const newPlayerData = {
+        ...get().player.playerData,
+        resources: resources.reduce((acc, { resource, amount }) => {
+          acc[resource] -= amount;
+          return acc;
+        }, get().player.playerData.resources),
+      };
       set((s) => ({
         player: {
           ...s.player,
           playerData: {
-            ...s.player.playerData,
-            resources: resources.reduce((acc, { resource, amount }) => {
-              acc[resource] -= amount;
-              return acc;
-            }, s.player.playerData.resources),
+            ...newPlayerData,
           },
         },
       }));
@@ -106,15 +110,18 @@ const useStore = create<IState>((set, get) => ({
     addResources: (
       resources: { resource: ResourceType; amount: number }[]
     ): void => {
+      const newPlayerData = {
+        ...get().player.playerData,
+        resources: resources.reduce((acc, { resource, amount }) => {
+          acc[resource] += amount;
+          return acc;
+        }, get().player.playerData.resources),
+      };
       set((s) => ({
         player: {
           ...s.player,
           playerData: {
-            ...s.player.playerData,
-            resources: resources.reduce((acc, { resource, amount }) => {
-              acc[resource] += amount;
-              return acc;
-            }, s.player.playerData.resources),
+            ...newPlayerData,
           },
         },
       }));
@@ -223,4 +230,6 @@ const useStore = create<IState>((set, get) => ({
 }));
 
 const { getState, setState } = useStore;
+
+Object.assign(window, { getState, setState });
 export { getState, setState, useStore };

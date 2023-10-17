@@ -18,6 +18,7 @@ export interface IFacility extends IEntity {
   variant: ModelDataType;
   colorPrimary: string;
   colorSecondary: string;
+  owner: string;
 }
 
 export interface IResource extends IEntity {

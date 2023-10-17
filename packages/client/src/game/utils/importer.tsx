@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { Material, Mesh, Texture } from "three";
 import type { GLTF } from "three-stdlib";
-import { useStore } from "../store";
+import { getState } from "../store";
 import { importModels } from "../data/models";
 import { importTextures } from "../data/resources";
 
@@ -16,8 +16,6 @@ export interface Assets {
 }
 
 function ModelLoader({ path }: { path: string }) {
-  const { addMesh } = useStore((state) => state.assets);
-
   useEffect(() => {
     useGLTF.preload(path);
   }, [path]);
@@ -29,6 +27,7 @@ function ModelLoader({ path }: { path: string }) {
   };
 
   useEffect(() => {
+    const addMesh = getState().assets.addMesh;
     if (model) {
       Object.values(model.nodes).forEach((node) => {
         try {
@@ -38,14 +37,12 @@ function ModelLoader({ path }: { path: string }) {
         }
       });
     }
-  }, [model, addMesh]);
+  }, [model]);
 
   return null;
 }
 
 function TextureLoader({ path }: { path: string }) {
-  const { addTexture } = useStore((state) => state.assets);
-
   useEffect(() => {
     useTexture.preload(path);
   }, [path]);
@@ -54,6 +51,7 @@ function TextureLoader({ path }: { path: string }) {
   const texture = useTexture(path) as Texture;
 
   useEffect(() => {
+    const addTexture = getState().assets.addTexture;
     if (texture) {
       importTextures.forEach((node) => {
         try {
@@ -63,7 +61,7 @@ function TextureLoader({ path }: { path: string }) {
         }
       });
     }
-  }, [texture, addTexture]);
+  }, [texture]);
 
   return null;
 }

@@ -1,4 +1,4 @@
-import { useStore } from "@/game/store";
+import { getState } from "@/game/store";
 import { IFacility } from "@/game/types/entities";
 import { palette } from "@/game/utils/palette";
 import { Directions, getRandom } from "@/lib/utils";
@@ -49,15 +49,13 @@ const CreatePositions = (
 };
 
 export function VineInstance(facilityProps: IFacility) {
-  const {
-    world: { getEntityByPosition },
-  } = useStore();
   const { position, scale, seed } = facilityProps;
   const [rng] = useState(prand.xoroshiro128plus(seed));
   const rand = () => prand.unsafeUniformIntDistribution(0, 1000, rng) / 1000;
   const [render] = useState(
     rand() > 0.6 &&
-      getEntityByPosition(Directions.UP().add(position)) === undefined
+      getState().world.getEntityByPosition(Directions.UP().add(position)) ===
+        undefined
   );
 
   const [amt] = useState(limit);
