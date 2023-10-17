@@ -34,6 +34,7 @@ function ResourceFactory() {
   const createResource = (resource: ResourceDataType, position: Vector3) => {
     console.log(position);
     const newResource: IResource = {
+      seed: time,
       entityType: "resource",
       position: position,
       scale: new Vector3(1, 1, 1).multiplyScalar(Math.random() * 0.3 + 0.7),

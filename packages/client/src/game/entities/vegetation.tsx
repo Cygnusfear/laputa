@@ -1,6 +1,6 @@
 import { Instances } from "@react-three/drei";
 import { useStore } from "../store";
-import { useMemo, useState } from "react";
+import { useMemo, useState, Fragment } from "react";
 import { IFacility } from "../types/entities";
 import { PlantInstance } from "./plants/plantInstance";
 import { VineInstance } from "./plants/vineInstance";
@@ -40,13 +40,10 @@ function Vegetation() {
       <Instances limit={limit} geometry={mesh} material={mat}>
         {plantFacilities.map((facility, idx) => {
           return (
-            <>
-              <PlantInstance key={idx + "" + facility.seed} {...facility} />
-              <VineInstance
-                key={idx + "" + facility.seed + "vine"}
-                {...facility}
-              />
-            </>
+            <Fragment key={idx + "" + facility.seed}>
+              <PlantInstance {...facility} />
+              <VineInstance {...facility} />
+            </Fragment>
           );
         })}
       </Instances>

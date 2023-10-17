@@ -3,7 +3,7 @@ import "./inventory.css";
 import { useStore } from "@/game/store";
 import { ResourceIcons, ResourceType } from "@/game/data/resources";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   animated,
   config,
@@ -11,6 +11,8 @@ import {
   type SpringValue,
 } from "@react-spring/web";
 import { useOnce } from "@/lib/useOnce";
+import { canAffordBuilding } from "@/game/systems/constructionSystem";
+import ColorWheel from "./colorWheel";
 
 function Inventory() {
   const {
@@ -59,6 +61,7 @@ function Inventory() {
 
   return (
     <div className="inventory-bar">
+      <ColorWheel />
       {loaded &&
         listTransitions((styles, entityData) => (
           <InventoryItem {...entityData} style={styles} />
@@ -80,18 +83,27 @@ function InventoryItem(
     input: { cursor, setInput, building },
   } = useStore();
 
+  const tooExpensive = useMemo(() => !canAffordBuilding(props), [props]);
+
   const hideCursor = () => {
     cursor.setCursor({ cursorState: "hidden" });
   };
 
   const handleClick = () => {
     if (building?.name === props.name) setInput({ building: undefined });
-    else setInput({ building: props });
+    else {
+      setInput({ building: props });
+      cursor.setCursor({ variant: 0 });
+    }
   };
 
   return (
     <animated.div
-      className={cn("card", building?.name === props.name && "selected-item")}
+      className={cn(
+        "card",
+        building?.name === props.name && "selected-item",
+        tooExpensive && "too-expensive"
+      )}
       onMouseOver={hideCursor}
       onMouseEnter={hideCursor}
       onClick={handleClick}

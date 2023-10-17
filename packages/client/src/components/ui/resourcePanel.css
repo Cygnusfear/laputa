@@ -1,0 +1,38 @@
+.resource-panel {
+  @apply fixed left-5 top-5 flex flex-col text-xs select-none;
+}
+
+.resource-item-wrapper {
+  @apply flex-row flex items-center;
+}
+
+.resource-name {
+  @apply bg-black/50 font-semibold rounded-lg p-1 px-2 mt-1 ml-2;
+  transform: scaleX(0);
+}
+
+.resource-name::first-letter {
+  text-transform: capitalize;
+}
+
+.resource-item-wrapper:hover .resource-name {
+  transform: scaleX(1);
+  opacity: 1;
+  transition: transform cubic-bezier(1, 0, 0, 1) 0.1s;
+}
+
+.resource-item {
+  @apply bg-white/10 rounded-lg p-1 px-2 mt-1 flex-row items-center flex;
+}
+
+.resource-item.too-expensive {
+  @apply bg-[#D8745D66] border-[#D8745D] border;
+}
+
+.hide-resource {
+  @apply opacity-20;
+}
+
+.resource-item-wrapper:hover .resource-item {
+  @apply opacity-100;
+}

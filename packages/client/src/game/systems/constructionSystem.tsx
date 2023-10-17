@@ -1,10 +1,9 @@
 import { Vector3 } from "three";
 import { getState } from "../store";
 import { createRef } from "react";
-import { getRandom } from "@/lib/utils";
+import { degreesToRadians, getRandom } from "@/lib/utils";
 import { palette } from "../utils/palette";
 import { IFacility } from "../types/entities";
-import prand from "pure-rand";
 import { floodFill } from "../utils/floodFill";
 import { FacilityDataType } from "../data/entities";
 
@@ -28,22 +27,51 @@ const getEntityInDirection = (position: Vector3, direction: Vector3) => {
   return getEntityByPosition(position.add(direction));
 };
 
+export const canAffordBuilding = (building: FacilityDataType) => {
+  const {
+    player: { hasResources },
+  } = getState();
+  return hasResources(
+    building.costs.map((c) => {
+      return { resource: c[0], amount: c[1] };
+    })
+  );
+};
+
 // TODO: extract input logic from construction system [refactor]
 // Should accept a building type as arg
-const buildFacility = (
-  position: Vector3,
-  building: FacilityDataType,
-  yaw?: number
-) => {
+const buildFacility = ({
+  position,
+  building,
+  levelInit = false,
+  yaw,
+  color,
+  variant,
+}: {
+  position: Vector3;
+  building: FacilityDataType;
+  levelInit: boolean;
+  yaw: number;
+  color: string;
+  variant: number;
+}) => {
   const {
     input: { cursor },
     world: { addEntity },
+    player: { spendResouces, addResources },
   } = getState();
 
   // Move Input logic away from here
   if (!building) {
     console.error("No building selected");
     return;
+  }
+  // Can afford?
+  if (!levelInit) {
+    if (!canAffordBuilding(building)) {
+      console.error("Sir you have no moolah");
+      return;
+    }
   }
 
   if (!canBuildAtPosition(position)) {
@@ -53,31 +81,38 @@ const buildFacility = (
   }
 
   // Use time for seeded random
-  const time = Date.now();
-  const rot = yaw || Math.PI * (Math.floor((Math.random() - 0.5) * 4) / 2);
+  const time = Date.now(); // NEED BLOCKTIME
+  const rot = yaw;
   const seed =
     (position.x * 10 * position.z * 10 * position.y * time * rot) ^
     (Math.random() * 0x100000000);
-  const rng = prand.xoroshiro128plus(seed);
 
   const newFacility: IFacility = {
     entityType: "facility",
     position: position,
     scale: new Vector3(1, 1, 1),
     colorPrimary: getRandom(palette.buildingPrimary),
-    colorSecondary: getRandom(palette.buildingSecondary),
+    colorSecondary: color,
     entityRef: createRef<THREE.Mesh>(),
-    rotation: new Vector3(0, rot, 0),
+    rotation: new Vector3(0, degreesToRadians(rot), 0),
     type: building,
-    variant:
-      building.variants[
-        prand.unsafeUniformIntDistribution(0, building.variants.length - 1, rng)
-      ],
-    createdTime: time,
+    variant: building.variants[variant],
+    createdTime: levelInit ? time - 100000 : time, // HACK NEED BLOCKTIME
     gravity: 0,
     seed: seed,
   };
 
+  if (!levelInit) {
+    const expenses = building.costs.map((c) => {
+      return { resource: c[0], amount: c[1] };
+    });
+    spendResouces(expenses);
+    const gains = building.produces.map((c) => {
+      return { resource: c[0], amount: c[1] };
+    });
+    addResources(gains);
+    console.log("net", gains, expenses);
+  }
   addEntity(newFacility);
   propagateGravity();
 };

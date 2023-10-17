@@ -31,43 +31,43 @@ contract FacilitySystemTest is MudTest {
   function testCanBuildFacilityTypeAtPosition() public {
     //cannot build at y < 0
     vm.expectRevert(abi.encodePacked("This facility cannot be built at this position"));
-    world.buildFacility(entityTypeIdGroundLevel, 1, -1, 1, 0);
+    world.buildFacility(entityTypeIdGroundLevel, 1, -1, 1, 0, "#ffffff", 0);
 
     //cannot build non ground level facility at y = 0
     vm.expectRevert(abi.encodePacked("This facility cannot be built at this position"));
-    world.buildFacility(entityTypeIdNonGroundLevel, 1, 0, 1, 0);
+    world.buildFacility(entityTypeIdNonGroundLevel, 1, 0, 1, 0, "#ffffff", 0);
 
     //build a ground level facility at position (1,0,1) with yaw 0
-    bytes32 entityKey01 = world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0);
+    bytes32 entityKey01 = world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0, "#ffffff", 0);
     PositionData memory posData01 = Position.get(entityKey01);
     assertEq(posData01.x, 1);
 
     //cannot build on occupied position
     vm.expectRevert(abi.encodePacked("This facility cannot be built at this position"));
-    world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0);
+    world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0, "#ffffff", 0);
 
     //cannot build entityTypeIdNonGroundLevel on position with nothing next to it
     vm.expectRevert(abi.encodePacked("This facility cannot be built at this position"));
-    world.buildFacility(entityTypeIdNonGroundLevel, 3, 0, 1, 0);
+    world.buildFacility(entityTypeIdNonGroundLevel, 3, 0, 1, 0, "#ffffff", 0);
 
     //can build entityTypeIdNonGroundLevel on position with something next to it
-    bytes32 entityKey02 = world.buildFacility(entityTypeIdNonGroundLevel, 1, 1, 1, 0);
+    bytes32 entityKey02 = world.buildFacility(entityTypeIdNonGroundLevel, 1, 1, 1, 0, "#ffffff", 0);
     PositionData memory posData02 = Position.get(entityKey02);
     assertEq(posData02.y, 1);
   }
 
   function testBuildFacility() public {
     //build an entityTypeIdGroundLevel facility at position (1,1,1) with yaw 0
-    bytes32 entityKey01 = world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0);
+    bytes32 entityKey01 = world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0, "#ffffff", 0);
     PositionData memory posData01 = Position.get(entityKey01);
     assertEq(posData01.x, 1);
 
     //cannot build on occupied position
     vm.expectRevert(abi.encodePacked("This facility cannot be built at this position"));
-    world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0);
+    world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0, "#ffffff", 0);
 
     //should be able to build on an unoccupied position
-    bytes32 entityKey03 = world.buildFacility(entityTypeIdGroundLevel, 2, 0, 1, 0);
+    bytes32 entityKey03 = world.buildFacility(entityTypeIdGroundLevel, 2, 0, 1, 0, "#ffffff", 0);
     PositionData memory posData03 = Position.get(entityKey03);
     assertEq(posData03.x, 2);
 
@@ -81,7 +81,7 @@ contract FacilitySystemTest is MudTest {
     world.destroyFacility(0);
 
     //build an entityTypeIdGroundLevel facility at position (1,1,1) with yaw 0
-    bytes32 entityKey01 = world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0);
+    bytes32 entityKey01 = world.buildFacility(entityTypeIdGroundLevel, 1, 0, 1, 0, "#ffffff", 0);
     PositionData memory posData01 = Position.get(entityKey01);
     assertEq(posData01.x, 1);
 
@@ -91,7 +91,7 @@ contract FacilitySystemTest is MudTest {
     assertNotEq(posData01b.x, 1);
 
     //should now be able to build on the same position after the original one was destroyed
-    bytes32 entityKey02 = world.buildFacility(11, 1, 0, 1, 0);
+    bytes32 entityKey02 = world.buildFacility(11, 1, 0, 1, 0, "#ffffff", 0);
     PositionData memory posData02 = Position.get(entityKey02);
     assertEq(posData02.x, 1);
   }

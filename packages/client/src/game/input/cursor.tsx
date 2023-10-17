@@ -1,11 +1,14 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Sparkles } from "@react-three/drei";
 import { AdditiveBlending, DoubleSide } from "three";
 
 import { useStore } from "../store";
 import { palette } from "../utils/palette";
-import { faceDirections } from "@/lib/utils";
-import { canBuildAtPosition } from "../systems/constructionSystem";
+import { degreesToRadians, faceDirections } from "@/lib/utils";
+import {
+  canAffordBuilding,
+  canBuildAtPosition,
+} from "../systems/constructionSystem";
 
 function Cursor() {
   const cursorRef = useRef<THREE.Mesh>(null);
@@ -26,7 +29,7 @@ function Cursor() {
 
   useEffect(() => {
     if (building) {
-      if (!canBuildAtPosition(position)) {
+      if (!canBuildAtPosition(position) || !canAffordBuilding(building)) {
         setCursor({ cursorState: "invalid" });
       } else {
         setCursor({ cursorState: "valid" });
@@ -82,6 +85,60 @@ function Cursor() {
           side={DoubleSide}
         />
       </mesh>
+      {building && <FacilityGhostRender />}
+    </group>
+  );
+}
+
+function FacilityGhostRender() {
+  const {
+    assets: { meshes },
+    input: {
+      building,
+      cursor: { yaw, variant: variantIndex, cursorState },
+    },
+  } = useStore();
+  const [rotation, setRotation] = useState([0, degreesToRadians(yaw), 0]);
+  const variant = building?.variants[variantIndex!];
+  const prototypes = useMemo(
+    () =>
+      Object.values(meshes).filter(
+        (mesh) => variant?.nodes.includes(mesh.name)
+      ),
+    [meshes, variant]
+  );
+  useEffect(() => {
+    setRotation([0, degreesToRadians(yaw), 0]);
+  }, [yaw]);
+
+  return (
+    <group
+      layers={30}
+      dispose={null}
+      scale={[1, 1, 1]}
+      position={[0, 0, 0]}
+      matrixAutoUpdate={false}
+      matrixWorldAutoUpdate={false}
+    >
+      {prototypes!.map((proto, index) => {
+        const color = palette.cursor;
+        return (
+          <mesh
+            dispose={null}
+            rotation={rotation}
+            position={[0, 0, 0]}
+            key={index}
+            geometry={proto.geometry}
+            receiveShadow
+            castShadow
+          >
+            <meshStandardMaterial
+              attach={`material`}
+              color={cursorState === "valid" ? color : palette.cursorInvalid}
+            />
+          </mesh>
+        );
+      })}
     </group>
   );
 }

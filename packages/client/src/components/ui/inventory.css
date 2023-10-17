@@ -43,6 +43,11 @@
   transition: all 0.3s;
 }
 
+.card.too-expensive .card-portrait {
+  @apply border-[#D8745D] bg-[#D8745D66];
+  transition: all 0.3s;
+}
+
 .card-title {
   @apply relative text-sm font-bold text-center leading-3;
   text-shadow:
@@ -70,4 +75,8 @@
   text-shadow:
     0px 0px 8px rgba(0, 0, 0, 0.1),
     0px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.card-wheel {
+  @apply relative flex h-24 w-24  cursor-pointer rounded-lg items-center;
 }

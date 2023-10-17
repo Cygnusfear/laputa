@@ -6,7 +6,8 @@ import { create } from "zustand";
 import { IEntity } from "./types/entities";
 import { Assets } from "./utils/importer";
 import { FacilityDataType } from "./data/entities";
-import { DefaultMaterials } from "./data/resources";
+import { DefaultMaterials, ResourceType } from "./data/resources";
+import { PlayerData, createNewPlayerData } from "./data/player";
 
 export interface World {
   entities: IEntity[];
@@ -24,6 +25,9 @@ export interface CursorProps {
   cursorState: CursorState;
   object: Object3D | Mesh | undefined;
   direction: Vector3;
+  color: string | undefined;
+  yaw: number;
+  variant: number;
   setCursor: (props: Partial<CursorProps>) => void;
 }
 
@@ -36,10 +40,18 @@ export interface Input {
   setInput: (props: Partial<Omit<Input, "cursor">>) => void;
 }
 
-export type TutorialState = "intro" | "gravityWell" | "regular";
 export type IPlayer = {
-  tutorialState: TutorialState;
-  setTutorialState: (state: TutorialState) => void;
+  playerData: PlayerData;
+  hasResources: (
+    resources: { resource: ResourceType; amount: number }[]
+  ) => boolean;
+  spendResouces: (
+    resources: { resource: ResourceType; amount: number }[]
+  ) => void;
+  addResources: (
+    resources: { resource: ResourceType; amount: number }[]
+  ) => void;
+  setTutorialIndex: (step: number) => void;
 };
 
 export interface IState {
@@ -56,12 +68,54 @@ const octree = new PointOctree<IEntity>(min, max);
 
 const useStore = create<IState>((set, get) => ({
   player: {
-    tutorialState: "intro",
-    setTutorialState: (state) => {
+    playerData: createNewPlayerData(),
+    setTutorialIndex: (step) => {
       set((s) => ({
         player: {
           ...s.player,
-          tutorialState: state,
+          playerData: {
+            ...s.player.playerData,
+            tutorialIndex: step,
+          },
+        },
+      }));
+    },
+    hasResources: (
+      resources: { resource: ResourceType; amount: number }[]
+    ): boolean => {
+      return resources.every(({ resource, amount }) => {
+        return get().player.playerData.resources[resource] >= amount;
+      });
+    },
+    spendResouces: (
+      resources: { resource: ResourceType; amount: number }[]
+    ): void => {
+      set((s) => ({
+        player: {
+          ...s.player,
+          playerData: {
+            ...s.player.playerData,
+            resources: resources.reduce((acc, { resource, amount }) => {
+              acc[resource] -= amount;
+              return acc;
+            }, s.player.playerData.resources),
+          },
+        },
+      }));
+    },
+    addResources: (
+      resources: { resource: ResourceType; amount: number }[]
+    ): void => {
+      set((s) => ({
+        player: {
+          ...s.player,
+          playerData: {
+            ...s.player.playerData,
+            resources: resources.reduce((acc, { resource, amount }) => {
+              acc[resource] += amount;
+              return acc;
+            }, s.player.playerData.resources),
+          },
         },
       }));
     },
@@ -107,10 +161,13 @@ const useStore = create<IState>((set, get) => ({
       }));
     },
     cursor: {
+      variant: 0,
+      color: undefined,
       position: new Vector3(),
       point: [],
       cursorState: "valid",
       object: undefined,
+      yaw: 0,
       direction: Directions.UP(),
       setCursor: (props: Partial<CursorProps>) => {
         set((state) => ({

@@ -14,8 +14,6 @@ export const importModels = [
   "/models/facilities.glb",
   "/models/resources.glb",
 ];
-export const importTextures = ["/textures/box01.webp"];
-
 const ModelData: ModelDataGroupType = {
   residence: [
     {
@@ -25,10 +23,10 @@ const ModelData: ModelDataGroupType = {
       colors: ["secondary", "primary"],
     },
     {
-      name: "Residence01",
-      nodes: ["CubaMid000", "CubaTop001"],
+      name: "Residence00",
+      nodes: ["CubaMid005", "CubaTop003", "CubaPole003"],
       materials: [],
-      colors: ["secondary", "primary"],
+      colors: ["secondary", "primary", "primary"],
     },
     {
       name: "Residence02",
@@ -49,10 +47,22 @@ const ModelData: ModelDataGroupType = {
       colors: ["secondary", "primary", "primary"],
     },
     {
+      name: "Residence01",
+      nodes: ["CubaMid000", "CubaTop001"],
+      materials: [],
+      colors: ["secondary", "primary"],
+    },
+    {
       name: "Residence05",
       nodes: ["CubaMid003", "CubaTop000", "CubaBottom000", "CubaPole001"],
       materials: [],
       colors: ["secondary", "primary", "primary", "primary"],
+    },
+    {
+      name: "Residence05",
+      nodes: ["CubaMid004", "CubaTop002", "CubaPole002"],
+      materials: [],
+      colors: ["secondary", "primary", "primary"],
     },
   ],
   engine: [
@@ -69,6 +79,22 @@ const ModelData: ModelDataGroupType = {
       nodes: ["Well00", "Well00001"],
       materials: ["Well"],
       colors: ["secondary", "primary"],
+    },
+  ],
+  miner: [
+    {
+      name: "Miner000",
+      nodes: ["Miner000", "Miner001"],
+      materials: [],
+      colors: ["secondary", "primary"],
+    },
+  ],
+  scaffold: [
+    {
+      name: "Scaffold000",
+      nodes: ["Scaffold000"],
+      materials: [],
+      colors: ["primary"],
     },
   ],
   crystal: [

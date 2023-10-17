@@ -67,20 +67,19 @@ const Facility = (props: IFacility) => {
       >
         <boxGeometry attach="geometry" args={[1, 1, 1]} />
         <meshBasicMaterial attach="material" visible={false} />
-        <Renderer {...props} />
+        <FacilityRenderer {...props} />
       </animated.mesh>
       <FacilitySound />
     </animated.group>
   );
 };
 
-const Renderer = (props: IFacility) => {
-  const { colorPrimary, colorSecondary, variant, rotation, position, type } =
+const FacilityRenderer = (props: IFacility) => {
+  const { colorPrimary, colorSecondary, variant, position, type, rotation } =
     props;
   const {
     assets: { meshes },
     world: { getEntityByPosition },
-    // input: { building },
   } = useStore();
 
   const prototypes = useMemo(
@@ -135,9 +134,7 @@ const Renderer = (props: IFacility) => {
       dispose={null}
       scale={[1, 1, 1]}
       position={[0, 0, 0]}
-      rotation={[0, rotation.y, 0]}
-      matrixAutoUpdate={false}
-      matrixWorldAutoUpdate={false}
+      rotation={rotation.toArray()}
     >
       {prototypes!.map((proto, index) => {
         const variantIndex = variant.nodes.indexOf(proto.name);

@@ -81,7 +81,9 @@ export function createSystemCalls(
     x: number = defaultVector3.x,
     y: number = defaultVector3.y,
     z: number = defaultVector3.z,
-    yaw: number = 0
+    yaw: number = 0,
+    color: string = "#ff00ff",
+    variant: number = 0
   ) => {
     const tx = await worldContract.write.buildFacility([
       entityTypeId,
@@ -89,6 +91,8 @@ export function createSystemCalls(
       y,
       z,
       yaw,
+      color,
+      variant,
     ]);
     await waitForTransaction(tx);
     return tx;
