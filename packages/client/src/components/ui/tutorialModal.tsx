@@ -20,16 +20,18 @@ function TutorialModal({
 
   return (
     <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black/50">
-      <div className="flex max-w-[50rem] flex-col rounded-lg border border-[#76EAE4] bg-[#76eae495] p-6 text-white shadow-lg">
+      <div className="flex max-w-[50rem] flex-col rounded-lg border border-[#FDBF7F] bg-[#C9986595] p-6 text-white shadow-lg">
         <div className="flex-1">
-          <h2 className="mb-4 text-2xl">{step.screens[screenIndex].name}</h2>
-          <div className="flex flex-row items-center justify-between gap-4">
-            <p
-              className="flex-1"
+          <h2 className="mb-4 text-2xl text-[#FEBE7F]">
+            {step.screens[screenIndex].name}
+          </h2>
+          <div className="flex flex-row items-start justify-start gap-4">
+            <div
+              className="flex-1 place-content-start items-start justify-self-start"
               dangerouslySetInnerHTML={{
                 __html: step.screens[screenIndex].text,
               }}
-            ></p>
+            ></div>
             <div className="flex-2">
               {currentScreen?.image && (
                 <img
@@ -38,7 +40,7 @@ function TutorialModal({
                   className="h-auto w-80"
                 />
               )}
-              {currentScreen?.entity && (
+              {!currentScreen?.image && currentScreen?.entity && (
                 <img
                   src={`/icons/${currentScreen.entity.image}`}
                   alt="Entity image"
@@ -51,7 +53,7 @@ function TutorialModal({
         <div className="mt-4 flex justify-end">
           <button
             onClick={() => onNext()}
-            className="rounded bg-[#76EAE4] px-4 py-2 text-white"
+            className="rounded bg-[#FDBF7F] px-4 py-2 text-white"
           >
             Next
           </button>
@@ -69,6 +71,7 @@ const Tutorial = () => {
 
   useEffect(() => {
     const checkTutorialCompletion = () => {
+      if (getState().player.playerData.finishedTutorial) return;
       const playerData = getState().player.playerData;
       const idx = getState().player.playerData.tutorialIndex;
       const currentTutorialStep = tutorialSteps[idx];

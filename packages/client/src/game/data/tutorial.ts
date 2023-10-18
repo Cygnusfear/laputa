@@ -47,7 +47,12 @@ export const tutorialSteps = [
     screens: [
       {
         name: "Power it up",
-        text: `As your floating city takes shape, energy becomes the lifeblood that keeps it alive and thriving. The Whirly Dynamo, with its spiraled elegance, is the key. This majestic device captures the whispers and roars of the cosmic breezes, converting them into the vital energy your city craves. Place it, and watch as it breathes life into your creations, illuminating the skies with its radiant aura.<br/><br/>
+        text: `As your floating city takes shape, energy shall become the lifeblood that keeps it alive and thriving. The Whirly Dynamo was born out of sheer necessity and innovation. As the demand for airborne cities increased, traditional power sources proved inefficient. Groundbreaking engineers and physicists from around the world convened, seeking a solution that could harness the vast energy potential of the stratosphere. Their answer was the Whirly Dynamo.<br/><br>Today, the Whirly Dynamo stands not just as a beacon of energy but as a testament to STAKAC's unwavering commitment to innovation and progress.`,
+        image: `turbine2.webp`,
+      },
+      {
+        name: "Power it up",
+        text: `Massive components were manufactured in STAKAC's off-site facilities and then airlifted for assembly, a process that required precision and coordination given the sheer size of the dynamo. This majestic device captures the whispers and roars of the cosmic breezes, converting them into the vital energy your city craves. Place it, and watch as it breathes life into your creations, illuminating the skies with its radiant aura.<br/><br/>
         ${EntityData.facilities.dynamo.description}`,
         entity: EntityData.facilities.dynamo,
       },
@@ -69,6 +74,7 @@ export const tutorialSteps = [
         text: `With the basic infrastructure in place, it's time to craft a space of warmth, comfort, and belonging. The Residence stands as a beacon of hope and rest for the citizens of your city. As you construct these abodes, you're not just building structures; you're crafting homes, stories, and memories. Place them with care, and watch as life, laughter, and dreams fill the spaces within.<br/><br/>
         ${EntityData.facilities.residence.description}`,
         entity: EntityData.facilities.residence,
+        image: "house.webp",
       },
     ],
   },
