@@ -1,5 +1,5 @@
 import { RefObject, useMemo } from "react";
-import { getState } from "../store";
+import { getState, useStore } from "../store";
 import { Mesh } from "three";
 import { animated, useSpring } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
@@ -17,6 +17,7 @@ import Wires from "./wires";
 // } from "react-icons/pi";
 import { FacilitySound } from "../audio/facilitySound";
 import useConstruction from "../systems/useConstruction";
+import { Outlines } from "@react-three/drei";
 
 const Facility = (props: IFacility) => {
   const { position, entityRef } = props;
@@ -74,6 +75,7 @@ const Facility = (props: IFacility) => {
 const FacilityRenderer = (props: IFacility) => {
   const { colorPrimary, colorSecondary, variant, position, type, rotation } =
     props;
+  const { building } = useStore().input;
 
   const prototypes = useMemo(
     () =>
@@ -94,6 +96,10 @@ const FacilityRenderer = (props: IFacility) => {
     if (entityBelow) return 0;
     return prand.unsafeUniformIntDistribution(0, 5, rand);
   }, [rand, position]);
+
+  const buildingMode = useMemo(() => {
+    return building && props.owner === getState().player.playerData?.address;
+  }, [building, props.owner]);
 
   // const IconWifi = useMemo(() => {
   //   switch (props.gravity) {
@@ -162,6 +168,7 @@ const FacilityRenderer = (props: IFacility) => {
                 <meshLambertMaterial attach={`material`} color={color} />
               )
             }
+            {buildingMode && <Outlines thickness={0.03} color="#76EAE4" />}
           </mesh>
         );
       })}

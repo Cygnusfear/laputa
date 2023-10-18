@@ -1,15 +1,23 @@
 import { IFacility } from "../types/entities";
-import EntityData, { FacilityDataType } from "./entities";
 import { ResourceType } from "./resources";
+import { setItem } from "window-async-local-storage";
 
 export type PlayerData = {
   resources: { [key in ResourceType]: number };
   facilities: IFacility[];
   name: string;
   tutorialIndex: number;
+  finishedTutorial: boolean;
+  address: string;
 };
 
-export const createNewPlayerData = (name = "New Player"): PlayerData => {
+export const createNewPlayerData = ({
+  name,
+  address,
+}: {
+  name?: string;
+  address?: string;
+}): PlayerData => {
   return {
     resources: {
       LAPU: 1000,
@@ -21,55 +29,42 @@ export const createNewPlayerData = (name = "New Player"): PlayerData => {
       crystal: 1,
     },
     facilities: [],
-    name,
+    name: name || "New Player",
     tutorialIndex: 0,
+    finishedTutorial: false,
+    address: address || "",
   };
 };
 
-export type TutorialStep = {
-  name: string;
-  text: string;
-  inventory: FacilityDataType[];
-};
-
-export const tutorialSteps = [
-  {
-    name: "intro",
-    text: "Let's start by building a Gravity Hill",
-    inventory: [EntityData.facilities.gravityhill],
-  },
-  {
-    name: "power-up",
-    text: "Power it all up",
-    inventory: [
-      EntityData.facilities.gravityhill,
-      EntityData.facilities.dynamo,
-    ],
-  },
-  {
-    name: "living",
-    text: "Make it a life worth living",
-    inventory: [
-      EntityData.facilities.gravityhill,
-      EntityData.facilities.dynamo,
-      EntityData.facilities.residence,
-      EntityData.facilities.scaffold,
-    ],
-  },
-] as TutorialStep[];
-
-export const initializePlayer = () => {
+export const initializePlayer = ({
+  address,
+}: {
+  address?: string;
+}): PlayerData => {
   const player = window.localStorage.getItem("playerData");
   if (player) {
-    return JSON.parse(player);
+    const playerData = JSON.parse(player) as PlayerData;
+    playerData.address = address || playerData.address;
+    console.log("Loaded player data", playerData);
+    Object.assign(window, { player: playerData });
+    return playerData;
   } else {
-    const newPlayer = createNewPlayerData();
+    const newPlayer = createNewPlayerData({ address });
     savePlayer(newPlayer);
+    console.log("Created new player data", newPlayer);
+    Object.assign(window, { player: newPlayer });
     return newPlayer;
   }
 };
 
-export const savePlayer = (playerData: PlayerData) => {
-  window.localStorage.setItem("playerData", JSON.stringify(playerData));
-  console.log("Saved player data");
+export const savePlayer = async (playerData: PlayerData, verbose = false) => {
+  const cleanData = JSON.parse(JSON.stringify(playerData)) as PlayerData;
+  cleanData.facilities = [];
+  setItem("playerData", JSON.stringify(cleanData)).then(() => {
+    if (verbose) console.log("saved", cleanData);
+  });
+};
+
+export const hasFacility = (playerData: PlayerData, facilityId: number) => {
+  return playerData.facilities.some((f) => f.type.entityTypeId === facilityId);
 };

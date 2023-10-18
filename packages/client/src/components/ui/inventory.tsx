@@ -13,10 +13,12 @@ import {
 import { useOnce } from "@/lib/useOnce";
 import { canAffordBuilding } from "@/game/systems/constructionSystem";
 import ColorWheel from "./colorWheel";
+import { RotateUI } from "./rotateUI";
 
 function Inventory() {
   const {
     world: { entities },
+    input: { building },
   } = useStore();
   const [loaded, setLoaded] = useState(false);
   const [cardsLoaded, setcardsLoaded] = useState(false);
@@ -60,12 +62,15 @@ function Inventory() {
   });
 
   return (
-    <div className="inventory-bar">
-      <ColorWheel />
-      {loaded &&
-        listTransitions((styles, entityData) => (
-          <InventoryItem {...entityData} style={styles} />
-        ))}
+    <div className="inventory-wrapper">
+      {building && <RotateUI building={building} />}
+      <div className="inventory-bar">
+        <ColorWheel />
+        {loaded &&
+          listTransitions((styles, entityData) => (
+            <InventoryItem {...entityData} style={styles} />
+          ))}
+      </div>
     </div>
   );
 }
@@ -99,7 +104,14 @@ function InventoryItem(
     if (building?.name === props.name) setInput({ building: undefined });
     else {
       setInput({ building: props });
-      setCursor({ variant: 0 });
+      const vari = Math.max(
+        0,
+        Math.floor(Math.random() * (props.variants.length - 1))
+      );
+      setCursor({
+        variant: vari,
+        yaw: Math.floor(Math.random() * 4) * 90,
+      });
     }
   };
 

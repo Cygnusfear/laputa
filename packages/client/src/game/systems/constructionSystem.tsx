@@ -47,6 +47,7 @@ const buildFacility = ({
   yaw,
   color,
   variant,
+  owner,
 }: {
   position: Vector3;
   building: FacilityDataType;
@@ -54,6 +55,7 @@ const buildFacility = ({
   yaw: number;
   color: string;
   variant: number;
+  owner: string;
 }) => {
   const {
     input: { cursor },
@@ -100,6 +102,7 @@ const buildFacility = ({
     createdTime: levelInit ? time - 100000 : time, // HACK NEED BLOCKTIME
     gravity: 0,
     seed: seed,
+    owner: owner,
   };
 
   if (!levelInit) {
@@ -110,9 +113,10 @@ const buildFacility = ({
     const gains = building.produces.map((c) => {
       return { resource: c[0], amount: c[1] };
     });
-    addResources(gains);
+    if (gains) addResources(gains);
     console.log("net", gains, expenses);
   }
+
   addEntity(newFacility);
   propagateGravity();
 };

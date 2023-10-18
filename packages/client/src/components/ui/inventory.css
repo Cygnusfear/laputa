@@ -1,5 +1,9 @@
+.inventory-wrapper {
+  @apply absolute bottom-3 w-full items-center justify-center flex-col flex;
+}
+
 .inventory-bar {
-  @apply absolute bottom-3 flex-row flex items-center justify-center w-full h-40 overflow-visible;
+  @apply flex-row flex items-center justify-center w-full h-40 overflow-visible;
 }
 
 .card {
@@ -27,7 +31,7 @@
 }
 
 .card-portrait {
-  @apply relative flex bg-cover h-24 w-24 self-end rounded-lg shadow-md cursor-pointer border border-transparent bg-[#76eae441];
+  @apply relative flex bg-cover h-24 w-24 self-end rounded-lg shadow-md cursor-pointer border border-transparent bg-[#76eae441] border-t-0;
 }
 
 .card-image {
@@ -79,4 +83,29 @@
 
 .card-wheel {
   @apply relative flex h-24 w-24  cursor-pointer rounded-lg items-center;
+}
+
+/*
+//  Rotation UI 
+*/
+
+.building-bar {
+  @apply flex-row flex items-center justify-center w-full overflow-visible gap-4;
+}
+
+.rotate-button,
+.variant-button {
+  @apply border border-t-0 border-[#FDBF7F] bg-[#C9986595] p-3 rounded-md text-[#fff];
+}
+
+.rotate-button {
+  @apply text-xl;
+}
+
+.variant-button {
+  @apply text-4xl;
+}
+
+.variant-button.disabled {
+  @apply text-[#e4e4e4] border-[#ececec] bg-[#eeeeee66];
 }

@@ -167,9 +167,15 @@ importers:
       three-stdlib:
         specifier: ^2.27.0
         version: 2.27.0(three@0.157.0)
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
       viem:
         specifier: 1.14.0
         version: 1.14.0(typescript@5.2.2)(zod@3.22.4)
+      window-async-local-storage:
+        specifier: ^1.1.0
+        version: 1.1.0
       zustand:
         specifier: ^4.4.3
         version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
@@ -198,6 +204,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.8
         version: 18.2.10
+      '@types/uuid':
+        specifier: ^9.0.6
+        version: 9.0.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.3
         version: 6.7.4(@typescript-eslint/parser@6.7.4)(eslint@8.50.0)(typescript@5.2.2)
@@ -2516,6 +2525,10 @@ packages:
       fflate: 0.6.10
       meshoptimizer: 0.18.1
     dev: false
+
+  /@types/uuid@9.0.6:
+    resolution: {integrity: sha512-BT2Krtx4xaO6iwzwMFUYvWBWkV2pr37zD68Vmp1CDV196MzczBRxuEpD6Pr395HAgebC/co7hOphs53r8V7jew==}
+    dev: true
 
   /@types/webxr@0.5.5:
     resolution: {integrity: sha512-HVOsSRTQYx3zpVl0c0FBmmmcY/60BkQLzVnpE9M1aG4f2Z0aKlBWfj4XZ2zr++XNBfkQWYcwhGlmuu44RJPDqg==}
@@ -6568,6 +6581,10 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
+
+  /window-async-local-storage@1.1.0:
+    resolution: {integrity: sha512-3vjSAv4cSSbIevseMNepd6AasFLy8YuQ77FwKj6HKKitO/8FKilOfEgSzVI3F2mJUynBsaZJNQiRFaDPRcXN6g==}
+    dev: false
 
   /wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
