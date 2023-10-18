@@ -6,8 +6,19 @@ import GameUI from "@/components/ui/gameUI";
 import Importer from "./utils/importer";
 import GameLoop from "./systems/gameLoop";
 import { Stats } from "@react-three/drei";
+import { useMemo, useState } from "react";
 
 function GameRoot() {
+  const [showFps, setShowFps] = useState(false);
+
+  useMemo(() => {
+    const toggleFPS = () => {
+      setShowFps(!showFps);
+    };
+
+    Object.assign(window, { showFps: toggleFPS });
+  }, [showFps]);
+
   return (
     <>
       <Canvas
@@ -21,7 +32,7 @@ function GameRoot() {
         <Importer />
         <GameLoop />
         <GameScene />
-        <Stats />
+        {showFps && <Stats />}
       </Canvas>
       <GameUI />
     </>
