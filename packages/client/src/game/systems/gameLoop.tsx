@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import resourceFactory from "./resourceFactory";
 import EntityData from "../data/entities";
 import { useMUD } from "@/useMUD";
@@ -32,7 +32,7 @@ function GameLoop() {
     }
   });
 
-  useMemo(() => {
+  useEffect(() => {
     const rotation = 90;
 
     const normalizeAngle = (angle: number) => {
@@ -45,6 +45,14 @@ function GameLoop() {
         getState().input.cursor.yaw + amount * rotation
       );
       getState().input.cursor.setCursor({ yaw: rot });
+    };
+
+    const rotateRight = () => {
+      rotateCursor(1);
+    };
+
+    const rotateLeft = () => {
+      rotateCursor(-1);
     };
 
     const nextVariant = () => {
@@ -83,18 +91,19 @@ function GameLoop() {
       if (e.key === "y") {
         newPlayer();
       }
+      e.stopPropagation();
     };
 
     Object.assign(window, { idkfa: cheat, newPlayer });
 
-    document.addEventListener("rotateRight", rotateCursor.bind(null, 1));
-    document.addEventListener("rotateLeft", rotateCursor.bind(null, -1));
+    document.addEventListener("rotateRight", rotateRight);
+    document.addEventListener("rotateLeft", rotateLeft);
     document.addEventListener("nextVariant", nextVariant);
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyDown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("rotateRight", rotateCursor.bind(null, 1));
-      document.removeEventListener("rotateLeft", rotateCursor.bind(null, -1));
+      document.removeEventListener("keyup", handleKeyDown);
+      document.removeEventListener("rotateRight", rotateRight);
+      document.removeEventListener("rotateLeft", rotateLeft);
       document.removeEventListener("nextVariant", nextVariant);
     };
   }, []);
@@ -133,7 +142,6 @@ function GameLoop() {
     // TODO: GameLoaded logic breaks when the map has zero entities [bug]
     for (const facility of facilities) {
       const { entity, typeId, position, yaw, color, variant, owner } = facility;
-      console.log(owner);
       if (!getState().world.getEntityByPosition(position)) {
         const building = Object.values(EntityData.facilities).find(
           (f) => f.entityTypeId === typeId || ""

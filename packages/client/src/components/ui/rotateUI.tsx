@@ -9,16 +9,19 @@ function RotateUI({ building }: { building: FacilityDataType }) {
   const [variantProps, setVariant] = useSpring(() => ({ scale: 1 }));
   const [rotateRightProps, setRotateRight] = useSpring(() => ({ scale: 1 }));
 
-  const handleRotateLeftClick = () => {
+  // @ts-ignore
+  const handleRotateLeftClick = (e: MouseEvent<HTMLDivElement, MouseEvent>) => {
     setRotateLeft({ scale: 0.9, config: config.wobbly });
     setTimeout(() => {
       setRotateLeft({ scale: 1, config: config.wobbly });
     }, 50);
     const event = new Event("rotateLeft");
     document.dispatchEvent(event);
+    e.stopPropagation();
   };
 
-  const handleVariantClick = () => {
+  // @ts-ignore
+  const handleVariantClick = (e: MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (building.variants.length <= 1) return;
     setVariant({ scale: 0.9, config: config.wobbly });
     setTimeout(() => {
@@ -26,21 +29,29 @@ function RotateUI({ building }: { building: FacilityDataType }) {
     }, 50);
     const event = new Event("nextVariant");
     document.dispatchEvent(event);
+    e.stopPropagation();
   };
 
-  const handleRotateRightClick = () => {
+  const handleRotateRightClick = (
+    // @ts-ignore
+    e: MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     setRotateRight({ scale: 0.9, config: config.wobbly });
     setTimeout(() => {
       setRotateRight({ scale: 1, config: config.wobbly });
     }, 50);
     const event = new Event("rotateRight");
     document.dispatchEvent(event);
+    e.stopPropagation();
   };
 
   return (
     <div className="building-bar">
       <animated.div style={rotateLeftProps}>
-        <div className="rotate-button" onClick={handleRotateLeftClick}>
+        <div
+          className="rotate-button"
+          onClick={(e) => handleRotateLeftClick(e)}
+        >
           <FaRotateLeft />
         </div>
       </animated.div>
@@ -51,14 +62,17 @@ function RotateUI({ building }: { building: FacilityDataType }) {
             "variant-button",
             building.variants.length <= 1 && "disabled"
           )}
-          onClick={handleVariantClick}
+          onClick={(e) => handleVariantClick(e)}
         >
           <VscSymbolVariable />
         </div>
       </animated.div>
 
       <animated.div style={rotateRightProps}>
-        <div className="rotate-button" onClick={handleRotateRightClick}>
+        <div
+          className="rotate-button"
+          onClick={(e) => handleRotateRightClick(e)}
+        >
           <FaRotateRight />
         </div>
       </animated.div>
