@@ -8,6 +8,7 @@ verbosity = 2
 src = "src"
 test = "test"
 out = "out"
+gas_limit = 3000000000
 allow_paths = [
   # pnpm symlinks to the project root's node_modules
   "../../node_modules",
@@ -36,3 +37,6 @@ eth_rpc_url = "https://sepolia-rpc.scroll.io/"
 
 [profile.mantle-testnet]
 eth_rpc_url = "https://rpc.testnet.mantle.xyz"
+
+[profile.sepolia]
+eth_rpc_url = "https://ethereum-sepolia.publicnode.com"
