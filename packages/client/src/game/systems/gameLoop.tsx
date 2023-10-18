@@ -72,9 +72,15 @@ function GameLoop() {
       }
     };
 
+    document.addEventListener("rotateRight", rotateCursor.bind(null, 1));
+    document.addEventListener("rotateLeft", rotateCursor.bind(null, -1));
+    document.addEventListener("nextVariant", nextVariant);
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("rotateRight", rotateCursor.bind(null, 1));
+      document.removeEventListener("rotateLeft", rotateCursor.bind(null, -1));
+      document.removeEventListener("nextVariant", nextVariant);
     };
   }, []);
 

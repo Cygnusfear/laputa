@@ -40,7 +40,6 @@ function useConstruction() {
       color,
       variant,
     ];
-    console.log(build);
     if (canBuildAtPosition(position) && canAffordBuilding(building)) {
       queueAsyncCall(async () => {
         console.trace("buildFacility hook", position, build);
