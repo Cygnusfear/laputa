@@ -32,13 +32,6 @@ function GameLoop() {
   });
 
   useMemo(() => {
-    const {
-      input: {
-        building,
-        cursor: { setCursor, yaw, variant },
-      },
-      player: { addResources },
-    } = getState();
     const rotation = 90;
 
     const normalizeAngle = (angle: number) => {
@@ -47,15 +40,16 @@ function GameLoop() {
     };
 
     const rotateCursor = (amount: number) => {
-      const rot = normalizeAngle(yaw + amount * rotation);
-      setCursor({ yaw: rot });
-      console.log(rot, yaw);
+      const rot = normalizeAngle(
+        getState().input.cursor.yaw + amount * rotation
+      );
+      getState().input.cursor.setCursor({ yaw: rot });
     };
 
     const nextVariant = () => {
-      const length = building?.variants.length || 0;
-      const next = (variant + 1) % length;
-      setCursor({ variant: next });
+      const length = getState().input.building?.variants.length || 0;
+      const next = (getState().input.cursor.variant + 1) % length;
+      getState().input.cursor.setCursor({ variant: next });
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -69,7 +63,7 @@ function GameLoop() {
         nextVariant();
       }
       if (e.key === "t") {
-        addResources([
+        getState().player.addResources([
           { resource: "LAPU", amount: 1000 },
           { resource: "crystal", amount: 5 },
           { resource: "power", amount: 15 },

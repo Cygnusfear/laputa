@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNProgress } from "@tanem/react-nprogress";
 
 import "./loadingScreen.css";
@@ -14,7 +14,7 @@ function LoadingScreen() {
     minimum: 0.01,
   });
 
-  useEffect(() => {
+  useMemo(() => {
     const fadeOut = () => {
       setLoading(false);
       setTimeout(() => {
