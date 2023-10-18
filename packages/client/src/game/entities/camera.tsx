@@ -1,54 +1,42 @@
 import { useEffect, useRef } from "react";
-import {
-  OrbitControls,
-  OrbitControlsProps,
-  PerspectiveCamera,
-} from "@react-three/drei";
-import { useOnce } from "@/lib/useOnce";
+import { CameraControls, PerspectiveCamera } from "@react-three/drei";
 import { BackgroundMusic } from "../audio/backgroundMusic";
+import { Group } from "three";
+import useCameraMoveHook from "../utils/useCameraMove";
 
 function Camera() {
-  const orbitRef = useRef<OrbitControlsProps>(null!);
+  const groupRef = useRef<Group>(null!);
+  const orbitRef = useRef<CameraControls>(null!);
 
   const setCameraAngle = () => {
-    if (orbitRef && orbitRef.current !== null) {
+    if ("current" in orbitRef) {
       orbitRef.current.maxPolarAngle = Infinity;
-      // @ts-ignore
-      orbitRef.current.setPolarAngle(Math.PI / 3);
+      orbitRef.current.minDistance = 7;
+      orbitRef.current.polarAngle = Math.PI / 2;
+      orbitRef.current.setPosition(7.894977, 6.020706, 10.526502);
+      console.log("camera set");
+      Object.assign(window, { cam: orbitRef.current });
     }
   };
 
-  useOnce(() => {
-    setCameraAngle();
-  });
-
   useEffect(() => {
-    document.addEventListener("gameLoaded", setCameraAngle);
-    return () => {
-      document.removeEventListener("gameLoaded", setCameraAngle);
-    };
+    setCameraAngle();
   }, []);
 
+  useCameraMoveHook(orbitRef);
+
   return (
-    <>
+    <group ref={groupRef}>
       <PerspectiveCamera position={[0, 50, 50]} fov={35}>
         <BackgroundMusic />
       </PerspectiveCamera>
-      <OrbitControls
-        target={[0, 0, 0]}
+      <CameraControls
         minDistance={7}
         maxDistance={100}
         maxPolarAngle={Math.PI / 3.5}
-        // @ts-ignore
         ref={orbitRef}
-        keys={{
-          LEFT: "a", //left arrow
-          UP: "w", // up arrow
-          RIGHT: "d", // right arrow
-          BOTTOM: "s", // down arrow
-        }}
       />
-    </>
+    </group>
   );
 }
 

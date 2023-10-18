@@ -1,5 +1,5 @@
 import { RefObject, useMemo } from "react";
-import { useStore } from "../store";
+import { getState } from "../store";
 import { Mesh } from "three";
 import { animated, useSpring } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
@@ -21,15 +21,12 @@ import useConstruction from "../systems/useConstruction";
 const Facility = (props: IFacility) => {
   const { position, entityRef } = props;
   const { constructFacility } = useConstruction();
-  const {
-    input: { cursor },
-  } = useStore();
 
   const { onMouseMove } = useInput((event: MouseInputEvent) => {
     if (event.event.faceIndex === undefined) return;
     const idx = Math.floor(event.event.faceIndex / 2);
     const direction = event.position.clone().add(faceDirections[idx!]);
-    cursor.setCursor({
+    getState().input.cursor.setCursor({
       position: direction,
       direction: faceDirections[idx!].clone().negate(),
     });
@@ -37,7 +34,7 @@ const Facility = (props: IFacility) => {
   }, entityRef);
 
   const { onMouseDown, onMouseClick } = useInput((event) => {
-    constructFacility(cursor.position);
+    constructFacility(getState().input.cursor.position);
     event.event.stopPropagation();
   }, entityRef);
 
@@ -77,17 +74,13 @@ const Facility = (props: IFacility) => {
 const FacilityRenderer = (props: IFacility) => {
   const { colorPrimary, colorSecondary, variant, position, type, rotation } =
     props;
-  const {
-    assets: { meshes },
-    world: { getEntityByPosition },
-  } = useStore();
 
   const prototypes = useMemo(
     () =>
-      Object.values(meshes).filter(
+      Object.values(getState().assets.meshes).filter(
         (mesh) => variant?.nodes.includes(mesh.name)
       ),
-    [meshes, variant]
+    [variant]
   );
 
   const rand = useMemo(() => {
@@ -96,10 +89,11 @@ const FacilityRenderer = (props: IFacility) => {
   }, []);
 
   const numWires = useMemo(() => {
+    const getEntityByPosition = getState().world.getEntityByPosition;
     const entityBelow = getEntityByPosition(Directions.DOWN().add(position));
     if (entityBelow) return 0;
     return prand.unsafeUniformIntDistribution(0, 5, rand);
-  }, [rand, position, getEntityByPosition]);
+  }, [rand, position]);
 
   // const IconWifi = useMemo(() => {
   //   switch (props.gravity) {

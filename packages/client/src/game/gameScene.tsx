@@ -6,13 +6,30 @@ import Facility from "./entities/facility";
 import { IFacility, IResource } from "./types/entities";
 import Background from "./entities/background";
 import Resource from "./entities/resource";
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { Vegetation } from "./entities/vegetation";
 
 function GameScene() {
   const {
     world: { entities },
   } = useStore();
+
+  const entityRender = useMemo(() => {
+    return (
+      <>
+        {entities.map((entity, idx) => {
+          switch (entity.entityType) {
+            case "facility":
+              return <Facility key={idx} {...(entity as IFacility)} />;
+            case "resource":
+              return <Resource key={idx} {...(entity as IResource)} />;
+            default:
+              return null;
+          }
+        })}
+      </>
+    );
+  }, [entities]);
 
   return (
     <scene>
@@ -25,16 +42,7 @@ function GameScene() {
       <Suspense fallback={null}>
         <Background />
         <Ground />
-        {entities.map((entity, idx) => {
-          switch (entity.entityType) {
-            case "facility":
-              return <Facility key={idx} {...(entity as IFacility)} />;
-            case "resource":
-              return <Resource key={idx} {...(entity as IResource)} />;
-            default:
-              return null;
-          }
-        })}
+        {entityRender}
         <Vegetation />
       </Suspense>
       <Cursor />

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Sparkles } from "@react-three/drei";
 import { AdditiveBlending, DoubleSide } from "three";
 
-import { useStore } from "../store";
+import { getState, useStore } from "../store";
 import { palette } from "../utils/palette";
 import { degreesToRadians, faceDirections } from "@/lib/utils";
 import {
@@ -14,7 +14,7 @@ function Cursor() {
   const cursorRef = useRef<THREE.Mesh>(null);
   const {
     input: {
-      cursor: { position, cursorState, direction, setCursor },
+      cursor: { position, cursorState, direction },
       building,
     },
     assets: { textures },
@@ -28,6 +28,7 @@ function Cursor() {
   }, [direction]);
 
   useEffect(() => {
+    const { setCursor } = getState().input.cursor;
     if (building) {
       if (!canBuildAtPosition(position) || !canAffordBuilding(building)) {
         setCursor({ cursorState: "invalid" });
@@ -37,7 +38,7 @@ function Cursor() {
     } else {
       setCursor({ cursorState: "hidden" });
     }
-  }, [cursorState, building, position, setCursor]);
+  }, [cursorState, building, position]);
 
   return (
     <group
@@ -125,6 +126,7 @@ function FacilityGhostRender() {
         return (
           <mesh
             dispose={null}
+            // @ts-ignore
             rotation={rotation}
             position={[0, 0, 0]}
             key={index}

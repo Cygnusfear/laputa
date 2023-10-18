@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { PositionalAudio } from "@react-three/drei";
 import type { PositionalAudio as PositionalAudioImpl } from "three";
+import { useAudioContext } from "../utils/useAudioContext";
 
 const vol = 1;
 
@@ -51,35 +52,20 @@ export const Sound = ({
 export const BackgroundMusic = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [trackIndex, setTrackIndex] = useState(0);
-  const [gameLoaded, setGameLoaded] = useState(false);
-  const [audioContextCanStart, setAudioContextCanStart] = useState(false);
+
   const playNextTrack = () => {
     setTrackIndex((prevIndex) => (prevIndex + 1) % files.length);
   };
 
+  const { audioContextCanStart, gameLoaded } = useAudioContext();
+
   useEffect(() => {
-    if (gameLoaded) {
+    if (gameLoaded && audioContextCanStart) {
       setTimeout(() => {
         setGameStarted(true);
       }, 4000);
     }
   }, [gameLoaded, audioContextCanStart]);
-
-  useEffect(() => {
-    const setLoaded = () => {
-      setGameLoaded(true);
-    };
-
-    const setAudioCanStart = () => {
-      setAudioContextCanStart(true);
-    };
-    document.addEventListener("gameLoaded", setLoaded);
-    document.addEventListener("click", setAudioCanStart);
-    return () => {
-      document.removeEventListener("gameLoaded", setLoaded);
-      document.removeEventListener("click", setAudioCanStart);
-    };
-  });
 
   if (!gameStarted || !audioContextCanStart) return null;
   return (

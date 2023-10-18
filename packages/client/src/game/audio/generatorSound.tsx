@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { PositionalAudio } from "@react-three/drei";
 import type { PositionalAudio as PositionalAudioImpl } from "three";
 import { getRandom } from "@/lib/utils";
-import { useStore } from "../store";
+import { useAudioContext } from "../utils/useAudioContext";
 
 const files = [""]; //"/audio/generator-idle.webm"];
 
@@ -16,9 +16,8 @@ export const Sound = ({
   source: string;
 }) => {
   const ref = useRef<PositionalAudioImpl>(null!);
-  const {
-    player: { gameLoaded, audioContextCanStart },
-  } = useStore();
+
+  const { gameLoaded, audioContextCanStart } = useAudioContext();
 
   useEffect(() => {
     const doPlay = () => {

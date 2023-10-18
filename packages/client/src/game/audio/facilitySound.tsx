@@ -2,10 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { PositionalAudio } from "@react-three/drei";
 import type { PositionalAudio as PositionalAudioImpl } from "three";
 import { getRandom } from "@/lib/utils";
-import { useStore } from "../store";
+import { useAudioContext } from "../utils/useAudioContext";
 
 const vol = 0.5;
-
 const files = ["/audio/plop00.wav", "/audio/plop01.wav"];
 
 export const Sound = ({
@@ -18,9 +17,7 @@ export const Sound = ({
   source: string;
 }) => {
   const ref = useRef<PositionalAudioImpl>(null!);
-  const {
-    player: { gameLoaded, audioContextCanStart },
-  } = useStore();
+  const { audioContextCanStart, gameLoaded } = useAudioContext();
 
   useEffect(() => {
     const doPlay = () => {

@@ -1,6 +1,6 @@
 import { IResource } from "../types/entities";
 import { useMemo } from "react";
-import { useStore } from "../store";
+import { getState } from "../store";
 import HeightLine from "./heightLine";
 // import { Sparkles } from "@react-three/drei";
 
@@ -17,16 +17,13 @@ function Resource(props: IResource) {
 
 const Renderer = (props: IResource) => {
   const { variant, scale } = props;
-  const {
-    assets: { meshes },
-  } = useStore();
 
   const prototypes = useMemo(
     () =>
-      Object.values(meshes).filter(
+      Object.values(getState().assets.meshes).filter(
         (mesh) => variant?.nodes.includes(mesh.name)
       ),
-    [meshes, variant]
+    [variant]
   );
 
   if (!variant || !prototypes || prototypes.length < 1) {
