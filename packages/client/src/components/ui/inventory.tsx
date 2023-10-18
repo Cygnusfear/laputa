@@ -1,6 +1,6 @@
 import EntityData, { FacilityDataType } from "@/game/data/entities";
 import "./inventory.css";
-import { useStore } from "@/game/store";
+import { getState, useStore } from "@/game/store";
 import { ResourceIcons, ResourceType } from "@/game/data/resources";
 import { cn } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
@@ -80,20 +80,26 @@ function InventoryItem(
 ) {
   const { name, blurb, image, produces, costs, style } = props;
   const {
-    input: { cursor, setInput, building },
+    input: { building },
   } = useStore();
 
   const tooExpensive = useMemo(() => !canAffordBuilding(props), [props]);
 
   const hideCursor = () => {
-    cursor.setCursor({ cursorState: "hidden" });
+    getState().input.cursor.setCursor({ cursorState: "hidden" });
   };
 
   const handleClick = () => {
+    const {
+      input: { setInput },
+      input: {
+        cursor: { setCursor },
+      },
+    } = getState();
     if (building?.name === props.name) setInput({ building: undefined });
     else {
       setInput({ building: props });
-      cursor.setCursor({ variant: 0 });
+      setCursor({ variant: 0 });
     }
   };
 

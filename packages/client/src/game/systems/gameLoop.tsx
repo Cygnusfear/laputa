@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useMemo } from "react";
 import resourceFactory from "./resourceFactory";
 import EntityData from "../data/entities";
 import { useMUD } from "@/useMUD";
@@ -6,7 +6,7 @@ import { Vector3 } from "three";
 import { buildFacility } from "./constructionSystem";
 import { useEntityQuery } from "@latticexyz/react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
-import { useStore } from "../store";
+import { getState } from "../store";
 import { useOnce } from "@/lib/useOnce";
 
 let loaded = false;
@@ -21,14 +21,6 @@ function GameLoop() {
       OwnedBy,
     },
   } = useMUD();
-  const {
-    world: { getEntityByPosition },
-    input: {
-      building,
-      cursor: { setCursor, yaw, variant },
-    },
-    player: { addResources },
-  } = useStore();
 
   // Startup
   useOnce(() => {
@@ -39,7 +31,14 @@ function GameLoop() {
     }
   });
 
-  useEffect(() => {
+  useMemo(() => {
+    const {
+      input: {
+        building,
+        cursor: { setCursor, yaw, variant },
+      },
+      player: { addResources },
+    } = getState();
     const rotation = 90;
 
     const normalizeAngle = (angle: number) => {
@@ -83,7 +82,7 @@ function GameLoop() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [addResources, building?.variants.length, setCursor, variant, yaw]);
+  }, []);
 
   const facilities = useEntityQuery([
     Has(Position),
@@ -108,7 +107,7 @@ function GameLoop() {
     return e;
   });
 
-  useEffect(() => {
+  useMemo(() => {
     // Debug for hiding the loading screen on new world
     const event = new Event("gameLoaded");
     document.dispatchEvent(event);
@@ -117,7 +116,7 @@ function GameLoop() {
     // TODO: GameLoaded logic breaks when the map has zero entities [bug]
     for (const facility of facilities) {
       const { entity, typeId, position, yaw, color, variant } = facility;
-      if (!getEntityByPosition(position)) {
+      if (!getState().world.getEntityByPosition(position)) {
         const building = Object.values(EntityData.facilities).find(
           (f) => f.entityTypeId === typeId || ""
         );
@@ -140,7 +139,7 @@ function GameLoop() {
       const event = new Event("gameLoaded");
       document.dispatchEvent(event);
     }
-  }, [facilities, getEntityByPosition]);
+  }, [facilities]);
 
   return <></>;
 }

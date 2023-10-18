@@ -5,6 +5,7 @@ import { ACESFilmicToneMapping, Color } from "three";
 import GameUI from "@/components/ui/gameUI";
 import Importer from "./utils/importer";
 import GameLoop from "./systems/gameLoop";
+import { Stats } from "@react-three/drei";
 
 function GameRoot() {
   return (
@@ -20,6 +21,7 @@ function GameRoot() {
         <Importer />
         <GameLoop />
         <GameScene />
+        <Stats />
       </Canvas>
       <GameUI />
     </>
