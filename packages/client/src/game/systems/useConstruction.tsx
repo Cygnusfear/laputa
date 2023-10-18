@@ -30,6 +30,7 @@ function useConstruction() {
         : getRandom(palette.buildingSecondary)) || "#ffffff";
     const variant = cursor.variant;
     const yaw = cursor.yaw || 0;
+    const owner = getState().player.playerData.address;
 
     const build = [
       building.entityTypeId,
@@ -39,11 +40,13 @@ function useConstruction() {
       yaw,
       color,
       variant,
+      owner,
     ];
     if (canBuildAtPosition(position) && canAffordBuilding(building)) {
       queueAsyncCall(async () => {
         console.trace("buildFacility hook", position, build);
         try {
+          // @ts-ignore
           const result = await mudBuildFacility(...build);
           console.log("mudBuildFacility result", result);
         } catch (error) {
@@ -57,6 +60,7 @@ function useConstruction() {
         levelInit: false,
         variant,
         color,
+        owner,
       });
     } else {
       console.error("Cannot build here", position);

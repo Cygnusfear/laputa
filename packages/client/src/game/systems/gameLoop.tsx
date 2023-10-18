@@ -95,6 +95,7 @@ function GameLoop() {
     const orientation = getComponentValueStrict(Orientation, entity);
     const type = getComponentValueStrict(EntityType, entity);
     const customization = getComponentValueStrict(EntityCustomization, entity);
+    const ownedBy = getComponentValueStrict(OwnedBy, entity);
     const e = {
       entity,
       typeId: type.typeId,
@@ -103,6 +104,7 @@ function GameLoop() {
       yaw: orientation.yaw,
       color: customization.color,
       variant: customization.variant,
+      owner: ownedBy.owner,
     };
     return e;
   });
@@ -115,7 +117,8 @@ function GameLoop() {
     // we're going to check which entities don't exist yet and build new ones:
     // TODO: GameLoaded logic breaks when the map has zero entities [bug]
     for (const facility of facilities) {
-      const { entity, typeId, position, yaw, color, variant } = facility;
+      const { entity, typeId, position, yaw, color, variant, owner } = facility;
+      console.log(owner);
       if (!getState().world.getEntityByPosition(position)) {
         const building = Object.values(EntityData.facilities).find(
           (f) => f.entityTypeId === typeId || ""
@@ -131,6 +134,7 @@ function GameLoop() {
           yaw,
           color,
           variant,
+          owner,
         });
         loaded = true;
       }

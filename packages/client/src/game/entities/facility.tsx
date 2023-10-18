@@ -17,6 +17,7 @@ import Wires from "./wires";
 // } from "react-icons/pi";
 import { FacilitySound } from "../audio/facilitySound";
 import useConstruction from "../systems/useConstruction";
+import { Outlines } from "@react-three/drei";
 
 const Facility = (props: IFacility) => {
   const { position, entityRef } = props;
@@ -122,6 +123,9 @@ const FacilityRenderer = (props: IFacility) => {
     return null;
   }
 
+  const playerOwned = props.owner === getState().player.playerData?.address;
+  console.log(props.owner, getState().player.playerData?.address, playerOwned);
+
   return (
     <group
       layers={30}
@@ -162,6 +166,7 @@ const FacilityRenderer = (props: IFacility) => {
                 <meshLambertMaterial attach={`material`} color={color} />
               )
             }
+            {playerOwned && <Outlines thickness={0.02} color="#FDBF7F" />}
           </mesh>
         );
       })}

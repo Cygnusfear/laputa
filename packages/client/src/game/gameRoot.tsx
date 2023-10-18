@@ -7,9 +7,22 @@ import Importer from "./utils/importer";
 import GameLoop from "./systems/gameLoop";
 import { Stats } from "@react-three/drei";
 import { useMemo, useState } from "react";
+import { useMUD } from "@/useMUD";
+import { initializePlayer } from "./data/player";
+import { getState } from "./store";
 
 function GameRoot() {
   const [showFps, setShowFps] = useState(false);
+  const {
+    network: {
+      walletClient: { account },
+    },
+  } = useMUD();
+
+  useMemo(() => {
+    const player = initializePlayer({ address: account.address });
+    getState().player.setPlayerData(player);
+  }, [account]);
 
   useMemo(() => {
     const toggleFPS = () => {
