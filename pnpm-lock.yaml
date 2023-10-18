@@ -131,6 +131,9 @@ importers:
       ethers:
         specifier: ^5.7.0
         version: 5.7.2
+      hold-event:
+        specifier: ^1.1.0
+        version: 1.1.0
       lodash.debounce:
         specifier: ^4.0.8
         version: 4.0.8
@@ -4241,6 +4244,10 @@ packages:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
     dependencies:
       react-is: 16.13.1
+    dev: false
+
+  /hold-event@1.1.0:
+    resolution: {integrity: sha512-dBziMRU5X/wT6Wc8mRnvqtrkCzUtzCYKK1l/lnhy1o1SIvhh2juuNL1pCgVq9JsL60LVyDNjQ8axI6UkWNI+Tw==}
     dev: false
 
   /hosted-git-info@2.8.9:
