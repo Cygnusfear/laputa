@@ -170,6 +170,9 @@ importers:
       viem:
         specifier: 1.14.0
         version: 1.14.0(typescript@5.2.2)(zod@3.22.4)
+      window-async-local-storage:
+        specifier: ^1.1.0
+        version: 1.1.0
       zustand:
         specifier: ^4.4.3
         version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
@@ -6575,6 +6578,10 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
+
+  /window-async-local-storage@1.1.0:
+    resolution: {integrity: sha512-3vjSAv4cSSbIevseMNepd6AasFLy8YuQ77FwKj6HKKitO/8FKilOfEgSzVI3F2mJUynBsaZJNQiRFaDPRcXN6g==}
+    dev: false
 
   /wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}

@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import ModelData, { ModelDataType } from "./models";
 import { ResourceType } from "./resources";
 
@@ -10,6 +11,7 @@ export type DataType = {
   produces: [ResourceType, number, number][];
   variants: ModelDataType[];
   tags: EntityTag[];
+  renderers?: ReactNode[];
 };
 
 export type FacilityDataType = DataType & {

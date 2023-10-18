@@ -8,6 +8,7 @@ import { useEntityQuery } from "@latticexyz/react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 import { getState } from "../store";
 import { useOnce } from "@/lib/useOnce";
+import { createNewPlayerData, savePlayer } from "../data/player";
 
 let loaded = false;
 
@@ -52,6 +53,20 @@ function GameLoop() {
       getState().input.cursor.setCursor({ variant: next });
     };
 
+    const newPlayer = () => {
+      getState().player.setPlayerData(createNewPlayerData({}));
+    };
+
+    const cheat = () => {
+      getState().player.addResources([
+        { resource: "LAPU", amount: 1000 },
+        { resource: "crystal", amount: 5 },
+        { resource: "power", amount: 15 },
+        { resource: "gravity", amount: 15 },
+      ]);
+      savePlayer(getState().player.playerData!);
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "q") {
         rotateCursor(-1);
@@ -63,14 +78,14 @@ function GameLoop() {
         nextVariant();
       }
       if (e.key === "t") {
-        getState().player.addResources([
-          { resource: "LAPU", amount: 1000 },
-          { resource: "crystal", amount: 5 },
-          { resource: "power", amount: 15 },
-          { resource: "gravity", amount: 15 },
-        ]);
+        cheat();
+      }
+      if (e.key === "y") {
+        newPlayer();
       }
     };
+
+    Object.assign(window, { idkfa: cheat, newPlayer });
 
     document.addEventListener("rotateRight", rotateCursor.bind(null, 1));
     document.addEventListener("rotateLeft", rotateCursor.bind(null, -1));

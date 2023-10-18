@@ -1,5 +1,6 @@
 import { IFacility } from "../types/entities";
 import { ResourceType } from "./resources";
+import { setItem } from "window-async-local-storage";
 
 export type PlayerData = {
   resources: { [key in ResourceType]: number };
@@ -56,11 +57,12 @@ export const initializePlayer = ({
   }
 };
 
-export const savePlayer = async (playerData: PlayerData) => {
+export const savePlayer = async (playerData: PlayerData, verbose = false) => {
   const cleanData = JSON.parse(JSON.stringify(playerData)) as PlayerData;
   cleanData.facilities = [];
-  window.localStorage.setItem("playerData", JSON.stringify(cleanData));
-  console.log("saved", cleanData);
+  setItem("playerData", JSON.stringify(cleanData)).then(() => {
+    if (verbose) console.log("saved", cleanData);
+  });
 };
 
 export const hasFacility = (playerData: PlayerData, facilityId: number) => {

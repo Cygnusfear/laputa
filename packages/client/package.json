@@ -48,6 +48,7 @@
     "three": "^0.157.0",
     "three-stdlib": "^2.27.0",
     "viem": "1.14.0",
+    "window-async-local-storage": "^1.1.0",
     "zustand": "^4.4.3"
   },
   "devDependencies": {
