@@ -25,13 +25,13 @@ export const tutorialSteps = [
     screens: [
       {
         name: "A world of floating cities",
-        text: "In a realm where the vastness of the cosmos meets the dreams of mortals, floating cities known as Laputas drift amidst the stars, tethered only by the delicate dance of gravity and ambition.<br/><br/>As a visionary architect of this celestial expanse, you are tasked with weaving together resources, imagination, and the very essence of the universe, to sculpt a city that not only floats but thrives. Let the dance of construction and collaboration begin, for in this ballet of creation, every tile, every choice, and every alliance matters.<br/><br/>Welcome, builder of the skies, to a journey of wonder and infinite possibilities.",
+        text: "In a realm where the vastness of the cosmos meets the dreams of mortals, floating cities known as <b>Laputas</b> drift amidst the stars, tethered only by the delicate dance of gravity and ambition.<br/><br/>As a visionary architect of this celestial expanse, you are tasked with weaving together resources, imagination, and the very essence of the universe, to sculpt a city that not only floats but thrives. <br/>Let the dance of construction and collaboration begin, for in this ballet of creation, every tile, every choice, and every alliance matters.<br/><br/>Welcome, builder of the skies, to a journey of wonder and infinite possibilities.",
         image: "scroll.webp",
       },
       {
         name: "Into the skies!",
-        text: `Embark on the foundational step of your skyward journey: the Gravity Hill. This magnificent contraption is the beating heart of your floating haven, generating the essential force of gravity. Choose the Gravity Hill from your inventory, and place it to set the cornerstone of your ethereal city.<br/><br/>
-        ${EntityData.facilities.gravityhill.description}`,
+        text: `Embark on the foundational step of your skyward journey: the <b>Gravity Hill</b>. This magnificent contraption is the beating heart of your floating haven, generating the essential force of <b>gravity</b>.<br/><br/>
+        ${EntityData.facilities.gravityhill.description}<br/><br/><i><b>Choose the Gravity Hill from your inventory, and place it</b></i> to set the cornerstone of your ethereal city.`,
         entity: EntityData.facilities.gravityhill,
       },
     ],
@@ -48,7 +48,7 @@ export const tutorialSteps = [
       {
         name: "Power it up",
         text: `As your floating city takes shape, energy shall become the lifeblood that keeps it alive and thriving. The Whirly Dynamo was born out of sheer necessity and innovation. As the demand for airborne cities increased, traditional power sources proved inefficient. Groundbreaking engineers and physicists from around the world convened, seeking a solution that could harness the vast energy potential of the stratosphere. Their answer was the Whirly Dynamo.<br/><br>Today, the Whirly Dynamo stands not just as a beacon of energy but as a testament to STAKAC's unwavering commitment to innovation and progress.`,
-        image: `turbine2.webp`,
+        image: `turbine3.webp`,
       },
       {
         name: "Power it up",

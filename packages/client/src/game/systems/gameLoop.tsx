@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import resourceFactory from "./resourceFactory";
 import EntityData from "../data/entities";
 import { useMUD } from "@/useMUD";
@@ -21,7 +21,9 @@ function GameLoop() {
       EntityCustomization,
       OwnedBy,
     },
+    network: { latestBlock$ },
   } = useMUD();
+  const [, setLatestBlock] = useState<number>(null!);
 
   // Startup
   useOnce(() => {
@@ -31,6 +33,20 @@ function GameLoop() {
       createResource(EntityData.resources.crystalFloat, position!);
     }
   });
+
+  useEffect(() => {
+    const subscription = latestBlock$.subscribe((block) => {
+      console.log("Received block:", block);
+      const event = new CustomEvent("blockReceived", {
+        detail: parseInt(block.number!.toString()),
+      });
+      document.dispatchEvent(event);
+      setLatestBlock(parseInt(block.number!.toString()));
+    });
+
+    // Cleanup: Unsubscribe when the component is unmounted
+    return () => subscription.unsubscribe();
+  }, [latestBlock$]);
 
   useEffect(() => {
     const { setCursor, yaw, variant } = getState().input.cursor;
