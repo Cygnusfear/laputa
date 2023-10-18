@@ -1,5 +1,5 @@
 import { RefObject, useMemo } from "react";
-import { getState } from "../store";
+import { getState, useStore } from "../store";
 import { Mesh } from "three";
 import { animated, useSpring } from "@react-spring/three";
 import { MouseInputEvent, useInput } from "../input/useInput";
@@ -75,6 +75,7 @@ const Facility = (props: IFacility) => {
 const FacilityRenderer = (props: IFacility) => {
   const { colorPrimary, colorSecondary, variant, position, type, rotation } =
     props;
+  const { building } = useStore().input;
 
   const prototypes = useMemo(
     () =>
@@ -95,6 +96,10 @@ const FacilityRenderer = (props: IFacility) => {
     if (entityBelow) return 0;
     return prand.unsafeUniformIntDistribution(0, 5, rand);
   }, [rand, position]);
+
+  const buildingMode = useMemo(() => {
+    return building && props.owner === getState().player.playerData?.address;
+  }, [building, props.owner]);
 
   // const IconWifi = useMemo(() => {
   //   switch (props.gravity) {
@@ -122,9 +127,6 @@ const FacilityRenderer = (props: IFacility) => {
     console.error("No prototypes found for variant", variant, prototypes);
     return null;
   }
-
-  const playerOwned = props.owner === getState().player.playerData?.address;
-  console.log(props.owner, getState().player.playerData?.address, playerOwned);
 
   return (
     <group
@@ -166,7 +168,7 @@ const FacilityRenderer = (props: IFacility) => {
                 <meshLambertMaterial attach={`material`} color={color} />
               )
             }
-            {playerOwned && <Outlines thickness={0.02} color="#FDBF7F" />}
+            {buildingMode && <Outlines thickness={0.03} color="#76EAE4" />}
           </mesh>
         );
       })}
