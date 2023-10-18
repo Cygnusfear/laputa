@@ -5,6 +5,7 @@ import {
   PerspectiveCamera,
 } from "@react-three/drei";
 import { useOnce } from "@/lib/useOnce";
+import { BackgroundMusic } from "../audio/backgroundMusic";
 
 function Camera() {
   const orbitRef = useRef<OrbitControlsProps>(null!);
@@ -30,7 +31,9 @@ function Camera() {
 
   return (
     <>
-      <PerspectiveCamera position={[0, 50, 50]} fov={35} />
+      <PerspectiveCamera position={[0, 50, 50]} fov={35}>
+        <BackgroundMusic />
+      </PerspectiveCamera>
       <OrbitControls
         target={[0, 0, 0]}
         minDistance={7}
