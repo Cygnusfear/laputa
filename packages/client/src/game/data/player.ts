@@ -6,6 +6,7 @@ export type PlayerData = {
   facilities: IFacility[];
   name: string;
   tutorialIndex: number;
+  finishedTutorial: boolean;
   address: string;
 };
 
@@ -29,6 +30,7 @@ export const createNewPlayerData = ({
     facilities: [],
     name: name || "New Player",
     tutorialIndex: 0,
+    finishedTutorial: false,
     address: address || "",
   };
 };
@@ -57,7 +59,8 @@ export const initializePlayer = ({
 export const savePlayer = async (playerData: PlayerData) => {
   const cleanData = JSON.parse(JSON.stringify(playerData)) as PlayerData;
   cleanData.facilities = [];
-  // window.localStorage.setItem("playerData", JSON.stringify(cleanData));
+  window.localStorage.setItem("playerData", JSON.stringify(cleanData));
+  console.log("saved", cleanData);
 };
 
 export const hasFacility = (playerData: PlayerData, facilityId: number) => {

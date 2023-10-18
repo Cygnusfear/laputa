@@ -68,22 +68,31 @@ const Tutorial = () => {
   const [screenIndex, setScreenIndex] = useState<number>(0);
 
   useEffect(() => {
-    const playerData = getState().player.playerData;
     const checkTutorialCompletion = () => {
+      const playerData = getState().player.playerData;
       const idx = getState().player.playerData.tutorialIndex;
       const currentTutorialStep = tutorialSteps[idx];
+      console.log("checking");
       if (currentTutorialStep) {
         const requiredValid = hasRequiredFacilities(
           currentTutorialStep,
           playerData
         );
-        if (requiredValid && idx < tutorialSteps.length - 1) {
-          setScreenIndex(0);
-          getState().player.setPlayerData({
-            ...playerData,
-            tutorialIndex: currentStep + 1,
-          });
-          setCurrentStep(currentStep + 1);
+        if (requiredValid && idx <= tutorialSteps.length - 1) {
+          if (idx === tutorialSteps.length - 1) {
+            setScreenIndex(0);
+            getState().player.setPlayerData({
+              ...playerData,
+              finishedTutorial: true,
+            });
+          } else {
+            setScreenIndex(0);
+            getState().player.setPlayerData({
+              ...playerData,
+              tutorialIndex: currentStep + 1,
+            });
+            setCurrentStep(currentStep + 1);
+          }
         }
       }
     };

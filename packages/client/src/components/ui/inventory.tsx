@@ -17,14 +17,14 @@ import { tutorialSteps } from "@/game/data/tutorial";
 function Inventory() {
   const {
     player: {
-      playerData: { tutorialIndex },
+      playerData: { tutorialIndex, finishedTutorial },
     },
   } = useStore();
   const [facilities, setFacilities] = useState<FacilityDataType[]>([]);
 
   useEffect(() => {
     const loadInventoryItems = () => {
-      if (tutorialIndex <= tutorialSteps.length - 1) {
+      if (!finishedTutorial && tutorialSteps[tutorialIndex]) {
         const f = Object.entries(EntityData.facilities)
           .map(([, entityData]) => entityData)
           .filter((entityData) =>
@@ -40,7 +40,7 @@ function Inventory() {
     };
 
     loadInventoryItems();
-  }, [tutorialIndex]);
+  }, [finishedTutorial, tutorialIndex]);
 
   const listTransitions = useTransition(facilities, {
     config: config.gentle,
@@ -81,7 +81,7 @@ function InventoryItem(
   const tooExpensive = useMemo(() => !canAffordBuilding(props), [props]);
 
   const hideCursor = () => {
-    cursor.setCursor({ cursorState: "hidden" });
+    getState().input.cursor.setCursor({ cursorState: "hidden" });
   };
 
   const handleClick = () => {

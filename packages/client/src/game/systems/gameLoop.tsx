@@ -112,8 +112,8 @@ function GameLoop() {
 
   useEffect(() => {
     // Debug for hiding the loading screen on new world
-    // const event = new Event("gameLoaded");
-    // document.dispatchEvent(event);
+    const event = new Event("gameLoaded");
+    document.dispatchEvent(event);
 
     // we're going to check which entities don't exist yet and build new ones:
     // TODO: GameLoaded logic breaks when the map has zero entities [bug]
