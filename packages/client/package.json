@@ -47,6 +47,7 @@
     "tailwind-merge": "^1.14.0",
     "three": "^0.157.0",
     "three-stdlib": "^2.27.0",
+    "uuid": "^9.0.1",
     "viem": "1.14.0",
     "window-async-local-storage": "^1.1.0",
     "zustand": "^4.4.3"
