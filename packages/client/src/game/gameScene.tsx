@@ -8,6 +8,7 @@ import Background from "./entities/background";
 import Resource from "./entities/resource";
 import { Suspense, useMemo } from "react";
 import { Vegetation } from "./entities/vegetation";
+import FacilityEffectsRenderer from "./effects/facilityEffectsRenderer";
 
 function GameScene() {
   const {
@@ -44,6 +45,7 @@ function GameScene() {
         <Ground />
         {entityRender}
         <Vegetation />
+        <FacilityEffectsRenderer />
       </Suspense>
       <Cursor />
     </scene>
