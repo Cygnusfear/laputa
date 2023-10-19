@@ -168,7 +168,16 @@ const FacilityRenderer = (props: IFacility) => {
                 <meshLambertMaterial attach={`material`} color={color} />
               )
             }
-            {buildingMode && <Outlines thickness={0.03} color="#76EAE4" />}
+            {buildingMode && (
+              <Outlines
+                thickness={0.03}
+                color="#76EAE4"
+                screenspace={false}
+                opacity={1}
+                transparent={false}
+                angle={Math.PI}
+              />
+            )}
           </mesh>
         );
       })}

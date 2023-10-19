@@ -20,7 +20,6 @@ function GridRenderer() {
     fadeStrength: 2,
     followCamera: true,
     infiniteGrid: true,
-    depthTest: false,
   } as GridProps;
   return (
     <>
