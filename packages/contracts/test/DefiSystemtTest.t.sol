@@ -36,7 +36,7 @@ contract DefiSystemTest is MudTest {
     IERC20 lapu = IERC20(GameSetting.getLapuVaultAddress());
 
     //1. player get DAI from faucet
-    world.mockDaiFacuet(player01, amount01);
+    world.mockDaiFaucet(player01, amount01);
     assertEq(world.defiDaiBalanceOf(player01), amount01);
 
     vm.startPrank(player01);

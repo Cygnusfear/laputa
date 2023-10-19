@@ -34,7 +34,7 @@ export function createSystemCalls(
   { worldContract, waitForTransaction }: SetupNetworkResult,
   { Counter, Position, Orientation, EntityType, OwnedBy }: ClientComponents
 ) {
-  const defaultVector3 = new Vector3(1, 0, 1);
+  const defaultVector3 = new Vector3(1, 0, 3);
 
   const increment = async () => {
     /*
@@ -175,19 +175,19 @@ export function createSystemCalls(
     return allEntityMetadatas;
   };
 
-  const mudMockDaiFacuet = async (playerAddress, amount) => {
-    const tx = await worldContract.write.mockDAIFaucet(playerAddress, amount);
+  const mudMockDaiFaucet = async (playerAddress, amount) => {
+    const tx = await worldContract.write.mockDaiFaucet([playerAddress, amount]);
     await waitForTransaction(tx);
     return tx;
   };
 
   const mudDefiDaiBalanceOf = async (playerAddress) => {
-    const res = await worldContract.read.defiDaiBalanceOf(playerAddress);
+    const res = await worldContract.read.defiDaiBalanceOf([playerAddress]);
     return res;
   };
 
   const mudDefiLapuBalanceOf = async (playerAddress) => {
-    const res = await worldContract.read.defiLapuBalanceOf(playerAddress);
+    const res = await worldContract.read.defiLapuBalanceOf([playerAddress]);
     return res;
   };
 
@@ -207,7 +207,7 @@ export function createSystemCalls(
     mudBuildFacility,
     mudGetEntityMetadataAtPosition,
     mudGetAllFacilityEntityMetadatas,
-    mudMockDaiFacuet,
+    mudMockDaiFaucet,
     mudDefiDaiBalanceOf,
     mudDefiLapuBalanceOf,
     mudDefiGetTotalRewardBalance,
