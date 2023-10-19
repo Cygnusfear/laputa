@@ -6,6 +6,15 @@ export default mudConfig({
       keySchema: {},
       valueSchema: "uint32",
     },
+    GameSetting: {
+      keySchema: {},
+      valueSchema: {
+        aDaiAddress: "address",
+        defiPoolAddress: "address",
+        daiAddress: "address",
+        lapuVaultAddress: "address",
+      },
+    },
     Position: {
       valueSchema: {
         x: "int32",
