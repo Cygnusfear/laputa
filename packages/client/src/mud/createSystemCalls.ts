@@ -175,6 +175,27 @@ export function createSystemCalls(
     return allEntityMetadatas;
   };
 
+  const mudMockDaiFacuet = async (playerAddress, amount) => {
+    const tx = await worldContract.write.mockDAIFaucet(playerAddress, amount);
+    await waitForTransaction(tx);
+    return tx;
+  };
+
+  const mudDefiDaiBalanceOf = async (playerAddress) => {
+    const res = await worldContract.read.defiDaiBalanceOf(playerAddress);
+    return res;
+  };
+
+  const mudDefiLapuBalanceOf = async (playerAddress) => {
+    const res = await worldContract.read.defiLapuBalanceOf(playerAddress);
+    return res;
+  };
+
+  const mudDefiGetTotalRewardBalance = async () => {
+    const res = await worldContract.read.defiGetTotalRewardBalance();
+    return res;
+  };
+
   return {
     increment,
     mudGetEntityType,
@@ -186,5 +207,9 @@ export function createSystemCalls(
     mudBuildFacility,
     mudGetEntityMetadataAtPosition,
     mudGetAllFacilityEntityMetadatas,
+    mudMockDaiFacuet,
+    mudDefiDaiBalanceOf,
+    mudDefiLapuBalanceOf,
+    mudDefiGetTotalRewardBalance,
   };
 }

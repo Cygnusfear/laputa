@@ -8,7 +8,7 @@ import "../interfaces/IMockERC20.sol";
 import "../interfaces/ILapuVault.sol";
 
 contract MockSystem is System {
-  function mockDAIFacuet(address receiver, uint256 amount) public {
+  function mockDaiFacuet(address receiver, uint256 amount) public {
     IMockERC20 dai = IMockERC20(GameSetting.getDaiAddress());
     dai.faucet(receiver, amount);
   }
