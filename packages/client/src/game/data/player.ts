@@ -6,8 +6,8 @@ export type PlayerData = {
   resources: { [key in ResourceType]: number };
   facilities: IFacility[];
   name: string;
-  tutorialIndex: number;
-  finishedTutorial: boolean;
+  activeTutorials: string[];
+  finishedTutorials: string[];
   address: string;
 };
 
@@ -30,8 +30,8 @@ export const createNewPlayerData = ({
     },
     facilities: [],
     name: name || "New Player",
-    tutorialIndex: 0,
-    finishedTutorial: false,
+    activeTutorials: [],
+    finishedTutorials: [],
     address: address || "",
   };
 };

@@ -75,6 +75,7 @@ const useStore = create<IState>((set, get) => ({
         ...get().player.playerData,
         ...playerData,
       };
+      Object.assign(window, { player: newPlayerData });
       set((s) => ({
         player: {
           ...s.player,
