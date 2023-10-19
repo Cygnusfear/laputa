@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { CameraControls, PerspectiveCamera } from "@react-three/drei";
 import { BackgroundMusic } from "../audio/backgroundMusic";
 import { Group } from "three";
-import useCameraMoveHook from "../utils/useCameraMove";
+import CameraMove from "../input/cameraMove";
 
 function Camera() {
   const groupRef = useRef<Group>(null!);
@@ -23,19 +23,19 @@ function Camera() {
     setCameraAngle();
   }, []);
 
-  useCameraMoveHook(orbitRef);
-
   return (
     <group ref={groupRef}>
-      <PerspectiveCamera position={[0, 50, 50]} fov={35}>
-        <BackgroundMusic />
-      </PerspectiveCamera>
-      <CameraControls
-        minDistance={7}
-        maxDistance={100}
-        maxPolarAngle={Math.PI / 3.5}
-        ref={orbitRef}
-      />
+      <CameraMove orbitRef={orbitRef}>
+        <PerspectiveCamera position={[0, 50, 50]} fov={35}>
+          <BackgroundMusic />
+        </PerspectiveCamera>
+        <CameraControls
+          minDistance={7}
+          maxDistance={100}
+          maxPolarAngle={Math.PI / 3.5}
+          ref={orbitRef}
+        />
+      </CameraMove>
     </group>
   );
 }
