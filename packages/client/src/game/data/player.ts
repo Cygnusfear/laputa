@@ -66,5 +66,7 @@ export const savePlayer = async (playerData: PlayerData, verbose = false) => {
 };
 
 export const hasFacility = (playerData: PlayerData, facilityId: number) => {
-  return playerData.facilities.some((f) => f.type.entityTypeId === facilityId);
+  return !!playerData.facilities.find(
+    (f) => f.type.entityTypeId === facilityId
+  );
 };

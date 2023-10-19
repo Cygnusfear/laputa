@@ -6,11 +6,10 @@ import GameUI from "@/components/ui/gameUI";
 import Importer from "./utils/importer";
 import GameLoop from "./systems/gameLoop";
 import { Stats } from "@react-three/drei";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useMUD } from "@/useMUD";
-import { initializePlayer, savePlayer } from "./data/player";
+import { initializePlayer } from "./data/player";
 import { getState } from "./store";
-import { evaluateTutorials } from "./data/tutorial";
 
 function GameRoot() {
   const [showFps, setShowFps] = useState(false);
@@ -32,15 +31,6 @@ function GameRoot() {
 
     Object.assign(window, { showFps: toggleFPS });
   }, [showFps]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      savePlayer(getState().player.playerData);
-      evaluateTutorials();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <>

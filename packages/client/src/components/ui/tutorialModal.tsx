@@ -4,7 +4,7 @@ import {
   completeTutorial,
   tutorialSteps,
 } from "@/game/data/tutorial";
-import { getState, useStore } from "@/game/store";
+import { getState } from "@/game/store";
 import { useState, useEffect } from "react";
 import { useSpring, animated, config } from "@react-spring/web";
 
@@ -77,36 +77,34 @@ function TutorialModal({
 }
 
 const Tutorial = () => {
-  const {
-    player: { playerData },
-  } = useStore();
   const [currentTutorial, setCurrentTutorial] = useState<
     TutorialStep | undefined
   >(undefined);
   const [screenIndex, setScreenIndex] = useState<number>(0);
 
   useEffect(() => {
-    const playerData = getState().player.playerData;
-    console.log(currentTutorial, playerData.activeTutorials);
-    if (playerData.activeTutorials.length > 0) {
-      if (
-        currentTutorial === undefined ||
-        (currentTutorial &&
-          playerData.activeTutorials[0] !== currentTutorial?.name)
-      ) {
-        const tutorialStep = tutorialSteps.find(
-          (step) => step.name === playerData.activeTutorials[0]
-        );
-        setCurrentTutorial(tutorialStep);
-        setScreenIndex(0);
+    const setTutorial = () => {
+      const playerData = getState().player.playerData;
+      if (playerData.activeTutorials.length > 0) {
+        if (playerData.activeTutorials[0]) {
+          const tutorialStep = tutorialSteps.find(
+            (step) => step.name === playerData.activeTutorials[0]
+          );
+          setCurrentTutorial((prev) => {
+            if (prev != tutorialStep) {
+              setScreenIndex(0);
+              return tutorialStep;
+            }
+          });
+        }
       }
-    }
-  }, [
-    currentTutorial,
-    playerData,
-    playerData.activeTutorials,
-    playerData.finishedTutorials,
-  ]);
+    };
+
+    document.addEventListener("activeTutorial", setTutorial);
+    return () => {
+      document.removeEventListener("activeTutorial", setTutorial);
+    };
+  }, []);
 
   return (
     <>

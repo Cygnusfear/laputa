@@ -9,6 +9,7 @@ import { Has, getComponentValueStrict } from "@latticexyz/recs";
 import { getState } from "../store";
 import { useOnce } from "@/lib/useOnce";
 import { createNewPlayerData, savePlayer } from "../data/player";
+import { evaluateTutorials, tutorialSteps } from "../data/tutorial";
 
 let loaded = false;
 
@@ -135,8 +136,8 @@ function GameLoop() {
 
   useMemo(() => {
     // Debug for hiding the loading screen on new world
-    const event = new Event("gameLoaded");
-    document.dispatchEvent(event);
+    // const event = new Event("gameLoaded");
+    // document.dispatchEvent(event);
 
     // we're going to check which entities don't exist yet and build new ones:
     // TODO: GameLoaded logic breaks when the map has zero entities [bug]
@@ -167,6 +168,21 @@ function GameLoop() {
       document.dispatchEvent(event);
     }
   }, [facilities]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      savePlayer(getState().player.playerData);
+      if (
+        loaded &&
+        getState().player.playerData.finishedTutorials.length <
+          tutorialSteps.length
+      ) {
+        evaluateTutorials();
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return <></>;
 }

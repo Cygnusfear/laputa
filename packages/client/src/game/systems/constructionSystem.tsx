@@ -118,10 +118,12 @@ const buildFacility = ({
   }
   addEntity(newFacility);
   if (owner == getState().player.playerData?.address) {
-    getState().player.setPlayerData({
-      ...getState().player.playerData!,
-      facilities: [...getState().player.playerData!.facilities, newFacility],
-    });
+    if (!getState().player.playerData?.facilities.includes(newFacility)) {
+      getState().player.setPlayerData({
+        ...getState().player.playerData!,
+        facilities: [...getState().player.playerData!.facilities, newFacility],
+      });
+    }
   }
   propagateGravity();
 };

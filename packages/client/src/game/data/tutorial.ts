@@ -26,24 +26,30 @@ export const evaluateTutorials = async () => {
   for (const t of player.activeTutorials) {
     const activeTutorial = tutorialSteps.find((step) => step.name === t);
     if (activeTutorial?.completedCondition(player)) {
-      activeTutorials = activeTutorials.filter(
-        (t) => t !== activeTutorial.name
-      );
+      activeTutorials = [];
       if (!finishedTutorials.includes(activeTutorial.name)) {
         finishedTutorials.push(activeTutorial.name);
       }
     }
   }
-  for (const t of tutorialSteps.filter(
-    (t) => !finishedTutorials.includes(t.name)
-  )) {
-    const activeTutorial = tutorialSteps.find((step) => step.name === t.name);
-    if (
-      activeTutorial?.startCondition(player) &&
-      !activeTutorials.includes(t.name) &&
-      activeTutorials.length < 1
-    ) {
-      activeTutorials.push(activeTutorial.name);
+  if (activeTutorials.length < 1) {
+    for (const t of tutorialSteps.filter(
+      (t) => !finishedTutorials.includes(t.name)
+    )) {
+      const availabletutorial = t;
+      if (availabletutorial.completedCondition(player)) {
+        finishedTutorials.push(availabletutorial.name);
+        continue;
+      } else if (
+        availabletutorial?.startCondition(player) &&
+        !activeTutorials.includes(t.name)
+      ) {
+        activeTutorials.push(availabletutorial.name);
+        if (activeTutorials.length > 0) {
+          const event = new Event("activeTutorial");
+          document.dispatchEvent(event);
+        }
+      }
     }
   }
   getState().player.setPlayerData({
@@ -51,7 +57,6 @@ export const evaluateTutorials = async () => {
     activeTutorials,
     finishedTutorials,
   });
-  console.log(activeTutorials, finishedTutorials, player);
 };
 
 export const completeTutorial = async (tutorialName: string) => {
@@ -149,7 +154,7 @@ export const tutorialSteps = [
       {
         name: "A place to put your stuff",
         text: `With the basic infrastructure in place, it's time to craft a space of warmth, comfort, and belonging. The Residence stands as a beacon of hope and rest for the citizens of your city. As you construct these abodes, you're not just building structures; you're crafting homes, stories, and memories. Place them with care, and watch as life, laughter, and dreams fill the spaces within.<br/><br/>
-        ${EntityData.facilities.residence.description}`,
+        ${EntityData.facilities.residence.description}<br/><br/><b>Build a residence for your citizens</b>`,
         entity: EntityData.facilities.residence,
         image: "house.webp",
       },
@@ -164,8 +169,8 @@ export const tutorialSteps = [
       EntityData.facilities.residence,
       EntityData.facilities.scaffold,
     ],
-    completedCondition: () => {
-      return true;
+    completedCondition: (player: PlayerData) => {
+      return hasFacility(player, EntityData.facilities.residence.entityTypeId);
     },
     startCondition: (player: PlayerData) => {
       return hasFacility(player, EntityData.facilities.residence.entityTypeId);
