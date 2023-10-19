@@ -34,7 +34,7 @@ function TutorialModal({
   return (
     <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black/50">
       <animated.div className="flex max-w-[50rem] flex-col" style={props}>
-        <div className="flex-1  rounded-lg  bg-[#C99865] p-6 pb-10 text-white shadow-lg">
+        <div className="flex-1  rounded-lg  border-b border-[#FDBF7F33] bg-[#2B3840] p-6 pb-10 text-white shadow-lg">
           <h2 className="mb-4 text-2xl text-[#ffddbb]">
             {step.screens[screenIndex].name}
           </h2>
