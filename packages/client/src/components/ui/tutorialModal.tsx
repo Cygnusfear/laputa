@@ -33,34 +33,31 @@ function TutorialModal({
   });
   return (
     <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black/50">
-      <animated.div
-        className="flex max-w-[50rem] flex-col rounded-lg  bg-[#C99865] p-6 text-white shadow-lg"
-        style={props}
-      >
-        <div className="flex-1">
-          <h2 className="mb-4 text-2xl text-[#ffc992]">
+      <animated.div className="flex max-w-[50rem] flex-col" style={props}>
+        <div className="flex-1  rounded-lg  bg-[#C99865] p-6 pb-10 text-white shadow-lg">
+          <h2 className="mb-4 text-2xl text-[#ffddbb]">
             {step.screens[screenIndex].name}
           </h2>
-          <div className="flex flex-row items-start justify-start gap-4">
+          <div className="flex flex-row items-start justify-start gap-8">
             <div
-              className="flex-1 place-content-start items-start justify-self-start"
+              className="flex-1 grow place-content-start items-start justify-self-start"
               dangerouslySetInnerHTML={{
                 __html: step.screens[screenIndex].text,
               }}
             ></div>
-            <div className="flex-2">
+            <div className="flex-2 w-80">
               {currentScreen?.image && (
                 <img
                   src={`/art/${currentScreen.image}`}
                   alt="Tutorial image"
-                  className="h-auto w-80"
+                  className="h-auto w-full"
                 />
               )}
               {!currentScreen?.image && currentScreen?.entity && (
                 <img
                   src={`/icons/${currentScreen.entity.image}`}
                   alt="Entity image"
-                  className="mb-4 h-auto w-80"
+                  className="h-auto w-full"
                 />
               )}
             </div>

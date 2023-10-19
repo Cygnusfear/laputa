@@ -95,7 +95,7 @@
 
 .rotate-button,
 .variant-button {
-  @apply border border-t-0 border-[#FDBF7F] bg-[#C9986595] p-3 rounded-md text-[#fff];
+  @apply border border-t-0 border-[#FDBF7F] bg-[#C9986595] p-3 rounded-3xl text-[#fff];
 }
 
 .rotate-button {
