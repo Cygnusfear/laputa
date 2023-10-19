@@ -12,10 +12,8 @@ import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import "./IPoolAddressesProvider.sol";
 import "./IPool.sol";
 
-interface ILapuVault {
+interface ILapuVault is IERC20 {
   event LAPUMintedFromDeFiYield(uint256 amount);
-
-  event LAPURewardsTransferredTo(address indexed to, uint256 amount);
 
   function convertToShares(uint256 assets) external view returns (uint256);
 
@@ -42,9 +40,4 @@ interface ILapuVault {
    * @dev emitting event LAPUMintedFromDeFiYield(yield)
    */
   function mintLAPUAccordingToDeFiYield() external returns (uint256);
-
-  /**
-   * @dev emitting event LAPURewardsTransferredTo(to, amount)
-   */
-  function transferLAPURewardsTo(address to, uint256 amount) external;
 }

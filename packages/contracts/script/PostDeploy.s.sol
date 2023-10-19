@@ -38,9 +38,6 @@ contract PostDeploy is Script {
     MockERC20 mockDAI = new MockERC20("MockDAI", "mDAI");
     console.log("mockDAI deployed at:", address(mockDAI));
 
-    // Mint some mockDAI for the world contract
-    mockDAI.faucet(worldAddress, 1000);
-
     // Deploy LapuVault
     LapuVault lapuVault = new LapuVault(
       worldAddress,
@@ -51,7 +48,12 @@ contract PostDeploy is Script {
       IERC20(address(mockAToken))
     );
     console.log("lapuVault deployed at:", address(lapuVault));
-    IWorld(worldAddress).defiAssignContractAddresses(address(mockAToken), address(mockDAI), address(lapuVault));
+    IWorld(worldAddress).defiAssignContractAddresses(
+      address(mockAToken),
+      address(mockPool),
+      address(mockDAI),
+      address(lapuVault)
+    );
 
     vm.stopBroadcast();
   }
