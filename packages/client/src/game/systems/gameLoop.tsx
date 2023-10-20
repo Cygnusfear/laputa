@@ -205,7 +205,7 @@ function GameLoop() {
       ) {
         evaluateTutorials();
       }
-    }, 1000);
+    }, 500);
 
     return () => clearInterval(interval);
   }, []);

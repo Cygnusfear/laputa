@@ -93,6 +93,7 @@ export async function setupWallet(
 }
 
 export async function createComethWallet() {
+  console.time("cometh");
   window.localStorage.removeItem("comethWalletAddress");
   const localStorageAddress = window.localStorage.getItem(
     "comethWalletAddress"
@@ -109,16 +110,22 @@ export async function createComethWallet() {
   console.log(instance);
 
   if (localStorageAddress) {
-    await instance.connect(localStorageAddress);
+    instance.connect(localStorageAddress);
+    console.log("cometh");
   } else {
-    await instance.connect();
-    const walletAddress = await instance.getAddress();
-    window.localStorage.setItem("comethWalletAddress", walletAddress);
+    instance.connect().then(async () => {
+      const walletAddress = await instance.getAddress();
+      window.localStorage.setItem("comethWalletAddress", walletAddress);
+      console.log("cometh");
+    });
   }
+  console.timeEnd("cometh");
   // const provider = new ComethProvider(instance);
   // console.log(provider);
   return instance;
 }
+
+export async function connectComethWallet() {}
 
 /**
  * Creates a burner wallet using the provided network configuration and client options.

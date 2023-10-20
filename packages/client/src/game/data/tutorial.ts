@@ -14,9 +14,10 @@ export type TutorialStep = {
 
 export type TutorialScreen = {
   name: string;
-  text: string;
+  text?: string;
   image?: string;
   entity?: FacilityDataType;
+  hideNext?: boolean;
   onExitScreen?: () => boolean;
 };
 
@@ -191,11 +192,20 @@ export const tutorialSteps = [
       },
       {
         name: "Access to your vault",
-        text: `In your celestial city, even the intangible becomes precious. As you amass LAPU—the lifeblood of your soaring civilization—it's crucial to safeguard it. Begin by authorizing your unique fingerprint to fortify your vault. This acts as the key to your treasury, ensuring that your hard-earned wealth remains yours and yours alone. Take the first step in solidifying your skyward legacy.<br/><br/>Now that you're generating income, let's make sure we store it in a safe place for you.<br/><br/>`,
+        text: `In your celestial city, even the intangible becomes precious. As you amass LAPU—the lifeblood of your soaring civilization—it's crucial to safeguard it. Begin by authorizing your unique fingerprint to fortify your vault. This acts as the key to your treasury, ensuring that your hard-earned wealth remains yours and yours alone. Take the first step in solidifying your skyward legacy.<br/><br/>Now that you're generating income, let's make sure we store it in a safe place for you.<br/><br/><b>Let's create a passkey to store your assets safely</b>`,
         image: `vault2.webp`,
         onExitScreen: () => {
           createWallet();
         },
+      },
+      {
+        name: "Set up your vault access",
+        text: ``,
+        image: `vault2.webp`,
+        onExitScreen: () => {
+          tutorialFlags.hasHadWalletExplainer = true;
+        },
+        hideNext: true,
       },
     ],
   },
@@ -216,8 +226,8 @@ export const tutorialSteps = [
     },
     screens: [
       {
-        name: "Keeping it safe",
-        text: `Congratulations, your vault is now secured, anchored by your unique fingerprint. You've just laid the foundation of your financial fortress in the sky. Every LAPU you earn will be safely stored here, ready for you to invest in new technologies, facilities, or whatever your visionary mind desires. In this vault, your ambitions become tangible, your dreams within grasp. Forge ahead; the sky is no longer the limit.<br/><br/>`,
+        name: "Congratulations, you're all set!",
+        text: `Your vault is now secured, anchored by your unique fingerprint. You've just laid the foundation of your financial fortress in the sky. Every LAPU you earn will be safely stored here, ready for you to invest in new technologies, facilities, or whatever your visionary mind desires. In this vault, your ambitions become tangible, your dreams within grasp. <br/><br/>Forge ahead; the sky is no longer the limit.<br/><br/>`,
         image: `vault.webp`,
         onExitScreen: () => {
           tutorialFlags.hasHadWalletExplainer = true;

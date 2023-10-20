@@ -39,12 +39,14 @@ function TutorialModal({
             {step.screens[screenIndex].name}
           </h2>
           <div className="flex flex-row items-start justify-start gap-8">
-            <div
-              className="flex-1 grow place-content-start items-start justify-self-start"
-              dangerouslySetInnerHTML={{
-                __html: step.screens[screenIndex].text,
-              }}
-            ></div>
+            {step.screens[screenIndex].text && (
+              <div
+                className="flex-1 grow place-content-start items-start justify-self-start"
+                dangerouslySetInnerHTML={{
+                  __html: step.screens[screenIndex].text || "",
+                }}
+              ></div>
+            )}
             <div className="flex-2 w-80">
               {currentScreen?.image && (
                 <img
@@ -66,12 +68,14 @@ function TutorialModal({
           </div>
         </div>
         <div className="mt-4 flex justify-end">
-          <button
-            onClick={() => onNext()}
-            className="cursor-pointer rounded border border-t-0 border-[#FDBF7F] bg-[#FDBF7Faa] px-4 py-2 text-white hover:bg-[#FDBF7Fee]"
-          >
-            Next
-          </button>
+          {!step.screens[screenIndex].hideNext && (
+            <button
+              onClick={() => onNext()}
+              className="cursor-pointer rounded border border-t-0 border-[#FDBF7F] bg-[#FDBF7Faa] px-4 py-2 text-white hover:bg-[#FDBF7Fee]"
+            >
+              Next
+            </button>
+          )}
         </div>
       </animated.div>
     </div>
