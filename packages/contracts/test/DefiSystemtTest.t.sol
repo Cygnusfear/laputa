@@ -54,7 +54,7 @@ contract DefiSystemTest is MudTest {
     assertEq(world.defiGetTotalRewardBalance(), amount02);
     vm.stopPrank();
 
-    //5. mock yield generation from DeFi pool (which we can call periodically from client)
+    //5. mock yield generation from DeFi pool (which we can call periodically call from client)
     world.mockYieldGenerationFromDeFiPool(amount03);
     assertEq(world.defiGetTotalRewardBalance(), amount02 + amount03);
 
