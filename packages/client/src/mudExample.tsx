@@ -6,7 +6,7 @@ import { useMUD } from "./useMUD";
 import { getState } from "./game/store";
 import { useState, useEffect } from "react";
 
-export const MudExample = () => {
+export const MudExample = ({ show = true }: { show?: boolean }) => {
   const {
     components: { Counter, GameSetting },
     systemCalls: {
@@ -49,10 +49,20 @@ export const MudExample = () => {
       )) as number;
       setPlayerDaiBalance(playerDaiBalance_);
 
+      // Update LAPU Balance
       const playerLapuBalance_ = (await mudDefiLapuBalanceOf(
         playerAddress
       )) as number;
       setPlayerLapuBalance(playerLapuBalance_);
+      const resources = getState().player?.playerData?.resources;
+      console.log("resources -> ", playerLapuBalance_);
+      getState().player?.setPlayerData({
+        ...getState().player?.playerData,
+        resources: {
+          ...resources,
+          LAPU: parseInt(playerLapuBalance_.toString()),
+        },
+      });
 
       const totalRewardBalance_ =
         (await mudDefiGetTotalRewardBalance()) as number;
@@ -96,6 +106,7 @@ export const MudExample = () => {
     return new Promise((resolve) => setTimeout(resolve, ms));
   };
 
+  if (!show) return null;
   return (
     <div>
       <div>

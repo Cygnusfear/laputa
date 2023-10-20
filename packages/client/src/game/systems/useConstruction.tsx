@@ -9,14 +9,34 @@ import {
 import { queueAsyncCall } from "../utils/asyncQueue";
 import { getRandom } from "@/lib/utils";
 import { palette } from "../utils/palette";
+import { useEffect } from "react";
 
 function useConstruction() {
   const {
-    systemCalls: { mudBuildFacility },
+    systemCalls: {
+      mudBuildFacility,
+      mudDefiConsumesLapuFromPlayer,
+      approveLapuToMudWorldForTheConnectedPlayer,
+    },
   } = useMUD();
   const {
     input: { building },
+    player: {
+      playerData: { address },
+    },
   } = getState();
+
+  useEffect(() => {
+    const approveOnLaunch = async () => {
+      const amount = 100000;
+      console.log("approveOnLaunch", address, amount);
+      approveLapuToMudWorldForTheConnectedPlayer(amount);
+    };
+
+    if (address !== "") {
+      approveOnLaunch();
+    }
+  }, [address, approveLapuToMudWorldForTheConnectedPlayer]);
 
   const constructFacility = async (position: Vector3) => {
     if (!building) return;
@@ -46,6 +66,15 @@ function useConstruction() {
       queueAsyncCall(async () => {
         console.trace("buildFacility hook", position, build);
         try {
+          const cost = building.costs.find((cost) => cost[0] === "LAPU");
+          if (cost) {
+            console.log(cost[1]);
+            const consume = await mudDefiConsumesLapuFromPlayer(
+              cost[1],
+              getState().player?.playerData?.address
+            );
+            console.log(consume);
+          }
           // @ts-ignore
           const result = await mudBuildFacility(...build);
           console.log("mudBuildFacility result", result);
