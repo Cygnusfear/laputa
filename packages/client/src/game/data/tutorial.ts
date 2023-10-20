@@ -1,3 +1,4 @@
+import { createComethWallet } from "@/mud/wallet";
 import { getState } from "../store";
 import EntityData, { FacilityDataType } from "./entities";
 import { PlayerData, hasFacility } from "./player";
@@ -9,7 +10,6 @@ export type TutorialStep = {
   screens: TutorialScreen[];
   completedCondition: (player: PlayerData) => boolean;
   startCondition: (player: PlayerData) => boolean;
-  onExitScreens?: () => boolean;
 };
 
 export type TutorialScreen = {
@@ -17,6 +17,13 @@ export type TutorialScreen = {
   text: string;
   image?: string;
   entity?: FacilityDataType;
+  onExitScreen?: () => boolean;
+};
+
+const tutorialFlags = {
+  hasCreatedWallet: false,
+  hasHadWalletExplainer: false,
+  // hasFinishedIntro: false,
 };
 
 export const evaluateTutorials = async () => {
@@ -26,7 +33,7 @@ export const evaluateTutorials = async () => {
   let activeTutorials = player.activeTutorials || [];
   for (const t of player.activeTutorials) {
     const activeTutorial = tutorialSteps.find((step) => step.name === t);
-    if (activeTutorial?.completedCondition(player)) {
+    if (activeTutorial && activeTutorial.completedCondition(player)) {
       activeTutorials = [];
       if (!finishedTutorials.includes(activeTutorial.name)) {
         finishedTutorials.push(activeTutorial.name);
@@ -42,7 +49,7 @@ export const evaluateTutorials = async () => {
         finishedTutorials.push(availabletutorial.name);
         continue;
       } else if (
-        availabletutorial?.startCondition(player) &&
+        availabletutorial.startCondition(player) &&
         !activeTutorials.includes(t.name)
       ) {
         activeTutorials.push(availabletutorial.name);
@@ -89,8 +96,8 @@ export const tutorialSteps = [
         EntityData.facilities.gravityhill.entityTypeId
       );
     },
-    startCondition: () => {
-      return true;
+    startCondition: (player: PlayerData) => {
+      return !player.finishedTutorials.includes("intro");
     },
     screens: [
       {
@@ -170,14 +177,11 @@ export const tutorialSteps = [
       EntityData.facilities.residence,
       EntityData.facilities.scaffold,
     ],
-    completedCondition: (player: PlayerData) => {
-      return hasWallet(player);
+    completedCondition: () => {
+      return hasWallet();
     },
     startCondition: (player: PlayerData) => {
       return hasFacility(player, EntityData.facilities.residence.entityTypeId);
-    },
-    onExitScreens: () => {
-      console.log("woop woop");
     },
     screens: [
       {
@@ -186,15 +190,50 @@ export const tutorialSteps = [
         image: `friends.webp`,
       },
       {
-        name: "Keep it safe",
-        text: `Now that you're generating income, let's make sure we store it in a safe place for you.<br/><br/>`,
+        name: "Access to your vault",
+        text: `In your celestial city, even the intangible becomes precious. As you amass LAPU—the lifeblood of your soaring civilization—it's crucial to safeguard it. Begin by authorizing your unique fingerprint to fortify your vault. This acts as the key to your treasury, ensuring that your hard-earned wealth remains yours and yours alone. Take the first step in solidifying your skyward legacy.<br/><br/>Now that you're generating income, let's make sure we store it in a safe place for you.<br/><br/>`,
         image: `vault2.webp`,
+        onExitScreen: () => {
+          createWallet();
+        },
+      },
+    ],
+  },
+  {
+    name: "keepitsafe",
+    text: "Make it a life worth living",
+    inventory: [
+      EntityData.facilities.gravityhill,
+      EntityData.facilities.dynamo,
+      EntityData.facilities.residence,
+      EntityData.facilities.scaffold,
+    ],
+    completedCondition: () => {
+      return tutorialFlags.hasHadWalletExplainer;
+    },
+    startCondition: () => {
+      return hasWallet() && tutorialFlags.hasCreatedWallet;
+    },
+    screens: [
+      {
+        name: "Keeping it safe",
+        text: `Congratulations, your vault is now secured, anchored by your unique fingerprint. You've just laid the foundation of your financial fortress in the sky. Every LAPU you earn will be safely stored here, ready for you to invest in new technologies, facilities, or whatever your visionary mind desires. In this vault, your ambitions become tangible, your dreams within grasp. Forge ahead; the sky is no longer the limit.<br/><br/>`,
+        image: `vault.webp`,
+        onExitScreen: () => {
+          tutorialFlags.hasHadWalletExplainer = true;
+        },
       },
     ],
   },
 ] as TutorialStep[];
 
-const hasWallet = (player: PlayerData) => {
-  player;
-  return false;
+const hasWallet = () => {
+  const comethWallet = window.localStorage.getItem("comethWalletAddress");
+  return comethWallet && comethWallet !== "";
+};
+
+const createWallet = async () => {
+  const wallet = await createComethWallet();
+  tutorialFlags.hasCreatedWallet = true;
+  console.log("woop woop", wallet);
 };

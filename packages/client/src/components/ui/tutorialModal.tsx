@@ -1,5 +1,9 @@
 // Tutorial.tsx
-import { TutorialStep, tutorialSteps } from "@/game/data/tutorial";
+import {
+  TutorialStep,
+  // completeTutorial,
+  tutorialSteps,
+} from "@/game/data/tutorial";
 import { getState } from "@/game/store";
 import { useState, useEffect } from "react";
 import { useSpring, animated, config } from "@react-spring/web";
@@ -110,15 +114,13 @@ const Tutorial = () => {
           step={currentTutorial}
           screenIndex={screenIndex}
           onNext={() => {
-            if (screenIndex + 1 > currentTutorial.screens.length - 1) {
-              if (currentTutorial.onExitScreens) {
-                currentTutorial.onExitScreens();
-              }
-              // completeTutorial(currentTutorial.name);
-              setScreenIndex(screenIndex + 1);
-            } else {
-              setScreenIndex(screenIndex + 1);
+            if (currentTutorial.screens[screenIndex].onExitScreen) {
+              currentTutorial.screens[screenIndex]!.onExitScreen!();
             }
+            // if (currentTutorial.screens.length - 1 === screenIndex) {
+            //   completeTutorial(currentTutorial.name);
+            // }
+            setScreenIndex(screenIndex + 1);
           }}
         />
       )}

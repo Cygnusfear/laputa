@@ -14,6 +14,8 @@
     "fmt:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache"
   },
   "dependencies": {
+    "@cometh/connect-sdk": "^1.1.2",
+    "@ethersproject/hash": "^5.7.0",
     "@latticexyz/common": "2.0.0-next.11",
     "@latticexyz/dev-tools": "2.0.0-next.11",
     "@latticexyz/react": "2.0.0-next.11",
