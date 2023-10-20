@@ -294,6 +294,16 @@ export function createSystemCalls(
     return tx;
   };
 
+  const lapuVaultGetTotalSupply = async () => {
+    const gameSetting = await getComponentValue(GameSetting, singletonEntity);
+    const data = await publicClient.readContract({
+      address: gameSetting?.lapuVaultAddress,
+      abi: IERC20Abi,
+      functionName: "totalSupply",
+    });
+    return data;
+  };
+
   return {
     increment,
     mudGetEntityType,
@@ -316,5 +326,6 @@ export function createSystemCalls(
     mudDefiConsumesLapuFromPlayer,
     mudMockYieldGenerationFromDeFiPool,
     mudMockReleaseRewardToPlayer,
+    lapuVaultGetTotalSupply,
   };
 }

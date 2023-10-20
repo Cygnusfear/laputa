@@ -21,6 +21,7 @@ export const MudExample = () => {
       mudDefiGetTotalRewardBalance,
       mudMockYieldGenerationFromDeFiPool,
       mudMockReleaseRewardToPlayer,
+      lapuVaultGetTotalSupply,
     },
   } = useMUD();
 
@@ -39,6 +40,7 @@ export const MudExample = () => {
   const [totalRewardBalance, setTotalRewardBalance] = useState<number | null>(
     null
   );
+  const [lapuVaultTvl, setLapuVaultTvl] = useState<bigint | null>(0);
 
   useEffect(() => {
     const refreshData = async () => {
@@ -55,6 +57,9 @@ export const MudExample = () => {
       const totalRewardBalance_ =
         (await mudDefiGetTotalRewardBalance()) as number;
       setTotalRewardBalance(totalRewardBalance_);
+
+      const lapuVaultTvl_ = (await lapuVaultGetTotalSupply()) as bigint;
+      setLapuVaultTvl(lapuVaultTvl_);
     };
 
     const refreshDataIntervalId = setInterval(refreshData, 1000);
@@ -66,6 +71,7 @@ export const MudExample = () => {
     mudDefiLapuBalanceOf,
     mudDefiGetTotalRewardBalance,
     playerAddress,
+    lapuVaultGetTotalSupply,
   ]);
 
   useEffect(() => {
@@ -97,12 +103,16 @@ export const MudExample = () => {
         <span> {playerLapuBalance?.toString() ?? "??"} LAPU</span>
       </div>
       <div>
-        Reward balance:{" "}
-        <span>{totalRewardBalance?.toString() ?? "??"} LAPU</span>
+        LAPUTA:{" "}
+        <span>
+          Reward balance {totalRewardBalance?.toString() ?? "??"} LAPU
+        </span>{" "}
+        <span>
+          Total rewarded {gameSetting?.totalRewarded?.toString() ?? "??"} LAPU
+        </span>
       </div>
       <div>
-        Total rewarded:{" "}
-        <span>{gameSetting?.totalRewarded?.toString() ?? "??"}</span>
+        LAPU VAULT TVL: <span>{lapuVaultTvl?.toString() ?? "??"} DAI</span>
       </div>
       <div>
         Counter: <span>{counter?.value ?? "??"}</span>
