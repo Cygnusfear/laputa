@@ -146,7 +146,7 @@ export const tutorialSteps = [
       EntityData.facilities.scaffold,
     ],
     completedCondition: (player: PlayerData) => {
-      return hasWallet(player);
+      return hasFacility(player, EntityData.facilities.residence.entityTypeId);
     },
     startCondition: (player: PlayerData) => {
       return hasFacility(player, EntityData.facilities.dynamo.entityTypeId);
