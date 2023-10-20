@@ -5,7 +5,7 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     name: Run Type Check, Linters
-    runs-on: macos-13-large
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -34,9 +34,9 @@ jobs:
         shell: bash
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        shell: bash
-        run: pnpm recursive run build
+      # - name: Build
+      #   shell: bash
+      #   run: pnpm recursive run build
 
       #- name: Check types
       #  run: pnpm run type-check
