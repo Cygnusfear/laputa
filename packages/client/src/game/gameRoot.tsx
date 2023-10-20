@@ -10,6 +10,7 @@ import { useMemo, useState } from "react";
 import { useMUD } from "@/useMUD";
 import { initializePlayer } from "./data/player";
 import { getState } from "./store";
+import { evaluateTutorials } from "./data/tutorial";
 
 function GameRoot() {
   const [showFps, setShowFps] = useState(false);
@@ -22,6 +23,8 @@ function GameRoot() {
   useMemo(() => {
     const player = initializePlayer({ address: account.address });
     getState().player.setPlayerData(player);
+
+    Object.assign(window, { startTutorial: evaluateTutorials });
   }, [account]);
 
   useMemo(() => {

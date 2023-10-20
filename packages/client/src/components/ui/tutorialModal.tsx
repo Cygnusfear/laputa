@@ -32,7 +32,7 @@ function TutorialModal({
     },
   });
   return (
-    <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black/50">
+    <div className="fixed left-0 top-0 flex h-full w-full select-none items-center justify-center bg-black/50">
       <animated.div className="flex max-w-[50rem] flex-col" style={props}>
         <div className="flex-1  rounded-lg  border-b border-[#FDBF7F33] bg-[#2B3840] p-6 pb-10 text-white shadow-lg">
           <h2 className="mb-4 text-2xl text-[#ffddbb]">
@@ -51,6 +51,7 @@ function TutorialModal({
                   src={`/art/${currentScreen.image}`}
                   alt="Tutorial image"
                   className="h-auto w-full"
+                  draggable="false"
                 />
               )}
               {!currentScreen?.image && currentScreen?.entity && (
@@ -58,6 +59,7 @@ function TutorialModal({
                   src={`/icons/${currentScreen.entity.image}`}
                   alt="Entity image"
                   className="h-auto w-full"
+                  draggable="false"
                 />
               )}
             </div>
@@ -83,28 +85,27 @@ const Tutorial = () => {
   const [screenIndex, setScreenIndex] = useState<number>(0);
 
   useEffect(() => {
-    const setTutorial = () => {
+    const setTutorial = async () => {
       const playerData = getState().player.playerData;
       if (playerData.activeTutorials.length > 0) {
         if (playerData.activeTutorials[0]) {
           const tutorialStep = tutorialSteps.find(
             (step) => step.name === playerData.activeTutorials[0]
           );
-          setCurrentTutorial((prev) => {
-            if (prev != tutorialStep) {
+          if (currentTutorial !== tutorialStep) {
+            setCurrentTutorial(() => {
               setScreenIndex(0);
               return tutorialStep;
-            }
-          });
+            });
+          }
         }
       }
     };
-
     document.addEventListener("activeTutorial", setTutorial);
     return () => {
       document.removeEventListener("activeTutorial", setTutorial);
     };
-  }, []);
+  }, [currentTutorial]);
 
   return (
     <>
@@ -114,6 +115,9 @@ const Tutorial = () => {
           screenIndex={screenIndex}
           onNext={() => {
             if (screenIndex + 1 > currentTutorial.screens.length - 1) {
+              if (currentTutorial.onExitScreens) {
+                currentTutorial.onExitScreens();
+              }
               completeTutorial(currentTutorial.name);
               setScreenIndex(screenIndex + 1);
             } else {

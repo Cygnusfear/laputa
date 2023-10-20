@@ -9,6 +9,7 @@ export type TutorialStep = {
   screens: TutorialScreen[];
   completedCondition: (player: PlayerData) => boolean;
   startCondition: (player: PlayerData) => boolean;
+  onExitScreens?: () => boolean;
 };
 
 export type TutorialScreen = {
@@ -45,10 +46,6 @@ export const evaluateTutorials = async () => {
         !activeTutorials.includes(t.name)
       ) {
         activeTutorials.push(availabletutorial.name);
-        if (activeTutorials.length > 0) {
-          const event = new Event("activeTutorial");
-          document.dispatchEvent(event);
-        }
       }
     }
   }
@@ -57,6 +54,10 @@ export const evaluateTutorials = async () => {
     activeTutorials,
     finishedTutorials,
   });
+  if (activeTutorials.length > 0) {
+    const event = new Event("activeTutorial");
+    document.dispatchEvent(event);
+  }
 };
 
 export const completeTutorial = async (tutorialName: string) => {
@@ -145,7 +146,7 @@ export const tutorialSteps = [
       EntityData.facilities.scaffold,
     ],
     completedCondition: (player: PlayerData) => {
-      return hasFacility(player, EntityData.facilities.residence.entityTypeId);
+      return hasWallet(player);
     },
     startCondition: (player: PlayerData) => {
       return hasFacility(player, EntityData.facilities.dynamo.entityTypeId);
@@ -170,10 +171,13 @@ export const tutorialSteps = [
       EntityData.facilities.scaffold,
     ],
     completedCondition: (player: PlayerData) => {
-      return hasFacility(player, EntityData.facilities.residence.entityTypeId);
+      return hasWallet(player);
     },
     startCondition: (player: PlayerData) => {
       return hasFacility(player, EntityData.facilities.residence.entityTypeId);
+    },
+    onExitScreens: () => {
+      console.log("woop woop");
     },
     screens: [
       {
@@ -181,6 +185,16 @@ export const tutorialSteps = [
         text: `In the symphony of the skies, where gravity dances and dynamos sing, it's the heartbeat of the population that brings true prosperity. As the denizens of your floating city find their homes, they don't just live—they thrive, they dream, and they contribute. With every beat of life, with every shared story, the magic of LAPU starts to accumulate.<br/><br/>It's not just currency; it's a manifestation of hope, hard work, and harmony. Embrace this rhythm, for in this celestial economy, the wealth isn't just in coins but in the vibrant life that generates it.<br/><br/>`,
         image: `friends.webp`,
       },
+      {
+        name: "Keep it safe",
+        text: `Now that you're generating income, let's make sure we store it in a safe place for you.<br/><br/>`,
+        image: `vault2.webp`,
+      },
     ],
   },
 ] as TutorialStep[];
+
+const hasWallet = (player: PlayerData) => {
+  console.log(player);
+  return false;
+};
