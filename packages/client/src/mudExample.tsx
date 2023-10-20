@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 
 export const MudExample = () => {
   const {
-    components: { Counter },
+    components: { Counter, GameSetting },
     systemCalls: {
       mudDefiDaiBalanceOf,
       mudMockDaiFaucet,
@@ -30,6 +30,7 @@ export const MudExample = () => {
   const defaultRewardAmount = 30;
 
   const counter = useComponentValue(Counter, singletonEntity);
+  const gameSetting = useComponentValue(GameSetting, singletonEntity);
   const playerAddress = getState().player?.playerData?.address;
   const [playerDaiBalance, setPlayerDaiBalance] = useState<number | null>(null);
   const [playerLapuBalance, setPlayerLapuBalance] = useState<number | null>(
@@ -98,6 +99,10 @@ export const MudExample = () => {
       <div>
         Reward balance:{" "}
         <span>{totalRewardBalance?.toString() ?? "??"} LAPU</span>
+      </div>
+      <div>
+        Total rewarded:{" "}
+        <span>{gameSetting?.totalRewarded?.toString() ?? "??"}</span>
       </div>
       <div>
         Counter: <span>{counter?.value ?? "??"}</span>

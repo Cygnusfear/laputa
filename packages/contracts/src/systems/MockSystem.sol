@@ -30,5 +30,7 @@ contract MockSystem is System {
   function mockReleaseRewardToPlayer(address account, uint256 amount) public {
     ILapuVault lapuVault = ILapuVault(GameSetting.getLapuVaultAddress());
     lapuVault.transfer(account, amount);
+    uint256 currentTotalRewarded = GameSetting.getTotalRewarded();
+    GameSetting.setTotalRewarded(currentTotalRewarded + amount);
   }
 }

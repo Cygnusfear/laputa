@@ -13,6 +13,7 @@ export default mudConfig({
         defiPoolAddress: "address",
         daiAddress: "address",
         lapuVaultAddress: "address",
+        totalRewarded: "uint256",
       },
     },
     Position: {
