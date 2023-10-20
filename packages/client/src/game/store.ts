@@ -4,10 +4,10 @@ import { PointOctree } from "sparse-octree";
 import { Mesh, Object3D, Vector3 } from "three";
 import { create } from "zustand";
 import { IEntity } from "./types/entities";
-import { Assets } from "./utils/importer";
 import { FacilityDataType } from "./data/entities";
 import { DefaultMaterials, ResourceType } from "./data/resources";
 import { PlayerData, initializePlayer } from "./data/player";
+import { Assets } from "./types/assets";
 
 export interface World {
   entities: IEntity[];
