@@ -58,10 +58,16 @@ export const initializePlayer = ({
 };
 
 export const savePlayer = async (playerData: PlayerData, verbose = false) => {
-  const cleanData = JSON.parse(JSON.stringify(playerData)) as PlayerData;
-  cleanData.facilities = [];
-  setItem("playerData", JSON.stringify(cleanData)).then(() => {
-    if (verbose) console.log("saved", cleanData);
+  const cleanPlayer: PlayerData = {
+    resources: { ...playerData.resources },
+    activeTutorials: [...playerData.activeTutorials],
+    finishedTutorials: [...playerData.finishedTutorials],
+    address: playerData.address,
+    name: playerData.name,
+    facilities: [],
+  };
+  setItem("playerData", JSON.stringify(cleanPlayer)).then(() => {
+    if (verbose) console.log("saved", cleanPlayer);
   });
 };
 
