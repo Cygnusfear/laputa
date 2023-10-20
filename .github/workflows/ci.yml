@@ -34,9 +34,11 @@ jobs:
         shell: bash
         run: pnpm install --frozen-lockfile
 
-      # - name: Build
-      #   shell: bash
-      #   run: pnpm recursive run build
+      - name: Build
+        shell: bash
+        run: |
+          export NODE_OPTIONS=--max_old_space_size=4096
+          pnpm recursive run build
 
       #- name: Check types
       #  run: pnpm run type-check
