@@ -12,7 +12,6 @@ function ColorWheel() {
   const [hex, setHex] = useState(randomColor);
 
   const setColor = (color: ColorResult) => {
-    console.log(color.hex);
     setHex(color.hex);
     getState().input.cursor.setCursor({ color: color.hex });
     setHsva({ ...hsva, ...color.hsva });

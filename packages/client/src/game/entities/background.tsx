@@ -4,8 +4,13 @@ import { MeshStandardMaterial } from "three";
 function Background() {
   return (
     <group>
-      <Environment preset="forest" far={50} />
-      <Clouds material={MeshStandardMaterial}>
+      <Environment
+        files="/textures/sunset.exr"
+        background
+        far={20}
+        blur={0.2}
+      />
+      <Clouds material={MeshStandardMaterial} layers={2}>
         <Cloud
           bounds={[200, 10, 200]}
           volume={200}

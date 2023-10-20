@@ -116,8 +116,19 @@ const buildFacility = ({
     if (gains) addResources(gains);
     console.log("net", gains, expenses);
   }
-
   addEntity(newFacility);
+  if (owner === "") {
+    console.trace("No owner for facility", newFacility);
+  }
+  if (owner !== "" && owner === getState().player.playerData?.address) {
+    console.log(owner, newFacility);
+    if (!getState().player.playerData?.facilities.includes(newFacility)) {
+      getState().player.setPlayerData({
+        ...getState().player.playerData!,
+        facilities: [...getState().player.playerData!.facilities, newFacility],
+      });
+    }
+  }
   propagateGravity();
 };
 

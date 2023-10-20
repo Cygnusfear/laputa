@@ -6,8 +6,8 @@ export type PlayerData = {
   resources: { [key in ResourceType]: number };
   facilities: IFacility[];
   name: string;
-  tutorialIndex: number;
-  finishedTutorial: boolean;
+  activeTutorials: string[];
+  finishedTutorials: string[];
   address: string;
 };
 
@@ -30,8 +30,8 @@ export const createNewPlayerData = ({
     },
     facilities: [],
     name: name || "New Player",
-    tutorialIndex: 0,
-    finishedTutorial: false,
+    activeTutorials: [],
+    finishedTutorials: [],
     address: address || "",
   };
 };
@@ -45,7 +45,7 @@ export const initializePlayer = ({
   if (player) {
     const playerData = JSON.parse(player) as PlayerData;
     playerData.address = address || playerData.address;
-    console.log("Loaded player data", playerData);
+    console.trace("Loaded player data", playerData);
     Object.assign(window, { player: playerData });
     return playerData;
   } else {
@@ -58,13 +58,21 @@ export const initializePlayer = ({
 };
 
 export const savePlayer = async (playerData: PlayerData, verbose = false) => {
-  const cleanData = JSON.parse(JSON.stringify(playerData)) as PlayerData;
-  cleanData.facilities = [];
-  setItem("playerData", JSON.stringify(cleanData)).then(() => {
-    if (verbose) console.log("saved", cleanData);
+  const cleanPlayer: PlayerData = {
+    resources: { ...playerData.resources },
+    activeTutorials: [...playerData.activeTutorials],
+    finishedTutorials: [...playerData.finishedTutorials],
+    address: playerData.address,
+    name: playerData.name,
+    facilities: [],
+  };
+  setItem("playerData", JSON.stringify(cleanPlayer)).then(() => {
+    if (verbose) console.log("saved", cleanPlayer);
   });
 };
 
 export const hasFacility = (playerData: PlayerData, facilityId: number) => {
-  return playerData.facilities.some((f) => f.type.entityTypeId === facilityId);
+  return !!playerData.facilities.find(
+    (f) => f.type.entityTypeId === facilityId
+  );
 };
