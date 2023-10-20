@@ -78,11 +78,7 @@ contract LapuVaultTest is Test {
     assertEq(lapuVault.balanceOf(address(lapuVault)), 0);
     lapuVault.mintLAPUAccordingToDeFiYield();
     assertEq(lapuVault.totalSupply(), depositAmount01 + yieldAmount01);
-    assertEq(lapuVault.balanceOf(address(lapuVault)), yieldAmount01);
-
-    //call transferLAPURewardsTo to transfer rewards from vault to a player
-    lapuVault.transferLAPURewardsTo(address(this), yieldAmount01);
-    assertEq(lapuVault.balanceOf(address(lapuVault)), 0);
+    //in mintLAPUAccordingToDeFiYield, yieldAmount01 is expected to be transferred to the contract owner (this test contract)
     assertEq(lapuVault.balanceOf(address(this)), depositAmount01 + yieldAmount01);
 
     //player withdraws deposit and yield

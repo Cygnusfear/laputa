@@ -11,6 +11,9 @@ import { ethers } from "ethers";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
 
+import IERC20Abi from "contracts/out/IERC20.sol/IERC20.abi.json";
+import ILapuVaultAbi from "contracts/out/ILapuVault.sol/ILapuVault.abi.json";
+
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
@@ -31,10 +34,23 @@ export function createSystemCalls(
    *   through createClientComponents.ts, but it originates in
    *   syncToRecs (https://github.com/latticexyz/mud/blob/26dabb34321eedff7a43f3fcb46da4f3f5ba3708/templates/react/packages/client/src/mud/setupNetwork.ts#L39).
    */
-  { worldContract, waitForTransaction }: SetupNetworkResult,
-  { Counter, Position, Orientation, EntityType, OwnedBy }: ClientComponents
+  {
+    worldContract,
+    waitForTransaction,
+    publicClient,
+    walletClient,
+    worldAddress,
+  }: SetupNetworkResult,
+  {
+    Counter,
+    Position,
+    Orientation,
+    EntityType,
+    OwnedBy,
+    GameSetting,
+  }: ClientComponents
 ) {
-  const defaultVector3 = new Vector3(1, 0, 1);
+  const defaultVector3 = new Vector3(1, 0, 3);
 
   const increment = async () => {
     /*
@@ -175,6 +191,119 @@ export function createSystemCalls(
     return allEntityMetadatas;
   };
 
+  const mudMockDaiFaucet = async (playerAddress, amount) => {
+    const tx = await worldContract.write.mockDaiFaucet([playerAddress, amount]);
+    await waitForTransaction(tx);
+    return tx;
+  };
+
+  const mudDefiDaiBalanceOf = async (playerAddress) => {
+    const res = await worldContract.read.defiDaiBalanceOf([playerAddress]);
+    return res;
+  };
+
+  const mudDefiLapuBalanceOf = async (playerAddress) => {
+    const res = await worldContract.read.defiLapuBalanceOf([playerAddress]);
+    return res;
+  };
+
+  const mudDefiGetTotalRewardBalance = async () => {
+    const res = await worldContract.read.defiGetTotalRewardBalance();
+    return res;
+  };
+
+  const approveDaiToLapuVaultForTheConnectedPlayer = async (amount) => {
+    const gameSetting = await getComponentValue(GameSetting, singletonEntity);
+    const { request } = await publicClient.simulateContract({
+      address: gameSetting?.daiAddress,
+      abi: IERC20Abi,
+      functionName: "approve",
+      args: [gameSetting?.lapuVaultAddress, amount],
+      account: walletClient?.account,
+    });
+    const res = await walletClient.writeContract(request);
+    return res;
+  };
+
+  const approveLapuToMudWorldForTheConnectedPlayer = async (amount) => {
+    const gameSetting = await getComponentValue(GameSetting, singletonEntity);
+    const { request } = await publicClient.simulateContract({
+      address: gameSetting?.lapuVaultAddress,
+      abi: IERC20Abi,
+      functionName: "approve",
+      args: [worldAddress, amount],
+      account: walletClient?.account,
+    });
+    const res = await walletClient.writeContract(request);
+    return res;
+  };
+
+  const depositDaiToLapuVaultForTheConnectedPlayer = async (amount) => {
+    const gameSetting = await getComponentValue(GameSetting, singletonEntity);
+    const { request } = await publicClient.simulateContract({
+      address: gameSetting?.lapuVaultAddress,
+      abi: ILapuVaultAbi,
+      functionName: "deposit",
+      args: [amount, walletClient?.account.address],
+      account: walletClient?.account,
+    });
+    const res = await walletClient.writeContract(request);
+    return res;
+  };
+
+  const withdrawDaiFromLapuVaultForTheConnectedPlayer = async (amount) => {
+    const gameSetting = await getComponentValue(GameSetting, singletonEntity);
+    const { request } = await publicClient.simulateContract({
+      address: gameSetting?.lapuVaultAddress,
+      abi: ILapuVaultAbi,
+      functionName: "withdraw",
+      args: [
+        amount,
+        walletClient?.account.address,
+        walletClient?.account.address,
+      ],
+      account: walletClient?.account,
+    });
+    const res = await walletClient.writeContract(request);
+    return res;
+  };
+
+  const mudDefiConsumesLapuFromPlayer = async (amount, playerAddress) => {
+    const tx = await worldContract.write.defiConsumesLapuFromPlayer([
+      amount,
+      playerAddress,
+    ]);
+    await waitForTransaction(tx);
+    return tx;
+  };
+
+  const mudMockYieldGenerationFromDeFiPool = async (amount) => {
+    const tx = await worldContract.write.mockYieldGenerationFromDeFiPool([
+      amount,
+    ]);
+    await waitForTransaction(tx);
+    return tx;
+  };
+
+  const mudMockReleaseRewardToPlayer = async (playerAddress, amount) => {
+    const tx = await worldContract.write.mockReleaseRewardToPlayer([
+      playerAddress,
+      amount,
+    ]);
+    await waitForTransaction(tx);
+    return tx;
+  };
+
+  const lapuVaultGetTotalSupply = async () => {
+    const gameSetting = await getComponentValue(GameSetting, singletonEntity);
+    const data = await publicClient.readContract({
+      address: gameSetting?.lapuVaultAddress,
+      abi: IERC20Abi,
+      functionName: "totalSupply",
+    });
+    return data;
+  };
+
   return {
     increment,
     mudGetEntityType,
@@ -186,5 +315,17 @@ export function createSystemCalls(
     mudBuildFacility,
     mudGetEntityMetadataAtPosition,
     mudGetAllFacilityEntityMetadatas,
+    mudMockDaiFaucet,
+    mudDefiDaiBalanceOf,
+    mudDefiLapuBalanceOf,
+    mudDefiGetTotalRewardBalance,
+    approveDaiToLapuVaultForTheConnectedPlayer,
+    approveLapuToMudWorldForTheConnectedPlayer,
+    depositDaiToLapuVaultForTheConnectedPlayer,
+    withdrawDaiFromLapuVaultForTheConnectedPlayer,
+    mudDefiConsumesLapuFromPlayer,
+    mudMockYieldGenerationFromDeFiPool,
+    mudMockReleaseRewardToPlayer,
+    lapuVaultGetTotalSupply,
   };
 }

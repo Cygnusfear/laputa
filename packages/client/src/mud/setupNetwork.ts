@@ -137,5 +137,6 @@ export async function setupNetwork() {
     waitForTransaction,
     worldContract,
     write$: write$.asObservable().pipe(share()),
+    worldAddress: networkConfig.worldAddress as Hex,
   };
 }
