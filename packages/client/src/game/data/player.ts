@@ -45,7 +45,7 @@ export const initializePlayer = ({
   if (player) {
     const playerData = JSON.parse(player) as PlayerData;
     playerData.address = address || playerData.address;
-    console.log("Loaded player data", playerData);
+    console.trace("Loaded player data", playerData);
     Object.assign(window, { player: playerData });
     return playerData;
   } else {

@@ -76,13 +76,14 @@ const FacilityRenderer = (props: IFacility) => {
   const { colorPrimary, colorSecondary, variant, position, type, rotation } =
     props;
   const { building } = useStore().input;
+  const { meshes } = useStore().assets;
 
   const prototypes = useMemo(
     () =>
-      Object.values(getState().assets.meshes).filter(
+      Object.values(meshes).filter(
         (mesh) => variant?.nodes.includes(mesh.name)
       ),
-    [variant]
+    [variant, meshes]
   );
 
   const rand = useMemo(() => {
