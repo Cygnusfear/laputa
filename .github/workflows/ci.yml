@@ -36,7 +36,9 @@ jobs:
 
       - name: Build
         shell: bash
-        run: pnpm recursive run build
+        run: |
+          export NODE_OPTIONS=--max_old_space_size=4096
+          pnpm recursive run build
 
       #- name: Check types
       #  run: pnpm run type-check

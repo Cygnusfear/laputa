@@ -6,15 +6,6 @@ import { useStore } from "../store";
 import { importModels } from "../data/models";
 import { importTextures } from "../data/resources";
 
-export interface Assets {
-  meshes: Record<string, Mesh>;
-  addMesh: (name: string, mesh: Mesh) => void;
-  textures: Record<string, Texture>;
-  addTexture: (name: string, texture: Texture) => void;
-  materials: Record<string, Material>;
-  addMaterial: (name: string, material: Material) => void;
-}
-
 function ModelLoader({ path }: { path: string }) {
   const { addMesh } = useStore((state) => state.assets);
 
