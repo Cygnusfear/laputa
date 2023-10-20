@@ -245,5 +245,10 @@ const hasWallet = () => {
 const createWallet = async () => {
   const wallet = await createComethWallet();
   tutorialFlags.hasCreatedWallet = true;
+  getState().player.setPlayerData({
+    ...getState().player.playerData,
+    hasComethWallet:
+      window.localStorage.getItem("comethWalletAddress") || "addy",
+  });
   console.log("woop woop", wallet);
 };
