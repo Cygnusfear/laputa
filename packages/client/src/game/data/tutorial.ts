@@ -195,6 +195,6 @@ export const tutorialSteps = [
 ] as TutorialStep[];
 
 const hasWallet = (player: PlayerData) => {
-  console.log(player);
+  player;
   return false;
 };
