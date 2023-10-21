@@ -19,16 +19,16 @@ export const MudExample = () => {
       mudDefiLapuBalanceOf,
       mudDefiConsumesLapuFromPlayer,
       mudDefiGetTotalRewardBalance,
-      mudMockYieldGenerationFromDeFiPool,
-      mudMockReleaseRewardToPlayer,
+      //mudMockYieldGenerationFromDeFiPool,
+      //mudMockReleaseRewardToPlayer,
       lapuVaultGetTotalSupply,
     },
   } = useMUD();
 
   const defaultTestAmount = 1000;
   const defaultConsumeAmount = 100;
-  const defaultYieldAmount = 50;
-  const defaultRewardAmount = 30;
+  //const defaultYieldAmount = 50;
+  //const defaultRewardAmount = 30;
 
   const counter = useComponentValue(Counter, singletonEntity);
   const gameSetting = useComponentValue(GameSetting, singletonEntity);
@@ -74,6 +74,7 @@ export const MudExample = () => {
     lapuVaultGetTotalSupply,
   ]);
 
+  /*
   useEffect(() => {
     const generateYieldIntervalId = setInterval(() => {
       mudMockYieldGenerationFromDeFiPool(defaultYieldAmount);
@@ -91,6 +92,7 @@ export const MudExample = () => {
       clearInterval(rewardPlayerIntervalId);
     };
   }, [playerAddress, mudMockReleaseRewardToPlayer]);
+  */
 
   const delay = async (ms) => {
     return new Promise((resolve) => setTimeout(resolve, ms));

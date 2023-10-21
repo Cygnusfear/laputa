@@ -240,6 +240,11 @@ export function createSystemCalls(
 
   const depositDaiToLapuVaultForTheConnectedPlayer = async (amount) => {
     const gameSetting = await getComponentValue(GameSetting, singletonEntity);
+    console.log("gameSetting?.lapuVaultAddress", gameSetting?.lapuVaultAddress);
+    console.log(
+      "depositDaiToLapuVaultForTheConnectedPlayer walletClient?.account.address",
+      walletClient?.account.address
+    );
     const { request } = await publicClient.simulateContract({
       address: gameSetting?.lapuVaultAddress,
       abi: ILapuVaultAbi,
@@ -304,6 +309,16 @@ export function createSystemCalls(
     return data;
   };
 
+  const mockLapuVaultFundPlayer = async (playerAddress, amount = 1000) => {
+    console.log("mockLapuVaultFundPlayer start", playerAddress, amount);
+    await mudMockDaiFaucet(playerAddress, amount);
+    console.log("mudMockDaiFaucet done");
+    await approveDaiToLapuVaultForTheConnectedPlayer(amount);
+    console.log("approveDaiToLapuVaultForTheConnectedPlayer done");
+    await depositDaiToLapuVaultForTheConnectedPlayer(amount);
+    console.log("mockLapuVaultFundPlayer done", playerAddress, amount);
+  };
+
   return {
     increment,
     mudGetEntityType,
@@ -327,5 +342,6 @@ export function createSystemCalls(
     mudMockYieldGenerationFromDeFiPool,
     mudMockReleaseRewardToPlayer,
     lapuVaultGetTotalSupply,
+    mockLapuVaultFundPlayer,
   };
 }
