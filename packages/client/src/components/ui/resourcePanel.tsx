@@ -74,7 +74,7 @@ function ResourcePanel() {
   return (
     <div className="resource-panel">
       {hasComethWallet !== "" && (
-        <div className="flex h-8 w-8 items-center rounded-[100%] border border-yellow-400 bg-slate-400">
+        <div className="mb-2 flex h-8 w-8 items-center rounded-[100%] border border-yellow-400 bg-slate-400">
           <FaFingerprint className="m-auto flex text-xl text-yellow-400" />
         </div>
       )}

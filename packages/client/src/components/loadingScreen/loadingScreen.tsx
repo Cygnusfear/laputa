@@ -26,6 +26,7 @@ function LoadingScreen() {
   });
 
   useEffect(() => {
+    console.log(syncProgress.percentage);
     setProgress(syncProgress.percentage);
     if (syncProgress.percentage >= 100) {
       setHide(true);
@@ -44,12 +45,12 @@ function LoadingScreen() {
         <div className=" font-anton tracking-wide">LAPUTA</div>
         <div
           className="loading-bar mx-auto mt-0.5 block h-2.5 bg-white"
-          style={{ width: `${progress * 100}%` }}
+          style={{ width: `${progress}%` }}
         />
         <div className="loading-text mt-20 block text-center font-sans text-xs text-white">
           {syncProgress.message}{" "}
           {syncProgress.percentage > 0 && (
-            <>{(syncProgress.percentage * 100).toFixed(2) + "%"}</>
+            <>{syncProgress.percentage.toFixed(2) + "%"}</>
           )}
         </div>
       </div>
