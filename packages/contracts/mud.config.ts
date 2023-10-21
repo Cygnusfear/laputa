@@ -46,7 +46,7 @@ export default mudConfig({
       },
       valueSchema: {
         buildingCostLapu: "uint256",
-        isResidence: "bool",
+        residence: "uint256",
       },
     },
     PlayerDataDetail: {

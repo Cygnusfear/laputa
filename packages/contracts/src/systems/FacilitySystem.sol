@@ -7,7 +7,7 @@ import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswith
 import { getKeysInTable } from "@latticexyz/world-modules/src/modules/keysintable/getKeysInTable.sol";
 import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
 
-import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy, EntityCustomization, GameSetting, EntityTypeDetail } from "../codegen/index.sol";
+import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy, EntityCustomization, GameSetting, EntityTypeDetail, PlayerDataDetail } from "../codegen/index.sol";
 import { positionToEntityKey } from "../positionToEntityKey.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -39,10 +39,10 @@ contract FacilitySystem is System {
   }
 
   function facilitySystemSetupEntityTypeDetails() public {
-    EntityTypeDetail.set(1, 400, false);
-    EntityTypeDetail.set(102, 300, false);
-    EntityTypeDetail.set(103, 75, true);
-    EntityTypeDetail.set(104, 50, false);
+    EntityTypeDetail.set(1, 400, 0);
+    EntityTypeDetail.set(102, 300, 0);
+    EntityTypeDetail.set(103, 75, 1);
+    EntityTypeDetail.set(104, 50, 0);
   }
 
   /**
@@ -68,6 +68,22 @@ contract FacilitySystem is System {
     uint256 buildingCostLapu = lapuCostToBuildFacilityType(entityTypeId);
     IERC20 lapu = IERC20(GameSetting.getLapuVaultAddress());
     SafeERC20.safeTransferFrom(lapu, consumer, address(this), buildingCostLapu);
+  }
+
+  function updatePlayerDataDetailForBuildingFacilityType(address player, uint32 entityTypeId) public {
+    uint256 residence = EntityTypeDetail.getResidence(entityTypeId);
+    if (residence > 0) {
+      GameSetting.setTotalResidence(GameSetting.getTotalResidence() + residence);
+      PlayerDataDetail.setResidence(player, PlayerDataDetail.getResidence(player) + residence);
+    }
+  }
+
+  function updatePlayerDataDetailForDestroyFacilityType(address player, uint32 entityTypeId) public {
+    uint256 residence = EntityTypeDetail.getResidence(entityTypeId);
+    if (residence > 0) {
+      GameSetting.setTotalResidence(GameSetting.getTotalResidence() - residence);
+      PlayerDataDetail.setResidence(player, PlayerDataDetail.getResidence(player) - residence);
+    }
   }
 
   /**
@@ -134,6 +150,8 @@ contract FacilitySystem is System {
     EntityCustomization.set(entityKey, variant, color);
     OwnedBy.set(entityKey, _msgSender());
 
+    updatePlayerDataDetailForBuildingFacilityType(_msgSender(), entityTypeId);
+
     return entityKey;
   }
 
@@ -144,6 +162,8 @@ contract FacilitySystem is System {
   function destroyFacility(bytes32 entityKey) public {
     require(_msgSender() != address(0), "Invalid sender address");
     require(OwnedBy.get(entityKey) == _msgSender(), "Sender does not own this entity");
+
+    updatePlayerDataDetailForDestroyFacilityType(_msgSender(), EntityType.get(entityKey));
 
     OwnedBy.deleteRecord(entityKey);
     EntityType.deleteRecord(entityKey);
