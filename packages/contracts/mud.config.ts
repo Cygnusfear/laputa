@@ -50,9 +50,6 @@ export default mudConfig({
       },
     },
     PlayerDataDetail: {
-      keySchema: {
-        playerId: "address",
-      },
       valueSchema: {
         residence: "uint256",
         rewarded: "uint256",
@@ -68,12 +65,17 @@ export default mudConfig({
     {
       name: "KeysInTableModule",
       root: true,
-      args: [resolveTableId("Position"), resolveTableId("PlayerDataDetail")],
+      args: [resolveTableId("Position")],
     },
     {
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("Position")],
+    },
+    {
+      name: "KeysInTableModule",
+      root: true,
+      args: [resolveTableId("PlayerDataDetail")],
     },
   ],
 });

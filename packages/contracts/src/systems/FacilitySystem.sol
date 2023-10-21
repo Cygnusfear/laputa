@@ -72,17 +72,20 @@ contract FacilitySystem is System {
 
   function updatePlayerDataDetailForBuildingFacilityType(address player, uint32 entityTypeId) public {
     uint256 residence = EntityTypeDetail.getResidence(entityTypeId);
+    bytes32 playerKey = bytes32(bytes20(player));
     if (residence > 0) {
       GameSetting.setTotalResidence(GameSetting.getTotalResidence() + residence);
-      PlayerDataDetail.setResidence(player, PlayerDataDetail.getResidence(player) + residence);
+      //PlayerDataDetail.setResidence(playerKey, PlayerDataDetail.getResidence(playerKey) + residence);
+      PlayerDataDetail.set(playerKey, 1, 0);
     }
   }
 
   function updatePlayerDataDetailForDestroyFacilityType(address player, uint32 entityTypeId) public {
     uint256 residence = EntityTypeDetail.getResidence(entityTypeId);
+    bytes32 playerKey = bytes32(bytes20(player));
     if (residence > 0) {
       GameSetting.setTotalResidence(GameSetting.getTotalResidence() - residence);
-      PlayerDataDetail.setResidence(player, PlayerDataDetail.getResidence(player) - residence);
+      PlayerDataDetail.setResidence(playerKey, PlayerDataDetail.getResidence(playerKey) - residence);
     }
   }
 
