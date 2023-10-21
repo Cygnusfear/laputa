@@ -75,8 +75,7 @@ contract FacilitySystem is System {
     bytes32 playerKey = bytes32(bytes20(player));
     if (residence > 0) {
       GameSetting.setTotalResidence(GameSetting.getTotalResidence() + residence);
-      //PlayerDataDetail.setResidence(playerKey, PlayerDataDetail.getResidence(playerKey) + residence);
-      PlayerDataDetail.set(playerKey, 1, 0);
+      PlayerDataDetail.setResidence(playerKey, PlayerDataDetail.getResidence(playerKey) + residence);
     }
   }
 
