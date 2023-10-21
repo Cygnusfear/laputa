@@ -1,10 +1,12 @@
 import { useEffect, useMemo } from "react";
+import { singletonEntity } from "@latticexyz/store-sync/recs";
+import { SyncStep } from "@latticexyz/store-sync";
 import resourceFactory from "./resourceFactory";
 import EntityData from "../data/entities";
 import { useMUD } from "@/useMUD";
 import { Vector3 } from "three";
 import { buildFacility } from "./constructionSystem";
-import { useEntityQuery } from "@latticexyz/react";
+import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 import { getState } from "../store";
 import { useOnce } from "@/lib/useOnce";
@@ -22,7 +24,18 @@ function GameLoop() {
       EntityCustomization,
       OwnedBy,
     },
+    network: {
+      components: { SyncProgress },
+    },
   } = useMUD();
+
+  const syncProgress = useComponentValue(SyncProgress, singletonEntity, {
+    message: "Connecting",
+    percentage: 0,
+    step: SyncStep.INITIALIZE,
+    latestBlockNumber: 0n,
+    lastBlockNumberProcessed: 0n,
+  });
 
   // Startup
   useOnce(() => {
@@ -162,14 +175,14 @@ function GameLoop() {
           variant,
           owner,
         });
-        loaded = true;
       }
     }
-    if (loaded) {
+    if (syncProgress.percentage === 100 && !loaded) {
+      loaded = true;
       const event = new Event("gameLoaded");
       document.dispatchEvent(event);
     }
-  }, [facilities]);
+  }, [facilities, syncProgress.percentage]);
 
   useEffect(() => {
     const interval = setInterval(() => {

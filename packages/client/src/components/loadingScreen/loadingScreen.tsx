@@ -1,35 +1,37 @@
 import { cn } from "@/lib/utils";
-import { useMemo, useState } from "react";
-import { useNProgress } from "@tanem/react-nprogress";
+import { useEffect, useState } from "react";
 
 import "./loadingScreen.css";
+import { useMUD } from "@/useMUD";
+import { useComponentValue } from "@latticexyz/react";
+import { singletonEntity } from "@latticexyz/store-sync/recs";
+import { SyncStep } from "@latticexyz/store-sync";
 
 function LoadingScreen() {
   const [hide, setHide] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { progress } = useNProgress({
-    isAnimating: loading,
-    animationDuration: 1300,
-    incrementDuration: 50,
-    minimum: 0.01,
+  const [progress, setProgress] = useState(0);
+  const {
+    network: {
+      components: { SyncProgress },
+    },
+  } = useMUD();
+
+  const syncProgress = useComponentValue(SyncProgress, singletonEntity, {
+    message: "Connecting",
+    percentage: 0,
+    step: SyncStep.INITIALIZE,
+    latestBlockNumber: 0n,
+    lastBlockNumberProcessed: 0n,
   });
 
-  useMemo(() => {
-    const fadeOut = () => {
+  useEffect(() => {
+    setProgress(syncProgress.percentage);
+    if (syncProgress.percentage >= 100) {
+      setHide(true);
       setLoading(false);
-      setTimeout(() => {
-        setHide(true);
-      }, 5000);
-    };
-
-    document.addEventListener("gameLoaded", () => {
-      fadeOut();
-    });
-
-    return () => {
-      document.removeEventListener("gameLoaded", () => {});
-    };
-  }, []);
+    }
+  }, [syncProgress]);
 
   if (hide) return null;
   return (
@@ -38,17 +40,18 @@ function LoadingScreen() {
       <div className={cn("loading-container", !loading && "fade-out")}>
         <div className="synthwave-lines" />
       </div>
-      <div
-        className={cn(
-          "game-title font-anton fade-in tracking-wide",
-          !loading && "fade-out"
-        )}
-      >
-        LAPUTA
+      <div className={cn("game-title fade-in", !loading && "fade-out")}>
+        <div className=" font-anton tracking-wide">LAPUTA</div>
         <div
           className="loading-bar mx-auto mt-0.5 block h-2.5 bg-white"
           style={{ width: `${progress * 100}%` }}
         />
+        <div className="loading-text mt-20 block text-center font-sans text-xs text-white">
+          {syncProgress.message}{" "}
+          {syncProgress.percentage > 0 && (
+            <>{(syncProgress.percentage * 100).toFixed(2) + "%"}</>
+          )}
+        </div>
       </div>
     </div>
   );
