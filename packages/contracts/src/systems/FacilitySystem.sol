@@ -7,8 +7,10 @@ import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswith
 import { getKeysInTable } from "@latticexyz/world-modules/src/modules/keysintable/getKeysInTable.sol";
 import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
 
-import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy, EntityCustomization } from "../codegen/index.sol";
+import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy, EntityCustomization, GameSetting } from "../codegen/index.sol";
 import { positionToEntityKey } from "../positionToEntityKey.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract FacilitySystem is System {
   /**
@@ -44,7 +46,16 @@ contract FacilitySystem is System {
    */
   function canPlayerBuildFacilityType(address player, uint32 entityTypeId) public view returns (bool) {
     //TODO: require player to have enough resources to build this facility
-    return true;
+
+    //For now, simply require player to have 10 LAPU to build any facility
+    IERC20 lapu = IERC20(GameSetting.getLapuVaultAddress());
+    return lapu.balanceOf(player) >= 10;
+  }
+
+  function consumeResourcesToBuildFacilityType(address consumer, uint32 entityTypeId) public {
+    //transfer 10 LAPU from consumer to this world contract
+    IERC20 lapu = IERC20(GameSetting.getLapuVaultAddress());
+    SafeERC20.safeTransferFrom(lapu, consumer, address(this), 10);
   }
 
   /**
@@ -88,12 +99,20 @@ contract FacilitySystem is System {
    * @param yaw The yaw of the facility to build.
    * @return The key of the entity that was created.
    */
-  function buildFacility(uint32 entityTypeId, int32 x, int32 y, int32 z, int32 yaw, string calldata color, uint32 variant) public returns (bytes32) {
+  function buildFacility(
+    uint32 entityTypeId,
+    int32 x,
+    int32 y,
+    int32 z,
+    int32 yaw,
+    string calldata color,
+    uint32 variant
+  ) public returns (bytes32) {
     require(_msgSender() != address(0), "Invalid sender address");
     require(canPlayerBuildFacilityType(_msgSender(), entityTypeId), "Cannot build this facility type");
     require(canBuildFacilityTypeAtPosition(entityTypeId, x, y, z), "This facility cannot be built at this position");
 
-    //TODO: consume resources from sender to build facility
+    consumeResourcesToBuildFacilityType(_msgSender(), entityTypeId);
 
     //create entity and assign component values
     bytes32 entityKey = positionToEntityKey(x, y, z);
