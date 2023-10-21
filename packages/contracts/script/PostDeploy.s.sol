@@ -55,6 +55,8 @@ contract PostDeploy is Script {
       address(lapuVault)
     );
 
+    IWorld(worldAddress).facilitySystemSetupEntityTypeDetails();
+
     vm.stopBroadcast();
   }
 }

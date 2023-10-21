@@ -7,7 +7,7 @@ import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswith
 import { getKeysInTable } from "@latticexyz/world-modules/src/modules/keysintable/getKeysInTable.sol";
 import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
 
-import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy, EntityCustomization, GameSetting } from "../codegen/index.sol";
+import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy, EntityCustomization, GameSetting, EntityTypeDetail } from "../codegen/index.sol";
 import { positionToEntityKey } from "../positionToEntityKey.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -38,6 +38,13 @@ contract FacilitySystem is System {
     return keysAtPosition.length == 0;
   }
 
+  function facilitySystemSetupEntityTypeDetails() public {
+    EntityTypeDetail.set(1, 400, false);
+    EntityTypeDetail.set(102, 300, false);
+    EntityTypeDetail.set(103, 75, true);
+    EntityTypeDetail.set(104, 50, false);
+  }
+
   /**
    * @dev Check if a player can build a facility of entityTypeId.
    * @param player The address of the player to check.
@@ -45,17 +52,22 @@ contract FacilitySystem is System {
    * @return True if the player can build a facility of entityTypeId, false otherwise.
    */
   function canPlayerBuildFacilityType(address player, uint32 entityTypeId) public view returns (bool) {
-    //TODO: require player to have enough resources to build this facility
-
-    //For now, simply require player to have 10 LAPU to build any facility
+    uint256 buildingCostLapu = EntityTypeDetail.getBuildingCostLapu(entityTypeId);
     IERC20 lapu = IERC20(GameSetting.getLapuVaultAddress());
-    return lapu.balanceOf(player) >= 10;
+    return lapu.balanceOf(player) >= buildingCostLapu;
+  }
+
+  function lapuCostToBuildFacilityType(uint32 entityTypeId) public view returns (uint256) {
+    uint256 buildingCostLapu = EntityTypeDetail.getBuildingCostLapu(entityTypeId);
+    if (buildingCostLapu > 0) return buildingCostLapu;
+    else return 100;
   }
 
   function consumeResourcesToBuildFacilityType(address consumer, uint32 entityTypeId) public {
-    //transfer 10 LAPU from consumer to this world contract
+    //transfer buildingCostLapu LAPU from consumer to this world contract
+    uint256 buildingCostLapu = lapuCostToBuildFacilityType(entityTypeId);
     IERC20 lapu = IERC20(GameSetting.getLapuVaultAddress());
-    SafeERC20.safeTransferFrom(lapu, consumer, address(this), 10);
+    SafeERC20.safeTransferFrom(lapu, consumer, address(this), buildingCostLapu);
   }
 
   /**

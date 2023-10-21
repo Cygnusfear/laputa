@@ -13,6 +13,7 @@ export default mudConfig({
         defiPoolAddress: "address",
         daiAddress: "address",
         lapuVaultAddress: "address",
+        totalResidence: "uint256",
         totalRewarded: "uint256",
       },
     },
@@ -39,6 +40,24 @@ export default mudConfig({
         typeId: "uint32",
       },
     },
+    EntityTypeDetail: {
+      keySchema: {
+        entityTypeId: "uint32",
+      },
+      valueSchema: {
+        buildingCostLapu: "uint256",
+        isResidence: "bool",
+      },
+    },
+    PlayerDataDetail: {
+      keySchema: {
+        playerId: "address",
+      },
+      valueSchema: {
+        residence: "uint256",
+        rewarded: "uint256",
+      },
+    },
     OwnedBy: {
       valueSchema: {
         owner: "address",
@@ -49,7 +68,7 @@ export default mudConfig({
     {
       name: "KeysInTableModule",
       root: true,
-      args: [resolveTableId("Position")],
+      args: [resolveTableId("Position"), resolveTableId("PlayerDataDetail")],
     },
     {
       name: "KeysWithValueModule",
