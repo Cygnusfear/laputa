@@ -27,6 +27,7 @@ export const MudExample = () => {
   const defaultTestAmount = 1000;
   const defaultConsumeAmount = 400;
   const defaultYieldAmount = 50;
+  const backgroundTxIntervalTime = 20000;
 
   const counter = useComponentValue(Counter, singletonEntity);
   const gameSetting = useComponentValue(GameSetting, singletonEntity);
@@ -88,7 +89,7 @@ export const MudExample = () => {
       if (backgroundTxEnabled) {
         executeBackgroundTx();
       }
-    }, 30000);
+    }, backgroundTxIntervalTime);
     return () => {
       clearInterval(backgroundTxIntervalId);
     };
