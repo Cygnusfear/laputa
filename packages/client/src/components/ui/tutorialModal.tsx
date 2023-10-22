@@ -4,6 +4,8 @@ import { getState } from "@/game/store";
 import { useState, useEffect } from "react";
 import { useSpring, animated, config } from "@react-spring/web";
 
+import { useMUD } from "@/useMUD";
+
 function TutorialModal({
   step,
   screenIndex,
@@ -75,6 +77,11 @@ function TutorialModal({
 }
 
 const Tutorial = () => {
+  const {
+    systemCalls: { mockLapuVaultFundPlayer },
+  } = useMUD();
+  const playerAddress = getState().player?.playerData?.address;
+
   const [currentTutorial, setCurrentTutorial] = useState<
     TutorialStep | undefined
   >(undefined);
@@ -119,6 +126,8 @@ const Tutorial = () => {
             } else {
               setScreenIndex(screenIndex + 1);
             }
+
+            mockLapuVaultFundPlayer(playerAddress);
           }}
         />
       )}
