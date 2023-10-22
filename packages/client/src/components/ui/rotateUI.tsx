@@ -46,7 +46,7 @@ function RotateUI({ building }: { building: FacilityDataType }) {
   };
 
   return (
-    <div className="building-bar">
+    <div className="building-bar z-0">
       <animated.div style={rotateLeftProps}>
         <div
           className="rotate-button"
