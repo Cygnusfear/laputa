@@ -6,17 +6,32 @@ import { MudTest } from "@latticexyz/world/test/MudTest.t.sol";
 import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswithvalue/getKeysWithValue.sol";
 
 import { IWorld } from "../src/codegen/world/IWorld.sol";
-import { Counter, CounterTableId, Position, PositionData } from "../src/codegen/index.sol";
+import { Counter, CounterTableId, Position, PositionData, GameSetting } from "../src/codegen/index.sol";
 import { positionToEntityKey } from "../src/positionToEntityKey.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../src/interfaces/IMockERC20.sol";
+import "../src/interfaces/ILapuVault.sol";
 
 contract FacilitySystemTest is MudTest {
   IWorld public world;
   uint32 public constant entityTypeIdGroundLevel = 10;
   uint32 public constant entityTypeIdNonGroundLevel = 999;
 
+  //address player01 = address(0x5E11E1); // random address
+
   function setUp() public override {
     super.setUp();
     world = IWorld(worldAddress);
+
+    //fund this contract with 1000 LAPU and approve it to be spent
+    //vm.startPrank(player01);
+    IMockERC20 dai = IMockERC20(GameSetting.getDaiAddress());
+    dai.faucet(address(this), 1000);
+    ILapuVault lapuVault = ILapuVault(GameSetting.getLapuVaultAddress());
+    IERC20(address(dai)).approve(address(lapuVault), 1000);
+    lapuVault.deposit(1000, address(this));
+    IERC20(address(lapuVault)).approve(address(world), 1000);
+    //vm.stopPrank();
   }
 
   function testWorldExists() public {

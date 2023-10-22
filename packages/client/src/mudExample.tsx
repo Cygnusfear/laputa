@@ -11,24 +11,23 @@ export const MudExample = () => {
     components: { Counter, GameSetting },
     systemCalls: {
       mudDefiDaiBalanceOf,
-      mudMockDaiFaucet,
       approveDaiToLapuVaultForTheConnectedPlayer,
       approveLapuToMudWorldForTheConnectedPlayer,
       depositDaiToLapuVaultForTheConnectedPlayer,
       withdrawDaiFromLapuVaultForTheConnectedPlayer,
       mudDefiLapuBalanceOf,
-      mudDefiConsumesLapuFromPlayer,
       mudDefiGetTotalRewardBalance,
       mudMockYieldGenerationFromDeFiPool,
-      mudMockReleaseRewardToPlayer,
       lapuVaultGetTotalSupply,
+      mockLapuVaultFundPlayer,
+      mudDefiDistributeRewardsToPlayers,
     },
   } = useMUD();
 
   const defaultTestAmount = 1000;
-  const defaultConsumeAmount = 100;
+  const defaultConsumeAmount = 400;
   const defaultYieldAmount = 50;
-  const defaultRewardAmount = 30;
+  const backgroundTxIntervalTime = 20000;
 
   const counter = useComponentValue(Counter, singletonEntity);
   const gameSetting = useComponentValue(GameSetting, singletonEntity);
@@ -41,6 +40,8 @@ export const MudExample = () => {
     null
   );
   const [lapuVaultTvl, setLapuVaultTvl] = useState<bigint | null>(0);
+  const [backgroundTxEnabled, setBackgroundTxEnabled] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const refreshData = async () => {
@@ -62,7 +63,7 @@ export const MudExample = () => {
       setLapuVaultTvl(lapuVaultTvl_);
     };
 
-    const refreshDataIntervalId = setInterval(refreshData, 1000);
+    const refreshDataIntervalId = setInterval(refreshData, 3000);
     return () => {
       clearInterval(refreshDataIntervalId);
     };
@@ -75,22 +76,29 @@ export const MudExample = () => {
   ]);
 
   useEffect(() => {
-    const generateYieldIntervalId = setInterval(() => {
-      mudMockYieldGenerationFromDeFiPool(defaultYieldAmount);
-    }, 10000);
-    return () => {
-      clearInterval(generateYieldIntervalId);
+    const executeBackgroundTx = async () => {
+      const rewardBalance = (await mudDefiGetTotalRewardBalance()) as number;
+      if (rewardBalance > 0) {
+        await mudDefiDistributeRewardsToPlayers();
+      } else {
+        await mudMockYieldGenerationFromDeFiPool(defaultYieldAmount);
+      }
     };
-  }, [mudMockYieldGenerationFromDeFiPool]);
 
-  useEffect(() => {
-    const rewardPlayerIntervalId = setInterval(() => {
-      mudMockReleaseRewardToPlayer(playerAddress, defaultRewardAmount);
-    }, 15000);
+    const backgroundTxIntervalId = setInterval(() => {
+      if (backgroundTxEnabled) {
+        executeBackgroundTx();
+      }
+    }, backgroundTxIntervalTime);
     return () => {
-      clearInterval(rewardPlayerIntervalId);
+      clearInterval(backgroundTxIntervalId);
     };
-  }, [playerAddress, mudMockReleaseRewardToPlayer]);
+  }, [
+    backgroundTxEnabled,
+    mudDefiGetTotalRewardBalance,
+    mudMockYieldGenerationFromDeFiPool,
+    mudDefiDistributeRewardsToPlayers,
+  ]);
 
   const delay = async (ms) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -123,17 +131,12 @@ export const MudExample = () => {
         onClick={async (event) => {
           event.preventDefault();
           console.log(
-            "mudMockDaiFaucet:",
-            await mudMockDaiFaucet(playerAddress, defaultTestAmount)
+            "mockLapuVaultFundPlayer:",
+            await mockLapuVaultFundPlayer(playerAddress)
           );
-          const playerDaiBalance_ = (await mudDefiDaiBalanceOf(
-            playerAddress
-          )) as number;
-          console.log("playerDaiBalance_:", playerDaiBalance_);
-          setPlayerDaiBalance(playerDaiBalance_);
         }}
       >
-        getDaiFromFaucet
+        FundPlayer
       </button>
       <button
         type="button"
@@ -164,17 +167,9 @@ export const MudExample = () => {
               defaultConsumeAmount
             )
           );
-          await delay(1000);
-          console.log(
-            "mudDefiConsumesLapuFromPlayer:",
-            await mudDefiConsumesLapuFromPlayer(
-              defaultConsumeAmount,
-              playerAddress
-            )
-          );
         }}
       >
-        consumeLapu
+        approveLapu
       </button>
       <button
         type="button"
@@ -190,6 +185,17 @@ export const MudExample = () => {
         }}
       >
         swapLapuToDai
+      </button>
+      <button
+        type="button"
+        className="px-100 py-100 rounded-md border border-gray-300 bg-white text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+        onClick={async (event) => {
+          event.preventDefault();
+          console.log("toggle backgroundTxEnabled from:", backgroundTxEnabled);
+          setBackgroundTxEnabled(!backgroundTxEnabled);
+        }}
+      >
+        {backgroundTxEnabled ? "Disable Background Tx" : "Enable Background Tx"}
       </button>
     </div>
   );

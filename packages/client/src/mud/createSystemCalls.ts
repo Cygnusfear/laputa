@@ -48,9 +48,14 @@ export function createSystemCalls(
     EntityType,
     OwnedBy,
     GameSetting,
+    EntityTypeDetail,
   }: ClientComponents
 ) {
   const defaultVector3 = new Vector3(1, 0, 3);
+
+  const delay = async (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
 
   const increment = async () => {
     /*
@@ -92,6 +97,14 @@ export function createSystemCalls(
     return res;
   };
 
+  const mudGetLapuBuildingCost = async (entityTypeId: number) => {
+    const entityTypeDetail = await getComponentValue(
+      EntityTypeDetail,
+      entityTypeId
+    );
+    return entityTypeDetail?.buildingCostLapu || 400;
+  };
+
   const mudBuildFacility = async (
     entityTypeId: number = 10,
     x: number = defaultVector3.x,
@@ -101,6 +114,18 @@ export function createSystemCalls(
     color: string = "#ff00ff",
     variant: number = 0
   ) => {
+    //approve mud world to spend LAPU for building
+    const buildingCostLapu = await mudGetLapuBuildingCost(entityTypeId);
+    console.log(
+      "mudBuildFacility approveLapuToMudWorldForTheConnectedPlayer",
+      buildingCostLapu
+    );
+    await approveLapuToMudWorldForTheConnectedPlayer(buildingCostLapu);
+    console.log(
+      "mudBuildFacility approveLapuToMudWorldForTheConnectedPlayer done"
+    );
+
+    delay(1000);
     const tx = await worldContract.write.buildFacility([
       entityTypeId,
       x,
@@ -222,7 +247,10 @@ export function createSystemCalls(
       account: walletClient?.account,
     });
     const res = await walletClient.writeContract(request);
-    return res;
+    const transaction = await publicClient.waitForTransactionReceipt({
+      hash: res,
+    });
+    return transaction;
   };
 
   const approveLapuToMudWorldForTheConnectedPlayer = async (amount) => {
@@ -235,11 +263,19 @@ export function createSystemCalls(
       account: walletClient?.account,
     });
     const res = await walletClient.writeContract(request);
-    return res;
+    const transaction = await publicClient.waitForTransactionReceipt({
+      hash: res,
+    });
+    return transaction;
   };
 
   const depositDaiToLapuVaultForTheConnectedPlayer = async (amount) => {
     const gameSetting = await getComponentValue(GameSetting, singletonEntity);
+    console.log("gameSetting?.lapuVaultAddress", gameSetting?.lapuVaultAddress);
+    console.log(
+      "depositDaiToLapuVaultForTheConnectedPlayer walletClient?.account.address",
+      walletClient?.account.address
+    );
     const { request } = await publicClient.simulateContract({
       address: gameSetting?.lapuVaultAddress,
       abi: ILapuVaultAbi,
@@ -248,7 +284,10 @@ export function createSystemCalls(
       account: walletClient?.account,
     });
     const res = await walletClient.writeContract(request);
-    return res;
+    const transaction = await publicClient.waitForTransactionReceipt({
+      hash: res,
+    });
+    return transaction;
   };
 
   const withdrawDaiFromLapuVaultForTheConnectedPlayer = async (amount) => {
@@ -265,7 +304,10 @@ export function createSystemCalls(
       account: walletClient?.account,
     });
     const res = await walletClient.writeContract(request);
-    return res;
+    const transaction = await publicClient.waitForTransactionReceipt({
+      hash: res,
+    });
+    return transaction;
   };
 
   const mudDefiConsumesLapuFromPlayer = async (amount, playerAddress) => {
@@ -278,6 +320,7 @@ export function createSystemCalls(
   };
 
   const mudMockYieldGenerationFromDeFiPool = async (amount) => {
+    console.log("mudMockYieldGenerationFromDeFiPool", amount);
     const tx = await worldContract.write.mockYieldGenerationFromDeFiPool([
       amount,
     ]);
@@ -304,6 +347,25 @@ export function createSystemCalls(
     return data;
   };
 
+  const mockLapuVaultFundPlayer = async (playerAddress, amount = 1000) => {
+    console.log("mockLapuVaultFundPlayer start", playerAddress, amount);
+    await mudMockDaiFaucet(playerAddress, amount);
+    console.log("mudMockDaiFaucet done");
+    delay(1000);
+    await approveDaiToLapuVaultForTheConnectedPlayer(amount);
+    console.log("approveDaiToLapuVaultForTheConnectedPlayer done");
+    delay(1000);
+    await depositDaiToLapuVaultForTheConnectedPlayer(amount);
+    console.log("mockLapuVaultFundPlayer done", playerAddress, amount);
+  };
+
+  const mudDefiDistributeRewardsToPlayers = async () => {
+    console.log("mudDefiDistributeRewardsToPlayers");
+    const tx = await worldContract.write.defiDistributeRewardsToPlayers();
+    await waitForTransaction(tx);
+    return tx;
+  };
+
   return {
     increment,
     mudGetEntityType,
@@ -327,5 +389,7 @@ export function createSystemCalls(
     mudMockYieldGenerationFromDeFiPool,
     mudMockReleaseRewardToPlayer,
     lapuVaultGetTotalSupply,
+    mockLapuVaultFundPlayer,
+    mudDefiDistributeRewardsToPlayers,
   };
 }

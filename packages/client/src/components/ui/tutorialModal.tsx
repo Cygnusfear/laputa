@@ -8,6 +8,8 @@ import { getState } from "@/game/store";
 import { useState, useEffect } from "react";
 import { useSpring, animated, config } from "@react-spring/web";
 
+import { useMUD } from "@/useMUD";
+
 function TutorialModal({
   step,
   screenIndex,
@@ -83,6 +85,11 @@ function TutorialModal({
 }
 
 const Tutorial = () => {
+  const {
+    systemCalls: { mockLapuVaultFundPlayer },
+  } = useMUD();
+  // const playerAddress = getState().player?.playerData?.address;
+
   const [currentTutorial, setCurrentTutorial] = useState<
     TutorialStep | undefined
   >(undefined);
@@ -121,10 +128,11 @@ const Tutorial = () => {
             if (currentTutorial.screens[screenIndex].onExitScreen) {
               currentTutorial.screens[screenIndex]!.onExitScreen!();
             }
-            // if (currentTutorial.screens.length - 1 === screenIndex) {
-            //   completeTutorial(currentTutorial.name);
-            // }
             setScreenIndex(screenIndex + 1);
+            if (currentTutorial.screens[screenIndex].funds)
+              mockLapuVaultFundPlayer(
+                currentTutorial.screens[screenIndex].funds
+              );
           }}
         />
       )}

@@ -7,8 +7,10 @@ import { getKeysWithValue } from "@latticexyz/world-modules/src/modules/keyswith
 import { getKeysInTable } from "@latticexyz/world-modules/src/modules/keysintable/getKeysInTable.sol";
 import { PackedCounter } from "@latticexyz/store/src/PackedCounter.sol";
 
-import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy, EntityCustomization } from "../codegen/index.sol";
+import { Counter, Position, PositionTableId, Orientation, EntityType, OwnedBy, EntityCustomization, GameSetting, EntityTypeDetail, PlayerDataDetail } from "../codegen/index.sol";
 import { positionToEntityKey } from "../positionToEntityKey.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract FacilitySystem is System {
   /**
@@ -36,6 +38,13 @@ contract FacilitySystem is System {
     return keysAtPosition.length == 0;
   }
 
+  function facilitySystemSetupEntityTypeDetails() public {
+    EntityTypeDetail.set(1, 400, 0);
+    EntityTypeDetail.set(102, 300, 0);
+    EntityTypeDetail.set(103, 75, 1);
+    EntityTypeDetail.set(104, 50, 0);
+  }
+
   /**
    * @dev Check if a player can build a facility of entityTypeId.
    * @param player The address of the player to check.
@@ -43,8 +52,40 @@ contract FacilitySystem is System {
    * @return True if the player can build a facility of entityTypeId, false otherwise.
    */
   function canPlayerBuildFacilityType(address player, uint32 entityTypeId) public view returns (bool) {
-    //TODO: require player to have enough resources to build this facility
-    return true;
+    uint256 buildingCostLapu = EntityTypeDetail.getBuildingCostLapu(entityTypeId);
+    IERC20 lapu = IERC20(GameSetting.getLapuVaultAddress());
+    return lapu.balanceOf(player) >= buildingCostLapu;
+  }
+
+  function lapuCostToBuildFacilityType(uint32 entityTypeId) public view returns (uint256) {
+    uint256 buildingCostLapu = EntityTypeDetail.getBuildingCostLapu(entityTypeId);
+    if (buildingCostLapu > 0) return buildingCostLapu;
+    else return 100;
+  }
+
+  function consumeResourcesToBuildFacilityType(address consumer, uint32 entityTypeId) public {
+    //transfer buildingCostLapu LAPU from consumer to this world contract
+    uint256 buildingCostLapu = lapuCostToBuildFacilityType(entityTypeId);
+    IERC20 lapu = IERC20(GameSetting.getLapuVaultAddress());
+    SafeERC20.safeTransferFrom(lapu, consumer, address(this), buildingCostLapu);
+  }
+
+  function updatePlayerDataDetailForBuildingFacilityType(address player, uint32 entityTypeId) public {
+    uint256 residence = EntityTypeDetail.getResidence(entityTypeId);
+    bytes32 playerKey = bytes32(bytes20(player));
+    if (residence > 0) {
+      GameSetting.setTotalResidence(GameSetting.getTotalResidence() + residence);
+      PlayerDataDetail.setResidence(playerKey, PlayerDataDetail.getResidence(playerKey) + residence);
+    }
+  }
+
+  function updatePlayerDataDetailForDestroyFacilityType(address player, uint32 entityTypeId) public {
+    uint256 residence = EntityTypeDetail.getResidence(entityTypeId);
+    bytes32 playerKey = bytes32(bytes20(player));
+    if (residence > 0) {
+      GameSetting.setTotalResidence(GameSetting.getTotalResidence() - residence);
+      PlayerDataDetail.setResidence(playerKey, PlayerDataDetail.getResidence(playerKey) - residence);
+    }
   }
 
   /**
@@ -88,12 +129,20 @@ contract FacilitySystem is System {
    * @param yaw The yaw of the facility to build.
    * @return The key of the entity that was created.
    */
-  function buildFacility(uint32 entityTypeId, int32 x, int32 y, int32 z, int32 yaw, string calldata color, uint32 variant) public returns (bytes32) {
+  function buildFacility(
+    uint32 entityTypeId,
+    int32 x,
+    int32 y,
+    int32 z,
+    int32 yaw,
+    string calldata color,
+    uint32 variant
+  ) public returns (bytes32) {
     require(_msgSender() != address(0), "Invalid sender address");
     require(canPlayerBuildFacilityType(_msgSender(), entityTypeId), "Cannot build this facility type");
     require(canBuildFacilityTypeAtPosition(entityTypeId, x, y, z), "This facility cannot be built at this position");
 
-    //TODO: consume resources from sender to build facility
+    consumeResourcesToBuildFacilityType(_msgSender(), entityTypeId);
 
     //create entity and assign component values
     bytes32 entityKey = positionToEntityKey(x, y, z);
@@ -102,6 +151,8 @@ contract FacilitySystem is System {
     EntityType.set(entityKey, entityTypeId);
     EntityCustomization.set(entityKey, variant, color);
     OwnedBy.set(entityKey, _msgSender());
+
+    updatePlayerDataDetailForBuildingFacilityType(_msgSender(), entityTypeId);
 
     return entityKey;
   }
@@ -113,6 +164,8 @@ contract FacilitySystem is System {
   function destroyFacility(bytes32 entityKey) public {
     require(_msgSender() != address(0), "Invalid sender address");
     require(OwnedBy.get(entityKey) == _msgSender(), "Sender does not own this entity");
+
+    updatePlayerDataDetailForDestroyFacilityType(_msgSender(), EntityType.get(entityKey));
 
     OwnedBy.deleteRecord(entityKey);
     EntityType.deleteRecord(entityKey);

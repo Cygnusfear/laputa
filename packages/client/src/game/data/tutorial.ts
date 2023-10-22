@@ -19,6 +19,7 @@ export type TutorialScreen = {
   entity?: FacilityDataType;
   hideNext?: boolean;
   onExitScreen?: () => boolean;
+  funds?: number;
 };
 
 const tutorialFlags = {
@@ -111,6 +112,7 @@ export const tutorialSteps = [
         text: `Embark on the foundational step of your skyward journey: the <b>Gravity Hill</b>. This magnificent contraption is the beating heart of your floating haven, generating the essential force of <b>gravity</b>.<br/><br/>
         ${EntityData.facilities.gravityhill.description}<br/><br/><i><b>Choose the Gravity Hill from your inventory, and place it</b></i> to set the cornerstone of your ethereal city.`,
         entity: EntityData.facilities.gravityhill,
+        funds: 400,
       },
     ],
   },
@@ -141,6 +143,7 @@ export const tutorialSteps = [
         text: `Massive components were manufactured in STAKAC's off-site facilities and then airlifted for assembly, a process that required precision and coordination given the sheer size of the dynamo. This majestic device captures the whispers and roars of the cosmic breezes, converting them into the vital energy your city craves. Place it, and watch as it breathes life into your creations, illuminating the skies with its radiant aura.<br/><br/>
         ${EntityData.facilities.dynamo.description}`,
         entity: EntityData.facilities.dynamo,
+        funds: 300,
       },
     ],
   },
@@ -166,6 +169,7 @@ export const tutorialSteps = [
         ${EntityData.facilities.residence.description}<br/><br/><b>Build a residence for your citizens</b>`,
         entity: EntityData.facilities.residence,
         image: "house.webp",
+        funds: 200,
       },
     ],
   },
@@ -232,6 +236,7 @@ export const tutorialSteps = [
         onExitScreen: () => {
           tutorialFlags.hasHadWalletExplainer = true;
         },
+        funds: 500,
       },
     ],
   },
