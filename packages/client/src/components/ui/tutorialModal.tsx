@@ -35,12 +35,15 @@ function TutorialModal({
   });
   return (
     <div className="fixed left-0 top-0 flex h-full w-full select-none items-center justify-center bg-black/50">
-      <animated.div className="flex max-w-[50rem] flex-col" style={props}>
-        <div className="flex-1  rounded-lg  border-b border-[#FDBF7F33] bg-[#2B3840] p-6 pb-10 text-white shadow-lg">
+      <animated.div
+        className="flex max-h-full max-w-full flex-col md:max-w-[50rem]"
+        style={props}
+      >
+        <div className="flex-1 overflow-scroll border-b border-[#FDBF7F33] bg-[#2B3840] p-6 pb-10 text-white shadow-lg sm:rounded-lg">
           <h2 className="mb-4 text-2xl text-[#ffddbb]">
             {step.screens[screenIndex].name}
           </h2>
-          <div className="flex flex-row items-start justify-start gap-8">
+          <div className="sm:text-md flex flex-col items-start justify-start gap-8 sm:flex-row">
             {step.screens[screenIndex].text && (
               <div
                 className="flex-1 grow place-content-start items-start justify-self-start"
@@ -69,11 +72,11 @@ function TutorialModal({
             </div>
           </div>
         </div>
-        <div className="mt-4 flex justify-end">
+        <div className="flex justify-end sm:mt-4">
           {!step.screens[screenIndex].hideNext && (
             <button
               onClick={() => onNext()}
-              className="cursor-pointer rounded border border-t-0 border-[#FDBF7F] bg-[#FDBF7Faa] px-4 py-2 text-white hover:bg-[#FDBF7Fee]"
+              className="w-full cursor-pointer rounded border border-t-0 border-[#FDBF7F] bg-[#FDBF7Faa] px-4 py-2 text-white hover:bg-[#FDBF7Fee] sm:w-auto"
             >
               Next
             </button>

@@ -3,7 +3,7 @@
 }
 
 .inventory-bar {
-  @apply flex-row flex items-center justify-center w-full h-40 overflow-visible;
+  @apply flex-row flex items-center justify-center w-full h-40 overflow-visible overflow-x-scroll;
 }
 
 .card {
