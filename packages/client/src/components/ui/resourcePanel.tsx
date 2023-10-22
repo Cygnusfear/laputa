@@ -5,6 +5,7 @@ import { useStore } from "@/game/store";
 
 import "./resourcePanel.css";
 import { cn } from "@/lib/utils";
+import { FaFingerprint } from "react-icons/fa6";
 
 function ResourceItem({
   resourceType,
@@ -64,11 +65,19 @@ function ResourceItem({
 
 function ResourcePanel() {
   const {
-    player: { playerData },
+    player: {
+      playerData,
+      playerData: { hasComethWallet },
+    },
   } = useStore();
 
   return (
     <div className="resource-panel">
+      {hasComethWallet !== "" && (
+        <div className="mb-2 flex h-8 w-8 items-center rounded-[100%] border border-yellow-400 bg-slate-400">
+          <FaFingerprint className="m-auto flex text-xl text-yellow-400" />
+        </div>
+      )}
       {Object.entries(playerData.resources)
         .filter(([type]) => type !== "water" && type !== "food")
         .map(([type, amount], idx) => (

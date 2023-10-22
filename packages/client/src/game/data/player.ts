@@ -9,6 +9,7 @@ export type PlayerData = {
   activeTutorials: string[];
   finishedTutorials: string[];
   address: string;
+  hasComethWallet: string;
 };
 
 export const createNewPlayerData = ({
@@ -33,6 +34,7 @@ export const createNewPlayerData = ({
     activeTutorials: [],
     finishedTutorials: [],
     address: address || "",
+    hasComethWallet: window.localStorage.getItem("comethWalletAddress") || "",
   };
 };
 
@@ -65,6 +67,7 @@ export const savePlayer = async (playerData: PlayerData, verbose = false) => {
     address: playerData.address,
     name: playerData.name,
     facilities: [],
+    hasComethWallet: window.localStorage.getItem("comethWalletAddress") || "",
   };
   setItem("playerData", JSON.stringify(cleanPlayer)).then(() => {
     if (verbose) console.log("saved", cleanPlayer);

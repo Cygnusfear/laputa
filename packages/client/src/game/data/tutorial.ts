@@ -1,3 +1,4 @@
+import { createComethWallet } from "@/mud/wallet";
 import { getState } from "../store";
 import EntityData, { FacilityDataType } from "./entities";
 import { PlayerData, hasFacility } from "./player";
@@ -9,14 +10,22 @@ export type TutorialStep = {
   screens: TutorialScreen[];
   completedCondition: (player: PlayerData) => boolean;
   startCondition: (player: PlayerData) => boolean;
-  onExitScreens?: () => boolean;
 };
 
 export type TutorialScreen = {
   name: string;
-  text: string;
+  text?: string;
   image?: string;
   entity?: FacilityDataType;
+  hideNext?: boolean;
+  onExitScreen?: () => boolean;
+  funds?: number;
+};
+
+const tutorialFlags = {
+  hasCreatedWallet: false,
+  hasHadWalletExplainer: false,
+  // hasFinishedIntro: false,
 };
 
 export const evaluateTutorials = async () => {
@@ -26,7 +35,7 @@ export const evaluateTutorials = async () => {
   let activeTutorials = player.activeTutorials || [];
   for (const t of player.activeTutorials) {
     const activeTutorial = tutorialSteps.find((step) => step.name === t);
-    if (activeTutorial?.completedCondition(player)) {
+    if (activeTutorial && activeTutorial.completedCondition(player)) {
       activeTutorials = [];
       if (!finishedTutorials.includes(activeTutorial.name)) {
         finishedTutorials.push(activeTutorial.name);
@@ -42,7 +51,7 @@ export const evaluateTutorials = async () => {
         finishedTutorials.push(availabletutorial.name);
         continue;
       } else if (
-        availabletutorial?.startCondition(player) &&
+        availabletutorial.startCondition(player) &&
         !activeTutorials.includes(t.name)
       ) {
         activeTutorials.push(availabletutorial.name);
@@ -89,14 +98,15 @@ export const tutorialSteps = [
         EntityData.facilities.gravityhill.entityTypeId
       );
     },
-    startCondition: () => {
-      return true;
+    startCondition: (player: PlayerData) => {
+      return !player.finishedTutorials.includes("intro");
     },
     screens: [
       {
         name: "A world of floating cities",
         text: "In a realm where the vastness of the cosmos meets the dreams of mortals, floating cities known as <b>Laputas</b> drift amidst the stars, tethered only by the delicate dance of gravity and ambition.<br/><br/>As a visionary architect of this celestial expanse, you are tasked with weaving together resources, imagination, and the very essence of the universe, to sculpt a city that not only floats but thrives. <br/>Let the dance of construction and collaboration begin, for in this ballet of creation, every tile, every choice, and every alliance matters.<br/><br/>Welcome, builder of the skies, to a journey of wonder and infinite possibilities.",
         image: "scroll.webp",
+        funds: 400,
       },
       {
         name: "Into the skies!",
@@ -127,6 +137,7 @@ export const tutorialSteps = [
         name: "Power it up",
         text: `As your floating city takes shape, energy shall become the lifeblood that keeps it alive and thriving. The Whirly Dynamo was born out of sheer necessity and innovation. As the demand for airborne cities increased, traditional power sources proved inefficient. Groundbreaking engineers and physicists from around the world convened, seeking a solution that could harness the vast energy potential of the stratosphere. Their answer was the Whirly Dynamo.<br/><br>Today, the Whirly Dynamo stands not just as a beacon of energy but as a testament to STAKAC's unwavering commitment to innovation and progress.`,
         image: `turbine3.webp`,
+        funds: 600,
       },
       {
         name: "Power it up",
@@ -170,14 +181,11 @@ export const tutorialSteps = [
       EntityData.facilities.residence,
       EntityData.facilities.scaffold,
     ],
-    completedCondition: (player: PlayerData) => {
-      return hasWallet(player);
+    completedCondition: () => {
+      return hasWallet();
     },
     startCondition: (player: PlayerData) => {
       return hasFacility(player, EntityData.facilities.residence.entityTypeId);
-    },
-    onExitScreens: () => {
-      console.log("woop woop");
     },
     screens: [
       {
@@ -186,15 +194,65 @@ export const tutorialSteps = [
         image: `friends.webp`,
       },
       {
-        name: "Keep it safe",
-        text: `Now that you're generating income, let's make sure we store it in a safe place for you.<br/><br/>`,
+        name: "Access to your vault",
+        text: `In your celestial city, even the intangible becomes precious. As you amass LAPU—the lifeblood of your soaring civilization—it's crucial to safeguard it. Begin by authorizing your unique fingerprint to fortify your vault. This acts as the key to your treasury, ensuring that your hard-earned wealth remains yours and yours alone. Take the first step in solidifying your skyward legacy.<br/><br/>Now that you're generating income, let's make sure we store it in a safe place for you.<br/><br/><b>Let's create a passkey to store your assets safely</b>`,
         image: `vault2.webp`,
+        onExitScreen: () => {
+          createWallet();
+        },
+      },
+      {
+        name: "Set up your vault access",
+        text: ``,
+        image: `vault2.webp`,
+        onExitScreen: () => {
+          tutorialFlags.hasHadWalletExplainer = true;
+        },
+        hideNext: true,
+      },
+    ],
+  },
+  {
+    name: "keepitsafe",
+    text: "Make it a life worth living",
+    inventory: [
+      EntityData.facilities.gravityhill,
+      EntityData.facilities.dynamo,
+      EntityData.facilities.residence,
+      EntityData.facilities.scaffold,
+    ],
+    completedCondition: () => {
+      return tutorialFlags.hasHadWalletExplainer;
+    },
+    startCondition: () => {
+      return hasWallet() && tutorialFlags.hasCreatedWallet;
+    },
+    screens: [
+      {
+        name: "Congratulations, you're all set!",
+        text: `Your vault is now secured, anchored by your unique fingerprint. You've just laid the foundation of your financial fortress in the sky. Every LAPU you earn will be safely stored here, ready for you to invest in new technologies, facilities, or whatever your visionary mind desires. In this vault, your ambitions become tangible, your dreams within grasp. <br/><br/>Forge ahead; the sky is no longer the limit.<br/><br/>`,
+        image: `vault.webp`,
+        onExitScreen: () => {
+          tutorialFlags.hasHadWalletExplainer = true;
+        },
+        funds: 500,
       },
     ],
   },
 ] as TutorialStep[];
 
-const hasWallet = (player: PlayerData) => {
-  player;
-  return false;
+const hasWallet = () => {
+  const comethWallet = window.localStorage.getItem("comethWalletAddress");
+  return comethWallet && comethWallet !== "";
+};
+
+const createWallet = async () => {
+  const wallet = await createComethWallet();
+  tutorialFlags.hasCreatedWallet = true;
+  getState().player.setPlayerData({
+    ...getState().player.playerData,
+    hasComethWallet:
+      window.localStorage.getItem("comethWalletAddress") || "addy",
+  });
+  console.log("woop woop", wallet);
 };

@@ -106,7 +106,18 @@ function GameLoop() {
       }
       if (e.key === "y") {
         newPlayer();
+        console.log("Debug -> Reset player");
       }
+      if (e.key === "u") {
+        const activeTutorial = "making money";
+        getState().player.setPlayerData({
+          ...getState().player.playerData,
+          finishedTutorials: ["intro"],
+          activeTutorials: [activeTutorial],
+        });
+        console.log("Debug -> Set player tutorials to wallet generation");
+      }
+
       e.stopPropagation();
     };
 
@@ -194,7 +205,7 @@ function GameLoop() {
       ) {
         evaluateTutorials();
       }
-    }, 1000);
+    }, 500);
 
     return () => clearInterval(interval);
   }, []);

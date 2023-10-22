@@ -1,18 +1,18 @@
 .inventory-wrapper {
-  @apply absolute bottom-3 w-full items-center justify-center flex-col flex;
+  @apply absolute bottom-3 w-full items-center justify-center flex-col flex overflow-y-visible;
 }
 
 .inventory-bar {
-  @apply flex-row flex items-center justify-center w-full h-40 overflow-visible;
+  @apply flex-row flex items-center justify-center w-full h-40 overflow-visible overflow-x-scroll overflow-y-visible;
 }
 
 .card {
-  @apply relative flex flex-col items-center justify-end w-24 h-full m-2 text-white overflow-visible cursor-pointer select-none;
+  @apply relative flex flex-col items-center justify-end w-24 h-full m-2 text-white overflow-visible cursor-pointer select-none overflow-y-visible;
   transition: opacity 1s ease-in-out;
 }
 
 .card-wrapper {
-  @apply relative flex flex-col items-center justify-end w-24 h-full m-2 text-white overflow-clip cursor-pointer;
+  @apply relative flex flex-col items-center justify-end w-24 h-full m-2 text-white overflow-clip cursor-pointer overflow-y-visible;
 }
 
 .card:hover .card-wrapper {

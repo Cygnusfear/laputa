@@ -2,6 +2,7 @@ import { IResource } from "../types/entities";
 import { useMemo } from "react";
 import { getState } from "../store";
 import HeightLine from "./heightLine";
+// import { Cloud, Clouds } from "@react-three/drei";
 // import { Sparkles } from "@react-three/drei";
 
 function Resource(props: IResource) {
@@ -33,6 +34,9 @@ const Renderer = (props: IResource) => {
 
   return (
     <group layers={30} dispose={null} position={[0, 0, 0]}>
+      {/* <Clouds>
+        <Cloud opacity={0.1} frustumCulled={false} />
+      </Clouds> */}
       {prototypes!.map((proto, index) => {
         return (
           <mesh

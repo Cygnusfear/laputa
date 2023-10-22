@@ -94,21 +94,21 @@ const EntityData = {
       variants: ModelData.scaffold,
       tags: [],
     },
-    miner: {
-      entityTypeId: 105,
-      name: "Crystal Miner",
-      blurb: "Needs to be placed next to a Crystal",
-      description: "",
-      image: "scaffold.webp",
-      costs: [
-        ["gravity", 1],
-        ["power", 2],
-        ["LAPU", 350],
-      ],
-      produces: [],
-      variants: ModelData.miner,
-      tags: [],
-    },
+    // miner: {
+    //   entityTypeId: 105,
+    //   name: "Crystal Miner",
+    //   blurb: "Needs to be placed next to a Crystal",
+    //   description: "",
+    //   image: "scaffold.webp",
+    //   costs: [
+    //     ["gravity", 1],
+    //     ["power", 2],
+    //     ["LAPU", 350],
+    //   ],
+    //   produces: [],
+    //   variants: ModelData.miner,
+    //   tags: [],
+    // },
   } as { [key: string]: FacilityDataType },
   resources: {
     crystalFloat: {
