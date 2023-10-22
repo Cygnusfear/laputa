@@ -2,7 +2,7 @@
 pragma solidity >=0.8.21;
 
 import { System } from "@latticexyz/world/src/System.sol";
-import { GameSetting } from "../codegen/index.sol";
+import { GameSetting, PlayerDataDetail } from "../codegen/index.sol";
 
 import "../interfaces/IMockERC20.sol";
 import "../interfaces/ILapuVault.sol";
@@ -30,7 +30,8 @@ contract MockSystem is System {
   function mockReleaseRewardToPlayer(address account, uint256 amount) public {
     ILapuVault lapuVault = ILapuVault(GameSetting.getLapuVaultAddress());
     lapuVault.transfer(account, amount);
-    uint256 currentTotalRewarded = GameSetting.getTotalRewarded();
-    GameSetting.setTotalRewarded(currentTotalRewarded + amount);
+    bytes32 accountKey = bytes32(bytes20(account));
+    PlayerDataDetail.setRewarded(accountKey, PlayerDataDetail.getRewarded(accountKey) + amount);
+    GameSetting.setTotalRewarded(GameSetting.getTotalRewarded() + amount);
   }
 }
