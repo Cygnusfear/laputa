@@ -54,6 +54,15 @@ export const MudExample = () => {
         playerAddress
       )) as number;
       setPlayerLapuBalance(playerLapuBalance_);
+      const resources = getState().player?.playerData?.resources;
+      console.log("resources -> ", playerLapuBalance_);
+      getState().player?.setPlayerData({
+        ...getState().player?.playerData,
+        resources: {
+          ...resources,
+          LAPU: parseInt(playerLapuBalance_.toString()),
+        },
+      });
 
       const totalRewardBalance_ =
         (await mudDefiGetTotalRewardBalance()) as number;

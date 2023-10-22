@@ -106,13 +106,13 @@ export const tutorialSteps = [
         name: "A world of floating cities",
         text: "In a realm where the vastness of the cosmos meets the dreams of mortals, floating cities known as <b>Laputas</b> drift amidst the stars, tethered only by the delicate dance of gravity and ambition.<br/><br/>As a visionary architect of this celestial expanse, you are tasked with weaving together resources, imagination, and the very essence of the universe, to sculpt a city that not only floats but thrives. <br/>Let the dance of construction and collaboration begin, for in this ballet of creation, every tile, every choice, and every alliance matters.<br/><br/>Welcome, builder of the skies, to a journey of wonder and infinite possibilities.",
         image: "scroll.webp",
+        funds: 400,
       },
       {
         name: "Into the skies!",
         text: `Embark on the foundational step of your skyward journey: the <b>Gravity Hill</b>. This magnificent contraption is the beating heart of your floating haven, generating the essential force of <b>gravity</b>.<br/><br/>
         ${EntityData.facilities.gravityhill.description}<br/><br/><i><b>Choose the Gravity Hill from your inventory, and place it</b></i> to set the cornerstone of your ethereal city.`,
         entity: EntityData.facilities.gravityhill,
-        funds: 400,
       },
     ],
   },
@@ -137,13 +137,13 @@ export const tutorialSteps = [
         name: "Power it up",
         text: `As your floating city takes shape, energy shall become the lifeblood that keeps it alive and thriving. The Whirly Dynamo was born out of sheer necessity and innovation. As the demand for airborne cities increased, traditional power sources proved inefficient. Groundbreaking engineers and physicists from around the world convened, seeking a solution that could harness the vast energy potential of the stratosphere. Their answer was the Whirly Dynamo.<br/><br>Today, the Whirly Dynamo stands not just as a beacon of energy but as a testament to STAKAC's unwavering commitment to innovation and progress.`,
         image: `turbine3.webp`,
+        funds: 600,
       },
       {
         name: "Power it up",
         text: `Massive components were manufactured in STAKAC's off-site facilities and then airlifted for assembly, a process that required precision and coordination given the sheer size of the dynamo. This majestic device captures the whispers and roars of the cosmic breezes, converting them into the vital energy your city craves. Place it, and watch as it breathes life into your creations, illuminating the skies with its radiant aura.<br/><br/>
         ${EntityData.facilities.dynamo.description}`,
         entity: EntityData.facilities.dynamo,
-        funds: 300,
       },
     ],
   },
@@ -169,7 +169,6 @@ export const tutorialSteps = [
         ${EntityData.facilities.residence.description}<br/><br/><b>Build a residence for your citizens</b>`,
         entity: EntityData.facilities.residence,
         image: "house.webp",
-        funds: 200,
       },
     ],
   },

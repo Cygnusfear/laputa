@@ -130,9 +130,14 @@ const Tutorial = () => {
             }
             setScreenIndex(screenIndex + 1);
             if (currentTutorial.screens[screenIndex].funds)
-              mockLapuVaultFundPlayer(
+              console.log(
+                "dofunds",
                 currentTutorial.screens[screenIndex].funds
               );
+            mockLapuVaultFundPlayer(
+              getState().player.playerData.address,
+              currentTutorial.screens[screenIndex].funds
+            );
           }}
         />
       )}
