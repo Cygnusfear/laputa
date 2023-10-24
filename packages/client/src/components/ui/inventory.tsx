@@ -3,7 +3,7 @@ import "./inventory.css";
 import { getState, useStore } from "@/game/store";
 import { ResourceIcons, ResourceType } from "@/game/data/resources";
 import { cn } from "@/lib/utils";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   animated,
   config,
@@ -86,9 +86,15 @@ function InventoryItem(
   const { name, blurb, image, produces, costs, style } = props;
   const {
     input: { building },
+    player: {
+      playerData: { resources, LAPUtoBeConsolidated },
+    },
   } = useStore();
+  const [tooExpensive, setTooExpensive] = useState(!canAffordBuilding(props));
 
-  const tooExpensive = useMemo(() => !canAffordBuilding(props), [props]);
+  useEffect(() => {
+    setTooExpensive(!canAffordBuilding(props));
+  }, [props, resources, LAPUtoBeConsolidated]);
 
   const hideCursor = () => {
     getState().input.cursor.setCursor({ cursorState: "hidden" });

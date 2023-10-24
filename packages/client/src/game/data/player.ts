@@ -117,6 +117,10 @@ export const doOptimisticLapuDelta = async (
         getState().player.setPlayerData({
           ...getState().player.playerData,
           LAPUtoBeConsolidated: consolidatePrev - amount,
+          resources: {
+            ...getState().player.playerData.resources,
+            LAPU: getState().player.playerData.resources.LAPU + amount,
+          },
         });
       })
       .catch((e: unknown) => {
@@ -126,6 +130,10 @@ export const doOptimisticLapuDelta = async (
         getState().player.setPlayerData({
           ...getState().player.playerData,
           LAPUtoBeConsolidated: consolidatePrev - amount,
+          resources: {
+            ...getState().player.playerData.resources,
+            LAPU: getState().player.playerData.resources.LAPU + amount,
+          },
         });
       });
   });

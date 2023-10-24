@@ -5,6 +5,7 @@ import { useMUD } from "./useMUD";
 
 import { getState } from "./game/store";
 import { useState, useEffect } from "react";
+import { getTimestamp } from "./lib/utils";
 
 export const MudExample = () => {
   const {
@@ -55,7 +56,11 @@ export const MudExample = () => {
         getState().player?.playerData?.address
       )) as number;
       setPlayerLapuBalance(playerLapuBalance_);
-      console.log("[contractRes] LAPU -> ", playerLapuBalance_);
+      console.log(
+        getTimestamp() + " [contractRes] LAPU -> ",
+        playerLapuBalance_
+      );
+      console.log(getTimestamp() + " [playerRes] LAPU -> ", playerLapuBalance_);
       getState().player?.setPlayerData({
         ...getState().player?.playerData,
         resources: {

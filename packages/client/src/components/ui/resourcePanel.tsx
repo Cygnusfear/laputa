@@ -85,7 +85,9 @@ function ResourcePanel() {
         </div>
       )}
       {Object.entries(playerData.resources)
-        .filter(([type]) => type !== "water" && type !== "food")
+        .filter(
+          ([type]) => type !== "water" && type !== "food" && type !== "crystal"
+        )
         .map(([type, amount], idx) => {
           const calcAmount = type === "LAPU" ? amount + LAPUtemp : amount;
           return (
@@ -96,7 +98,7 @@ function ResourcePanel() {
             />
           );
         })}
-      <ResourceItem resourceType="LAPU" amount={LAPUtemp} />
+      {/* <ResourceItem resourceType="LAPU" amount={LAPUtemp} /> */}
     </div>
   );
 }

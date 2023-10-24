@@ -8,7 +8,6 @@ import { floodFill } from "../utils/floodFill";
 import { FacilityDataType } from "../data/entities";
 import { doOptimisticLapuDelta } from "../data/player";
 import { getMUD } from "@/mud/setup";
-import { queueAsyncCall } from "../utils/asyncQueue";
 
 // TODO: Extract build conditions, can't build 1 tile below gravity well, only gravity well can build at y==1, etc
 const canBuildAtPosition = (position: Vector3) => {
@@ -135,11 +134,8 @@ const buildFacility = async ({
       variant,
       owner,
     ];
-    queueAsyncCall(async () => {
-      console.trace("buildFacility hook", position, build);
-      await doOptimisticLapuDelta(-LAPUCost, async () => {
-        await mudBuildFacility(...build);
-      });
+    doOptimisticLapuDelta(-LAPUCost, async () => {
+      await mudBuildFacility(...build);
     });
   }
   addEntity(newFacility);
