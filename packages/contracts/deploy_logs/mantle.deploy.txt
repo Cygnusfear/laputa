@@ -1,0 +1,36 @@
+forge create --rpc-url=https://rpc.testnet.mantle.xyz --constructor-args "MockAToken" "maToken" --legacy --private-key 0x555a1e86641760d5aa9199b415440f1015bfaf837dc1a00587817ab9e9712aa5 src/mock/MockERC20.sol:MockERC20
+[⠆] Compiling...
+No files changed, compilation skipped
+Deployer: 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5
+Deployed to: 0x40Fe65Db0Df5565b0fa50aeEAdC067125216FF2C
+Transaction hash: 0x7ddf27653d9a7917295ad78faa5c18a441a649cc24cdcc9d7a855e50ed04178a
+
+forge create --rpc-url=https://rpc.testnet.mantle.xyz --constructor-args 0x40Fe65Db0Df5565b0fa50aeEAdC067125216FF2C --legacy --private-key 0x555a1e86641760d5aa9199b415440f1015bfaf837dc1a00587817ab9e9712aa5 src/mock/MockPool.sol:MockPool
+[⠆] Compiling...
+No files changed, compilation skipped
+Deployer: 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5
+Deployed to: 0x38D69de4C2b89dEf213ddd18dc1E347F7fFf8910
+Transaction hash: 0xe83683a1b3b63096f1405e720b2916fb96a2a9cd986d8867b67f46fbafb0f1e9
+
+forge create --rpc-url=https://rpc.testnet.mantle.xyz --constructor-args 0x38D69de4C2b89dEf213ddd18dc1E347F7fFf8910 --legacy --private-key 0x555a1e86641760d5aa9199b415440f1015bfaf837dc1a00587817ab9e9712aa5 src/mock/MockPoolAddressesProvider.sol:MockPoolAddressesProvider
+[⠒] Compiling...
+No files changed, compilation skipped
+Deployer: 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5
+Deployed to: 0x184f7383C143A8f6DA0476F0A5C1C739DA05CcC7
+Transaction hash: 0xc0a95d3b9a6cde74c11d72416d60ad480453cfefa00f76c4c7161b0edfef126f
+
+forge create --rpc-url=https://rpc.testnet.mantle.xyz --constructor-args "MockDAI" "mDAI" --legacy --private-key 0x555a1e86641760d5aa9199b415440f1015bfaf837dc1a00587817ab9e9712aa5 src/mock/MockERC20.sol:MockERC20
+[⠢] Compiling...
+No files changed, compilation skipped
+Deployer: 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5
+Deployed to: 0x70a46B86dF81dcc23c38fDe13441beaCD48519E2
+Transaction hash: 0x92c709d0e7286a27ea56e9f4f99369794cf8ef614997228f22e5e70cc8e3751d
+
+forge create --rpc-url=https://rpc.testnet.mantle.xyz --constructor-args 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5 0x70a46B86dF81dcc23c38fDe13441beaCD48519E2 "LapuVaule" "LAPU" 0x184f7383C143A8f6DA0476F0A5C1C739DA05CcC7 0x40Fe65Db0Df5565b0fa50aeEAdC067125216FF2C --legacy --private-key 0x555a1e86641760d5aa9199b415440f1015bfaf837dc1a00587817ab9e9712aa5 src/LapuVault.sol:LapuVault
+[⠢] Compiling...
+No files changed, compilation skipped
+Deployer: 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5
+Deployed to: 0x711C046837BCCceE72E7C5Ed3157FefB71E7d583
+Transaction hash: 0xeae2fe42d095a6fb3650c3e3ba64dd0d9dd361e12b9840505f8a3aa71d7c53dd
+
+https://explorer.testnet.mantle.xyz/address/0x711C046837BCCceE72E7C5Ed3157FefB71E7d583/contracts#address-tabs

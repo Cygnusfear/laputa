@@ -1,0 +1,83 @@
+forge create --rpc-url=https://sepolia-rpc.scroll.io/ --constructor-args "MockAToken" "maToken" --legacy --private-key 0x555a1e86641760d5aa9199b415440f1015bfaf837dc1a00587817ab9e9712aa5 src/mock/MockERC20.sol:MockERC20
+[⠒] Compiling...
+No files changed, compilation skipped
+Deployer: 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5
+Deployed to: 0x40Fe65Db0Df5565b0fa50aeEAdC067125216FF2C
+Transaction hash: 0x5fa08371fcbdb3547ccf511bf8307f0228eadf07589e277bd733afc312c302e4
+
+forge create --rpc-url=https://sepolia-rpc.scroll.io/ --constructor-args 0x40Fe65Db0Df5565b0fa50aeEAdC067125216FF2C --legacy --private-key 0x555a1e86641760d5aa9199b415440f1015bfaf837dc1a00587817ab9e9712aa5 src/mock/MockPool.sol:MockPool
+[⠆] Compiling...
+No files changed, compilation skipped
+Deployer: 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5
+Deployed to: 0x38D69de4C2b89dEf213ddd18dc1E347F7fFf8910
+Transaction hash: 0x5d0958eada4322cde1c50f2b5d431acdac6ddb5533a71b6da5870e79d9977c58
+
+forge create --rpc-url=https://sepolia-rpc.scroll.io/ --constructor-args 0x38D69de4C2b89dEf213ddd18dc1E347F7fFf8910 --legacy --private-key 0x555a1e86641760d5aa9199b415440f1015bfaf837dc1a00587817ab9e9712aa5 src/mock/MockPoolAddressesProvider.sol:MockPoolAddressesProvider
+[⠢] Compiling...
+No files changed, compilation skipped
+Deployer: 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5
+Deployed to: 0x184f7383C143A8f6DA0476F0A5C1C739DA05CcC7
+Transaction hash: 0x76435b6d7bd2a68bd7ff52583c663a38fb2ea37f7c580a02f3922591559db312
+
+forge create --rpc-url=https://sepolia-rpc.scroll.io/ --constructor-args "MockDAI" "mDAI" --legacy --private-key 0x555a1e86641760d5aa9199b415440f1015bfaf837dc1a00587817ab9e9712aa5 src/mock/MockERC20.sol:MockERC20
+[⠒] Compiling...
+No files changed, compilation skipped
+Deployer: 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5
+Deployed to: 0x70a46B86dF81dcc23c38fDe13441beaCD48519E2
+Transaction hash: 0xd210335512a525c23afc1d3887061bb0bf864bf308347705c20bc9d3dbbaa3ea
+
+forge create --rpc-url=https://sepolia-rpc.scroll.io/ --constructor-args 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5 0x70a46B86dF81dcc23c38fDe13441beaCD48519E2 "LapuVaule" "LAPU" 0x184f7383C143A8f6DA0476F0A5C1C739DA05CcC7 0x40Fe65Db0Df5565b0fa50aeEAdC067125216FF2C --legacy --private-key 0x555a1e86641760d5aa9199b415440f1015bfaf837dc1a00587817ab9e9712aa5 src/LapuVault.sol:LapuVault
+[⠔] Compiling...
+No files changed, compilation skipped
+Deployer: 0x15bc81b35a8498cee37E2C7B857538B006CeCAa5
+Deployed to: 0x711C046837BCCceE72E7C5Ed3157FefB71E7d583
+Transaction hash: 0x0617158061d8146af4804df563271f7b468475e4cd85ce5ca58a0b5cf23c2efe
+
+https://sepolia.scrollscan.dev/tx/0x0617158061d8146af4804df563271f7b468475e4cd85ce5ca58a0b5cf23c2efe
+
+https://sepolia.scrollscan.dev/verifyContract-solc?a=0x711c046837bcccee72e7c5ed3157fefb71e7d583&c=v0.8.21%2bcommit.d9974bed&lictype=3
+
+N.B.!!!!
+EVM version to target: paris
+
+Hardhat ====================================
+npx hardhat run scripts/deploy.js --network scrollSepolia
+
+npx hardhat run scripts/deploy.js --network scrollSepolia
+Token address: 0x86f7e8675c66c462A1a143e8eF1E35D7BFc0F483
+
+npx hardhat verify --network scrollSepolia 0x86f7e8675c66c462A1a143e8eF1E35D7BFc0F483 MockAToken maToken
+
+Successfully submitted source code for contract
+contracts/mock/MockERC20.sol:MockERC20 at 0x86f7e8675c66c462A1a143e8eF1E35D7BFc0F483
+for verification on the block explorer. Waiting for verification result...
+
+Successfully verified contract MockERC20 on the block explorer.
+https://sepolia-blockscout.scroll.io/address/0x86f7e8675c66c462A1a143e8eF1E35D7BFc0F483#code
+
+
+
+
+
+npx hardhat run scripts/deploy.js --network scrollSepolia
+
+maTokenAddress 0xD753D5c3cf0631475d42a02DF51272E23e50446e
+mockPoolAddress 0x48A6998dc12E0e4eD12F188D9914cdEb9e2B1402
+mockPoolAddressesProviderAddress 0x5c2048BE2e250B02E55682333Bff29bFeC8847B6
+mockDAIAddress 0x8E84d9b7EaDFE4c5Df06f16cb30703aa4A6697d2
+lapuVaultAddress 0x2328d9AcC1A6BE71CAaAA280C88525e064f696E0
+
+npx hardhat verify --network scrollSepolia 0x2328d9AcC1A6BE71CAaAA280C88525e064f696E0 "0x15bc81b35a8498cee37E2C7B857538B006CeCAa5" "0x8E84d9b7EaDFE4c5Df06f16cb30703aa4A6697d2" "LapuVault" "LAPU" "0x5c2048BE2e250B02E55682333Bff29bFeC8847B6" "0xD753D5c3cf0631475d42a02DF51272E23e50446e"
+
+
+
+
+
+npx hardhat verify --network scrollSepolia 0x2328d9AcC1A6BE71CAaAA280C88525e064f696E0 "0x15bc81b35a8498cee37E2C7B857538B006CeCAa5" "0x8E84d9b7EaDFE4c5Df06f16cb30703aa4A6697d2" "LapuVault" "LAPU" "0x5c2048BE2e250B02E55682333Bff29bFeC8847B6" "0xD753D5c3cf0631475d42a02DF51272E23e50446e"
+
+Successfully submitted source code for contract
+contracts/LapuVault.sol:LapuVault at 0x2328d9AcC1A6BE71CAaAA280C88525e064f696E0
+for verification on the block explorer. Waiting for verification result...
+
+Successfully verified contract LapuVault on the block explorer.
+https://sepolia-blockscout.scroll.io/address/0x2328d9AcC1A6BE71CAaAA280C88525e064f696E0#code
