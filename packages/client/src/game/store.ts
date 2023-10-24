@@ -98,7 +98,11 @@ const useStore = create<IState>((set, get) => ({
       resources: { resource: ResourceType; amount: number }[]
     ): boolean => {
       return resources.every(({ resource, amount }) => {
-        return get().player.playerData.resources[resource] >= amount;
+        let consolidated = get().player.playerData.resources[resource];
+        if (resource === "LAPU") {
+          consolidated += get().player.playerData.LAPUtoBeConsolidated || 0;
+        }
+        return consolidated >= amount;
       });
     },
     spendResouces: (

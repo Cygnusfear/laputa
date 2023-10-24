@@ -3,7 +3,7 @@
 }
 
 .inventory-bar {
-  @apply flex-row flex items-center justify-center w-full h-40 overflow-visible overflow-x-scroll overflow-y-visible;
+  @apply flex-row flex items-center justify-center w-full h-44 overflow-visible overflow-x-scroll overflow-y-visible z-50;
 }
 
 .card {
@@ -26,12 +26,16 @@
 }
 
 .card:hover .card-content,
-.card-selected .card-content {
+.selected-item .card-content {
   opacity: 1;
 }
 
+.selected-item .card-portrait {
+  @apply shadow-md;
+}
+
 .card-portrait {
-  @apply relative flex bg-cover h-24 w-24 self-end rounded-lg shadow-md cursor-pointer border border-transparent bg-[#76eae441] border-t-0;
+  @apply relative flex bg-cover h-24 w-24 self-end rounded-lg cursor-pointer border border-transparent bg-[#76eae441] border-t-0;
 }
 
 .card-image {
@@ -90,7 +94,7 @@
 */
 
 .building-bar {
-  @apply flex-row flex items-center justify-center w-full overflow-visible gap-4;
+  @apply flex-row flex items-center justify-center w-full overflow-visible gap-4 z-0 absolute bottom-[100%];
 }
 
 .rotate-button,

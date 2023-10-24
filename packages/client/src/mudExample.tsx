@@ -5,6 +5,7 @@ import { useMUD } from "./useMUD";
 
 import { getState } from "./game/store";
 import { useState, useEffect } from "react";
+import { getTimestamp } from "./lib/utils";
 
 export const MudExample = () => {
   const {
@@ -50,19 +51,24 @@ export const MudExample = () => {
       )) as number;
       setPlayerDaiBalance(playerDaiBalance_);
 
+      // queueAsyncCall(async () => {
       const playerLapuBalance_ = (await mudDefiLapuBalanceOf(
-        playerAddress
+        getState().player?.playerData?.address
       )) as number;
       setPlayerLapuBalance(playerLapuBalance_);
-      const resources = getState().player?.playerData?.resources;
-      console.log("resources -> ", playerLapuBalance_);
+      console.log(
+        getTimestamp() + " [contractRes] LAPU -> ",
+        playerLapuBalance_
+      );
+      console.log(getTimestamp() + " [playerRes] LAPU -> ", playerLapuBalance_);
       getState().player?.setPlayerData({
         ...getState().player?.playerData,
         resources: {
-          ...resources,
+          ...getState().player?.playerData?.resources,
           LAPU: parseInt(playerLapuBalance_.toString()),
         },
       });
+      // });
 
       const totalRewardBalance_ =
         (await mudDefiGetTotalRewardBalance()) as number;

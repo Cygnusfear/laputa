@@ -6,6 +6,8 @@ import { palette } from "../utils/palette";
 import { IFacility } from "../types/entities";
 import { floodFill } from "../utils/floodFill";
 import { FacilityDataType } from "../data/entities";
+import { doOptimisticLapuDelta } from "../data/player";
+import { getMUD } from "@/mud/setup";
 
 // TODO: Extract build conditions, can't build 1 tile below gravity well, only gravity well can build at y==1, etc
 const canBuildAtPosition = (position: Vector3) => {
@@ -40,7 +42,7 @@ export const canAffordBuilding = (building: FacilityDataType) => {
 
 // TODO: extract input logic from construction system [refactor]
 // Should accept a building type as arg
-const buildFacility = ({
+const buildFacility = async ({
   position,
   building,
   levelInit = false,
@@ -62,6 +64,9 @@ const buildFacility = ({
     world: { addEntity },
     player: { spendResouces, addResources },
   } = getState();
+  const {
+    systemCalls: { mudBuildFacility },
+  } = await getMUD();
 
   // Move Input logic away from here
   if (!building) {
@@ -106,15 +111,32 @@ const buildFacility = ({
   };
 
   if (!levelInit) {
-    const expenses = building.costs.map((c) => {
-      return { resource: c[0], amount: c[1] };
-    });
-    spendResouces(expenses);
+    const expenses = building.costs
+      .filter((r) => r[0] !== "LAPU")
+      .map((c) => {
+        return { resource: c[0], amount: c[1] };
+      });
+    if (expenses) spendResouces(expenses);
     const gains = building.produces.map((c) => {
       return { resource: c[0], amount: c[1] };
     });
     if (gains) addResources(gains);
     console.log("net", gains, expenses);
+    const LAPUexpense = building.costs.find((r) => r[0] === "LAPU");
+    const LAPUCost = (LAPUexpense && LAPUexpense[1]) || 0;
+    const build = [
+      building.entityTypeId,
+      Math.floor(position.x),
+      Math.floor(position.y),
+      Math.floor(position.z),
+      yaw,
+      color,
+      variant,
+      owner,
+    ];
+    doOptimisticLapuDelta(-LAPUCost, async () => {
+      await mudBuildFacility(...build);
+    });
   }
   addEntity(newFacility);
   if (owner === "") {

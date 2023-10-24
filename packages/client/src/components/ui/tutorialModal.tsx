@@ -8,7 +8,7 @@ import { getState } from "@/game/store";
 import { useState, useEffect } from "react";
 import { useSpring, animated, config } from "@react-spring/web";
 
-import { useMUD } from "@/useMUD";
+import { vaultSponsorPlayer } from "@/game/data/player";
 
 function TutorialModal({
   step,
@@ -88,11 +88,6 @@ function TutorialModal({
 }
 
 const Tutorial = () => {
-  const {
-    systemCalls: { mockLapuVaultFundPlayer },
-  } = useMUD();
-  // const playerAddress = getState().player?.playerData?.address;
-
   const [currentTutorial, setCurrentTutorial] = useState<
     TutorialStep | undefined
   >(undefined);
@@ -137,10 +132,8 @@ const Tutorial = () => {
                 "dofunds",
                 currentTutorial.screens[screenIndex].funds
               );
-            mockLapuVaultFundPlayer(
-              getState().player.playerData.address,
-              currentTutorial.screens[screenIndex].funds
-            );
+            currentTutorial?.screens[screenIndex]?.funds !== undefined &&
+              vaultSponsorPlayer(currentTutorial.screens[screenIndex].funds!);
           }}
         />
       )}

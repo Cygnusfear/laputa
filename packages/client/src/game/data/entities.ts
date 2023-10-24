@@ -43,7 +43,7 @@ const EntityData = {
       image: "gravity.webp",
       costs: [
         ["LAPU", 400],
-        ["crystal", 1],
+        // ["crystal", 1],
       ],
       produces: [["gravity", 10, 1]],
       variants: ModelData.well,

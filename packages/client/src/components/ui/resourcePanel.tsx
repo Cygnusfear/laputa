@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSpring, animated, config } from "@react-spring/web";
 import { ResourceIcons, ResourceType } from "@/game/data/resources";
 import { useStore } from "@/game/store";
@@ -67,9 +67,15 @@ function ResourcePanel() {
   const {
     player: {
       playerData,
-      playerData: { hasComethWallet },
+      playerData: { hasComethWallet, LAPUtoBeConsolidated },
     },
   } = useStore();
+
+  const [LAPUtemp, setLAPUtemp] = useState(0);
+
+  useEffect(() => {
+    setLAPUtemp(LAPUtoBeConsolidated || 0);
+  }, [LAPUtoBeConsolidated]);
 
   return (
     <div className="resource-panel">
@@ -79,14 +85,20 @@ function ResourcePanel() {
         </div>
       )}
       {Object.entries(playerData.resources)
-        .filter(([type]) => type !== "water" && type !== "food")
-        .map(([type, amount], idx) => (
-          <ResourceItem
-            key={idx}
-            resourceType={type as ResourceType}
-            amount={amount}
-          />
-        ))}
+        .filter(
+          ([type]) => type !== "water" && type !== "food" && type !== "crystal"
+        )
+        .map(([type, amount], idx) => {
+          const calcAmount = type === "LAPU" ? amount + LAPUtemp : amount;
+          return (
+            <ResourceItem
+              key={idx}
+              resourceType={type as ResourceType}
+              amount={calcAmount}
+            />
+          );
+        })}
+      {/* <ResourceItem resourceType="LAPU" amount={LAPUtemp} /> */}
     </div>
   );
 }
