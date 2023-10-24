@@ -10,7 +10,7 @@ import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 import { getState } from "../store";
 import { useOnce } from "@/lib/useOnce";
-import { createNewPlayerData, savePlayer } from "../data/player";
+import { savePlayer } from "../data/player";
 import { evaluateTutorials, tutorialSteps } from "../data/tutorial";
 
 let loaded = false;
@@ -76,9 +76,10 @@ function GameLoop() {
     };
 
     const newPlayer = () => {
-      localStorage.removeItem("playerData");
+      // localStorage.removeItem("playerData");
       localStorage.clear();
-      getState().player.setPlayerData(createNewPlayerData({}));
+      location.reload();
+      // getState().player.setPlayerData(createNewPlayerData({}));
     };
 
     const cheat = () => {
@@ -197,13 +198,13 @@ function GameLoop() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      savePlayer(getState().player.playerData);
       if (
         loaded &&
         getState().player.playerData.finishedTutorials.length <
           tutorialSteps.length
       ) {
         evaluateTutorials();
+        savePlayer(getState().player.playerData);
       }
     }, 500);
 

@@ -1,8 +1,12 @@
+import { getMUD } from "@/mud/setup";
 import { IFacility } from "../types/entities";
 import { ResourceType } from "./resources";
 import { setItem } from "window-async-local-storage";
+import { getState } from "../store";
+import { queueAsyncCall } from "../utils/asyncQueue";
 
 export type PlayerData = {
+  LAPUtoBeConsolidated: number;
   resources: { [key in ResourceType]: number };
   facilities: IFacility[];
   name: string;
@@ -20,8 +24,9 @@ export const createNewPlayerData = ({
   address?: string;
 }): PlayerData => {
   return {
+    LAPUtoBeConsolidated: 0,
     resources: {
-      LAPU: 1000,
+      LAPU: 0,
       gravity: 0,
       population: 0,
       power: 0,
@@ -60,7 +65,7 @@ export const initializePlayer = ({
 };
 
 export const savePlayer = async (playerData: PlayerData, verbose = false) => {
-  const cleanPlayer: PlayerData = {
+  const cleanPlayer: Partial<PlayerData> = {
     resources: { ...playerData.resources },
     activeTutorials: [...playerData.activeTutorials],
     finishedTutorials: [...playerData.finishedTutorials],
@@ -78,4 +83,67 @@ export const hasFacility = (playerData: PlayerData, facilityId: number) => {
   return !!playerData.facilities.find(
     (f) => f.type.entityTypeId === facilityId
   );
+};
+
+// here we update the local Resources and push out a TX for updating the contract
+export const vaultSponsorPlayer = async (amount: number) => {
+  const {
+    systemCalls: { mockLapuVaultFundPlayer },
+  } = await getMUD();
+  await doOptimisticLapuDelta(
+    amount,
+    async () =>
+      await mockLapuVaultFundPlayer(
+        getState().player.playerData.address,
+        amount
+      )
+  );
+};
+
+export const doOptimisticLapuDelta = async (
+  amount: number,
+  fn: () => Promise<void>
+) => {
+  const prev = getState().player.playerData.LAPUtoBeConsolidated || 0;
+  getState().player.setPlayerData({
+    ...getState().player.playerData,
+    LAPUtoBeConsolidated: prev + amount,
+  });
+  queueAsyncCall(async () => {
+    await fn()
+      .then(() => {
+        const consolidatePrev =
+          getState().player.playerData.LAPUtoBeConsolidated;
+        getState().player.setPlayerData({
+          ...getState().player.playerData,
+          LAPUtoBeConsolidated: consolidatePrev - amount,
+        });
+      })
+      .catch((e: unknown) => {
+        console.log("Error in mockLapuVaultFundPlayer", e);
+        const consolidatePrev =
+          getState().player.playerData.LAPUtoBeConsolidated;
+        getState().player.setPlayerData({
+          ...getState().player.playerData,
+          LAPUtoBeConsolidated: consolidatePrev - amount,
+        });
+      });
+  });
+};
+
+// here we update the local Resources from the server
+export const updatePlayerLapuBalance = async () => {
+  const {
+    systemCalls: { mudDefiLapuBalanceOf },
+  } = await getMUD();
+  const balance = (await mudDefiLapuBalanceOf(
+    getState().player.playerData.address
+  )) as number;
+  getState().player?.setPlayerData({
+    ...getState().player?.playerData,
+    resources: {
+      ...getState().player?.playerData?.resources,
+      LAPU: parseInt(balance.toString()),
+    },
+  });
 };

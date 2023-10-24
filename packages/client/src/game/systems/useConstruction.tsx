@@ -1,4 +1,3 @@
-import { useMUD } from "@/useMUD";
 import { Vector3 } from "three";
 import { getState } from "../store";
 import {
@@ -6,14 +5,10 @@ import {
   canAffordBuilding,
   canBuildAtPosition,
 } from "./constructionSystem";
-import { queueAsyncCall } from "../utils/asyncQueue";
 import { getRandom } from "@/lib/utils";
 import { palette } from "../utils/palette";
 
 function useConstruction() {
-  const {
-    systemCalls: { mudBuildFacility },
-  } = useMUD();
   const {
     input: { building },
   } = getState();
@@ -31,28 +26,7 @@ function useConstruction() {
     const variant = cursor.variant;
     const yaw = cursor.yaw || 0;
     const owner = getState().player.playerData.address;
-
-    const build = [
-      building.entityTypeId,
-      Math.floor(position.x),
-      Math.floor(position.y),
-      Math.floor(position.z),
-      yaw,
-      color,
-      variant,
-      owner,
-    ];
     if (canBuildAtPosition(position) && canAffordBuilding(building)) {
-      queueAsyncCall(async () => {
-        console.trace("buildFacility hook", position, build);
-        try {
-          // @ts-ignore
-          const result = await mudBuildFacility(...build);
-          console.log("mudBuildFacility result", result);
-        } catch (error) {
-          console.error("mudBuildFacility error", error);
-        }
-      });
       buildFacility({
         position,
         building,
