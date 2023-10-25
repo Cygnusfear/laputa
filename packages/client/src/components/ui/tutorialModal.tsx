@@ -76,7 +76,7 @@ function TutorialModal({
           {!step.screens[screenIndex].hideNext && (
             <button
               onClick={() => onNext()}
-              className="w-full cursor-pointer rounded border border-t-0 border-[#FDBF7F] bg-[#FDBF7Faa] px-4 py-2 text-white hover:bg-[#FDBF7Fee] sm:w-auto"
+              className="w-full cursor-pointer border border-t-0 border-[#FDBF7F] bg-[#FDBF7F] px-4 py-2 text-white hover:bg-[#FDBF7Fee] sm:w-auto sm:rounded sm:bg-[#FDBF7Faa]"
             >
               Next
             </button>

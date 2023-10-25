@@ -12,7 +12,7 @@ export const App = () => {
   return (
     <RootLayout>
       <GameRoot />
-      <MudExample />
+      <MudExample display={false} />
       <LoadingScreen />
     </RootLayout>
   );

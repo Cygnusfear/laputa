@@ -3,7 +3,7 @@
 }
 
 .inventory-bar {
-  @apply flex-row flex justify-start w-full h-44 overflow-x-scroll overflow-y-visible z-50 max-w-full;
+  @apply flex-row flex justify-start sm:justify-center w-full h-44 overflow-x-scroll overflow-y-clip z-50 max-w-full px-3;
   scroll-snap-type: x mandatory; /* Enable vertical snap scrolling */
   scrollbar-width: none;
 }
