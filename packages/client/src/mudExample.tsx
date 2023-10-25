@@ -7,7 +7,7 @@ import { getState } from "./game/store";
 import { useState, useEffect } from "react";
 import { getTimestamp } from "./lib/utils";
 
-export const MudExample = () => {
+export const MudExample = ({ display = false }: { display: boolean }) => {
   const {
     components: { Counter, GameSetting },
     systemCalls: {
@@ -118,7 +118,7 @@ export const MudExample = () => {
   const delay = async (ms) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
   };
-
+  if (!display) return null;
   return (
     <div>
       <div>

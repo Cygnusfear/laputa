@@ -1,9 +1,11 @@
 .inventory-wrapper {
-  @apply absolute bottom-3 w-full items-center justify-center flex-col flex overflow-y-visible;
+  @apply absolute bottom-0 flex-col flex overflow-y-visible w-screen pointer-events-auto;
 }
 
 .inventory-bar {
-  @apply flex-row flex items-center justify-center w-full h-44 overflow-visible overflow-x-scroll overflow-y-visible z-50;
+  @apply flex-row flex justify-start sm:justify-center w-full h-44 overflow-x-scroll overflow-y-clip z-50 max-w-full px-3;
+  scroll-snap-type: x mandatory; /* Enable vertical snap scrolling */
+  scrollbar-width: none;
 }
 
 .card {

@@ -51,7 +51,7 @@ const EntityData = {
     },
     dynamo: {
       entityTypeId: 102,
-      name: "Whirly Dynamo",
+      name: "Dynamo",
       blurb: "Generates power",
       description:
         "The Whirly Dynamo is an awe-inspiring, spiraled contraption, eternally spinning, twirling, and cascading in the breezy stratosphere. It contains an enormous, spiraled windmill, capturing the gentlest of breezes and the mightiest of gales.",
