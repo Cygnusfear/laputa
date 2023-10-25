@@ -26,7 +26,6 @@ function LoadingScreen() {
   });
 
   useEffect(() => {
-    console.log(syncProgress.percentage);
     setProgress(syncProgress.percentage);
     if (syncProgress.percentage >= 100) {
       setHide(true);

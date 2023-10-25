@@ -34,12 +34,12 @@ function TutorialModal({
     },
   });
   return (
-    <div className="fixed left-0 top-0 flex h-full w-full select-none items-center justify-center bg-black/50">
+    <div className="pointer-events-auto fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center gap-0 bg-black/50">
       <animated.div
-        className="flex max-h-full max-w-full flex-col md:max-w-[50rem]"
+        className="flex max-h-full max-w-full flex-col gap-0 md:max-w-[50rem]"
         style={props}
       >
-        <div className="flex-1 overflow-scroll border-b border-[#FDBF7F33] bg-[#2B3840] p-6 pb-10 text-white shadow-lg sm:rounded-lg">
+        <div className="flex-1 overflow-scroll border-b border-[#FDBF7F33] bg-[#2B3840] p-6 pb-10 text-white sm:rounded-lg sm:shadow-lg">
           <h2 className="mb-4 text-2xl text-[#ffddbb]">
             {step.screens[screenIndex].name}
           </h2>

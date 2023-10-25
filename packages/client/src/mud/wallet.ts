@@ -102,6 +102,7 @@ export async function createComethWallet() {
   const walletAdaptor = new ConnectAdaptor({
     chainId: SupportedNetworks.MUMBAI,
     apiKey,
+    userName: "LAPUTA Vault",
   });
   const instance = new ComethWallet({
     authAdapter: walletAdaptor,

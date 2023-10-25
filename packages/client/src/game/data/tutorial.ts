@@ -87,6 +87,13 @@ export const completeTutorial = async (tutorialName: string) => {
   });
 };
 
+export const defaultInventory = [
+  EntityData.facilities.gravityhill,
+  EntityData.facilities.dynamo,
+  EntityData.facilities.residence,
+  EntityData.facilities.scaffold,
+];
+
 export const tutorialSteps = [
   {
     name: "intro",
@@ -150,12 +157,7 @@ export const tutorialSteps = [
   {
     name: "living",
     text: "Make it a life worth living",
-    inventory: [
-      EntityData.facilities.gravityhill,
-      EntityData.facilities.dynamo,
-      EntityData.facilities.residence,
-      EntityData.facilities.scaffold,
-    ],
+    inventory: defaultInventory,
     completedCondition: (player: PlayerData) => {
       return hasFacility(player, EntityData.facilities.residence.entityTypeId);
     },
@@ -175,12 +177,7 @@ export const tutorialSteps = [
   {
     name: "making money",
     text: "Make it a life worth living",
-    inventory: [
-      EntityData.facilities.gravityhill,
-      EntityData.facilities.dynamo,
-      EntityData.facilities.residence,
-      EntityData.facilities.scaffold,
-    ],
+    inventory: defaultInventory,
     completedCondition: () => {
       return hasWallet();
     },
@@ -215,12 +212,7 @@ export const tutorialSteps = [
   {
     name: "keepitsafe",
     text: "Make it a life worth living",
-    inventory: [
-      EntityData.facilities.gravityhill,
-      EntityData.facilities.dynamo,
-      EntityData.facilities.residence,
-      EntityData.facilities.scaffold,
-    ],
+    inventory: defaultInventory,
     completedCondition: () => {
       return tutorialFlags.hasHadWalletExplainer;
     },
@@ -240,6 +232,14 @@ export const tutorialSteps = [
     ],
   },
 ] as TutorialStep[];
+
+export const getTutorialByName = (name: string) => {
+  return tutorialSteps.find((t) => t.name === name);
+};
+
+export const getActiveTutorial = (playerData: PlayerData) => {
+  return tutorialSteps.find((t) => t.name === playerData.activeTutorials[0]);
+};
 
 const hasWallet = () => {
   const comethWallet = window.localStorage.getItem("comethWalletAddress");

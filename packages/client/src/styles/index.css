@@ -4,7 +4,7 @@
 
 html,
 body {
-  @apply bg-[#76ADAB] text-black;
+  @apply bg-[#76ADAB] text-black h-screen max-h-screen;
 }
 
 #mud-dev-tools button.peer::before {
@@ -34,4 +34,13 @@ img {
   -moz-user-select: none;
   -o-user-select: none;
   user-select: none;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Hide horizontal scrollbar */
+::-webkit-scrollbar-thumb {
+  background: transparent;
 }

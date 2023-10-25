@@ -1,5 +1,5 @@
 .resource-panel {
-  @apply fixed left-5 top-5 flex flex-col text-xs select-none;
+  @apply fixed left-5 top-5 flex flex-col text-xs select-none pointer-events-auto;
 }
 
 .resource-item-wrapper {

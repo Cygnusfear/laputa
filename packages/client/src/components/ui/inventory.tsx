@@ -14,6 +14,7 @@ import { useOnce } from "@/lib/useOnce";
 import { canAffordBuilding } from "@/game/systems/constructionSystem";
 import ColorWheel from "./colorWheel";
 import { RotateUI } from "./rotateUI";
+import { getActiveTutorial } from "@/game/data/tutorial";
 
 function Inventory() {
   const {
@@ -38,17 +39,21 @@ function Inventory() {
   });
 
   useEffect(() => {
-    // TODO: Remove hack to only show gravityhill at startup
     if (!loaded) return;
     if (cardsLoaded) return;
+    const activeTutorial = getActiveTutorial(getState().player.playerData);
     const f = Object.entries(EntityData.facilities)
       .map(([, entityData]) => entityData)
-      .filter((entityData) => !facilities.includes(entityData));
+      .filter((entityData) =>
+        activeTutorial
+          ? activeTutorial.inventory && !facilities.includes(entityData)
+          : !facilities.includes(entityData)
+      );
     setFacilities([...facilities, ...f]);
     setcardsLoaded(true);
   }, [cardsLoaded, entities, facilities, loaded]);
 
-  const listTransitions = useTransition(facilities, {
+  const listTransitions = useTransition(["colorWheel", ...facilities], {
     config: config.gentle,
     from: { opacity: 1, transform: "translateX(250px) translateY(-5px)" },
     enter: () => [
@@ -58,18 +63,25 @@ function Inventory() {
       },
     ],
     leave: { opacity: 0, height: 0, transform: "translateX(-250px)" },
-    keys: facilities.map((_, index) => index),
+    keys: ["colorWheel", ...facilities].map((_, index) => index),
   });
 
   return (
     <div className="inventory-wrapper">
       {building && <RotateUI building={building} />}
       <div className="inventory-bar">
-        <ColorWheel />
         {loaded &&
-          listTransitions((styles, entityData) => (
-            <InventoryItem {...entityData} style={styles} />
-          ))}
+          listTransitions((styles, entityData) => {
+            if (entityData === "colorWheel")
+              return <ColorWheel style={styles} />;
+            else
+              return (
+                <InventoryItem
+                  {...(entityData as FacilityDataType)}
+                  style={styles}
+                />
+              );
+          })}
       </div>
     </div>
   );
